@@ -7,11 +7,15 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
+app.get("/" , (req, res) => {
+  
+})
+
+app.get("/taf", (req, res) => {
   if (process.env.NODE_ENV == "development") {
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");
-    console.log('Get under Dev')
+    console.log('Using DEV taf file')
     getTafPromise = getTaf({ test: true, dataSource: xmlTestData })
       .then((response) => {
         res.send(response);
