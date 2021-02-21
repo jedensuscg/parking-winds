@@ -51,7 +51,8 @@ fetch("/taf")
     };
 
     drawWind = (spot) => {
-      r = winds.windSpeed * 1.5;
+      // TODO Clamp the radius for higher wind speeds.
+      r = winds.windSpeed * 1.8;
       dir = winds.windDir - 90;
 
       x = spot.x + 18 * Math.cos((Math.PI * dir) / 180);
