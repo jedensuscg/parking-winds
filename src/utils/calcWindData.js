@@ -11,23 +11,33 @@ calcPrevailingWinds = (rawTafData) => {
   });
 
   //Map elements with wind direction as key, adding up the time duration of each unique wind direction.
-
+  let newWindSpeed = 0
   for (let index = 0; index < windSpeeds.length; index++) {
+    console.log(windSpeeds[index])
+    
+
     if (windMap.has(windDirections[index])) {
+      
       const newTime = windMap.get(windDirections[index])[1] + windTimes[index];
-      windMap.set(windDirections[index], [windSpeeds, newTime]);
+      newWindSpeed = windSpeeds[index] > newWindSpeed ? windSpeeds[index] : newWindSpeed
+      console.log(newWindSpeed)
+      windMap.set(windDirections[index], [newWindSpeed, newTime]);
+
     } else {
-      windMap.set(windDirections[index], [windSpeeds, windTimes[index]]);
+      windMap.set(windDirections[index], [windSpeeds[index], windTimes[index]]);
+      newWindSpeed = windSpeeds[index]
     }
   }
 
   const prevailingWindDirectionMap = [...windMap.entries()].reduce((a, b) => (b[1][1] > a[1][1] ? b : a));
-  const prevailingWindMaxSpeedMap = Math.max(...prevailingWindDirectionMap[1][0]);
+  console.log(windMap)
+  console.log(prevailingWindDirectionMap)
   const prevailingWindDirection = prevailingWindDirectionMap[0];
   const prevailingWindTime = prevailingWindDirectionMap[1][1];
+  const prevailingWindSPeed = prevailingWindDirectionMap[1][0]
   return {
     direction: prevailingWindDirection,
-    speed: prevailingWindMaxSpeedMap,
+    speed: prevailingWindSPeed,
     time: prevailingWindTime,
   };
 };

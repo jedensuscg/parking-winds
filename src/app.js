@@ -7,10 +7,10 @@ const path = require('path')
 
 const app = express();
 const port = process.env.PORT || 3000;
-const indexPath = path.join(__dirname, "../public")
 
+app.use('/public', express.static(path.join(__dirname, "../public")))
 app.get('/', (req, res) => {
-  console.log(__dirname)
+
   res.sendFile(path.resolve('./public/index.html'));
 });
 
@@ -27,6 +27,7 @@ app.get("/taf", (req, res) => {
         console.log(error);
       });
   } else {
+    console.log('Prod Mode')
     getTaf()
       .then((response) => {
         res.send(response);
