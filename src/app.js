@@ -6,13 +6,14 @@ require("dotenv").config();
 const path = require('path')
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5500;
 
 app.use('/public', express.static(path.join(__dirname, "../public")))
 app.get('/', (req, res) => {
 
   res.sendFile(path.resolve('./public/index.html'));
 });
+
 
 app.get("/taf", (req, res) => {
   if (process.env.NODE_ENV == "development") {
