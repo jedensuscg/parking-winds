@@ -1,13 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/css/style.css">
     <title>ECAS Winds</title>
 </head>
+
 <body>
-    <canvas id="airstation" width="500" height="550"></canvas>
-    <script src="js/app.js"></script>
+    <div id="app">
+        <button class="create" @click="createDiagram">LOAD WINDS</button>
+        <br>
+        <div class="diagram">
+            <canvas id="airstation" width="915" height="627" @mousemove='handleMousemove'></canvas>
+        </div>
+        <div class="debug">
+            <p>DEBUG WINDOW</p> 
+            <div v-if="loadWinds">
+                <p>{{rawTaf}}</p>
+                <span>X = {{debugX}} , y = {{debugY}} </span>
+                <p>Prevailing Wind Direction: {{winds.prevailingWindDir}}</p>
+                <p>Prevailing Wind Speed: {{winds.prevailingWindSpeed}}</p>
+                <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir" v-model="winds.prevailingWindDir"><br>
+                <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed" v-model="winds.prevailingWindSpeed"><br>
+                <button @click="debugWindDraw">Test Winds</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script type="text/javascript" src="public/js/app.js"></script>
 </body>
+
 </html>

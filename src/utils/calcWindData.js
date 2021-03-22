@@ -62,7 +62,7 @@ calcHighestWinds = (rawTafData) => {
   };
 };
 
-getCalcTafData = (rawTafData) => {
+getCalculatedTafData = (rawTafData) => {
   prevailingWinds = calcPrevailingWinds(rawTafData);
   highestWinds = calcHighestWinds(rawTafData);
 
@@ -73,5 +73,5 @@ getCalcTafData = (rawTafData) => {
 };
 
 module.exports = {
-  getCalcTafData,
+  getCalculatedTafData,
 };

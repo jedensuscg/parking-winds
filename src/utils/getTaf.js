@@ -45,7 +45,6 @@ buildTafObject = (response) => {
     }
     const baseData = result.response.data.TAF;
 
-
     //object relating to TAF times
     timeData = {
       issueTime: baseData.issue_time,
@@ -54,7 +53,7 @@ buildTafObject = (response) => {
     };
     rawText = baseData.raw_text;
     rawTafData = createTafArrays(baseData.forecast);
-    winds = calcTafData.getCalcTafData(rawTafData);
+    winds = calcTafData.getCalculatedTafData(rawTafData);
   });
   return {
     timeData,
@@ -65,7 +64,6 @@ buildTafObject = (response) => {
 };
 
 createTafArrays = (forecastData) => {
-
   let durationOfForecast;
   let tafForecasts = [];
   forecastData.forEach((forecast) => {
@@ -87,7 +85,6 @@ createTafArrays = (forecastData) => {
       windDirection: parseInt(windDirection),
       windSpeed: parseInt(windSpeed),
       durationOfForecast,
-
     });
   });
 
