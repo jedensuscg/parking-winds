@@ -11,9 +11,10 @@
 
 <body>
     <div id="app">
-        <button class="create" @click="createDiagram">LOAD WINDS</button>
+        
         <br>
         <div class="diagram">
+            <button @click="draw(e, true)">PREVAILING WINDS</button> -- <button @click="draw(e, false)">HIGHEST WINDS</button>
             <canvas id="airstation" width="915" height="627" @mousemove='handleMousemove'></canvas>
         </div>
         <div class="debug">
@@ -24,8 +25,9 @@
                 <p>Prevailing Wind Direction: {{winds.prevailingWindDir}}</p>
                 <p>Prevailing Wind Speed: {{winds.prevailingWindSpeed}}</p>
                 <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir" v-model="winds.prevailingWindDir"><br>
-                <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed" v-model="winds.prevailingWindSpeed"><br>
-                <button @click="debugWindDraw">Test Winds</button>
+                <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed" v-model="winds.prevailingWindSpeed"><br><br>
+                <button @click="debugWindDraw">TEST WINDS</button> --
+                <button class="create" @click="createDiagram">LIVE WINDS</button>
             </div>
         </div>
 

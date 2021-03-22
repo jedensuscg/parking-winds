@@ -14,7 +14,6 @@ const getTaf = (options = { test: false, dataSource: url }) => {
         .get(url)
         .then((response) => {
           const tafData = buildTafObject(response);
-
           resolve(tafData);
         })
         .catch((error) => {
