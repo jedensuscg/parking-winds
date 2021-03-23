@@ -108,9 +108,8 @@ const app = Vue.createApp({
       };
 
       drawWinds = (spot) => {
-        let r, dir
-        const displaySpeed = r/2 + "kts"
-        const displayDir = (dir) < 100 ? "0" + (dir) : dir
+        let r, dir, displaySpeed
+        
         if (drawPrevailing) {
           r = this.winds.prevailingWindSpeed * 2;
           dir = this.winds.prevailingWindDir - 90;
@@ -118,7 +117,8 @@ const app = Vue.createApp({
           r = this.winds.highestWindSpeed * 2;
           dir = this.winds.highestWindSpeed - 90;
         }
-
+        const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
+        displaySpeed = r/2 + "kts"
         if (r >= 90) {
           r = 90;
         } else if (r <= 20) {
