@@ -123,7 +123,7 @@ const app = Vue.createApp({
           r = 20;
         }
         const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
-        const displaySpeed = r/2 + "kts"
+        const displaySpeed = r + "kts"
 
         x = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
         y = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
