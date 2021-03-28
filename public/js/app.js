@@ -115,7 +115,7 @@ const app = Vue.createApp({
           baseR = r
         } else {
           r = this.winds.highestWindSpeed * 2;
-          dir = this.winds.highestWindSpeed - 90;
+          dir = this.winds.highestWindDir - 90;
           baseR = r
         }
 
@@ -130,8 +130,8 @@ const app = Vue.createApp({
         x = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
         y = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
         textOffset = r + 5;
-        textX = x + textOffset * Math.cos((Math.PI * dir) / 180) - 10
-        textY = y + textOffset * Math.sin((Math.PI * dir) / 180) - 5
+        textX = (x + textOffset * Math.cos((Math.PI * dir) / 180) * 1.8) - 35
+        textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
         this.ctx.beginPath();
         this.ctx.moveTo(x + 10 * Math.cos((Math.PI * dir) / 180), y + 10 * Math.sin((Math.PI * dir) / 180));
         this.ctx.lineWidth = 8;
