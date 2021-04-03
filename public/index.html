@@ -15,7 +15,7 @@
         
         <br>
         <div class="diagram">
-            <button @click="draw(e, true)">PREVAILING WINDS</button> -- <button @click="draw(e, false)">HIGHEST WINDS</button>
+            <button @click="draw(e, 'prevailing')">PREVAILING WINDS</button> -- <button @click="draw(e, 'highest')">HIGHEST WINDS</button> -- <button @click="draw(e, 'gust')">WIND GUST</button>
             <canvas id="airstation" width="915" height="627" @mousemove='handleMousemove'></canvas>
         </div>
         <div class="debug">

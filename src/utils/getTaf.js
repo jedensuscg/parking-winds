@@ -9,7 +9,7 @@ const url =
 
 const getTaf = (options = { test: false, dataSource: url }) => {
   return new Promise((resolve, reject) => {
-    if (!options.test) {
+    if (!options.test) { //Check if using TEST DATA
       axios
         .get(url)
         .then((response) => {
@@ -62,6 +62,7 @@ buildTafObject = (response) => {
   };
 };
 
+// Create an array for each forecast period.
 createTafArrays = (forecastData) => {
   let durationOfForecast;
   let tafForecasts = [];
@@ -70,6 +71,7 @@ createTafArrays = (forecastData) => {
     timeTo = forecast.fcst_time_to;
     windDirection = forecast.wind_dir_degrees ? forecast.wind_dir_degrees : 0;
     windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
+    windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
 
     //determine amount of time taf forecast lasted
     if (timeFrom && timeTo) {
@@ -83,6 +85,7 @@ createTafArrays = (forecastData) => {
       timeTo,
       windDirection: parseInt(windDirection),
       windSpeed: parseInt(windSpeed),
+      windGust: parseInt(windGust),
       durationOfForecast,
     });
   });

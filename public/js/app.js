@@ -34,6 +34,7 @@ const app = Vue.createApp({
         prevailingWindSpeed: 0,
         highestWindDir: 0,
         highestWindSpeed: 0,
+        HighestWindGust: 0,
       },
       rawTaf: "",
       loadWinds: false,
@@ -57,13 +58,15 @@ const app = Vue.createApp({
           this.winds.prevailingWindSpeed = data.winds.prevailingWinds.speed;
           this.winds.highestWindDir = data.winds.highestWinds.direction;
           this.winds.highestWindSpeed = data.winds.highestWinds.speed;
+          this.winds.HighestWindGustSpeed = data.winds.highestGust.speed;
+          this.winds.HighestWindGustDir = data.winds.highestGust.direction;
           this.rawTaf = data.rawText;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    draw(e, drawPrevailing = true) {
+    draw(e, drawType = "prevailing") {
       drawAirsta = () => {
         (async () => {
           await this.drawBackground();
@@ -100,25 +103,31 @@ const app = Vue.createApp({
         this.ctx.strokeStyle = "#FF0000";
         this.ctx.stroke();
 
-        if (drawPrevailing) {
           this.ctx.strokeStyle = "red";
-        } else {
-          this.ctx.strokeStyle = "green";
-        }
       };
 
       drawWinds = (spot) => {
-        let r, dir
-        if (drawPrevailing) {
+        let r, dir, baseR
+        if (drawType === "prevailing") {
           r = this.winds.prevailingWindSpeed * 2;
           dir = this.winds.prevailingWindDir - 90;
-          baseR = r
-        } else {
-          r = this.winds.highestWindSpeed * 2;
-          dir = this.winds.highestWindDir - 90;
-          baseR = r
-        }
 
+        } else if(drawType === "highest") {
+            r = this.winds.highestWindSpeed * 2;
+            dir = this.winds.highestWindDir - 90;
+        } 
+        else if(drawType === "gust") {
+          if (this.winds.HighestWindGustSpeed == 0) {
+            alert("No Gust for this TAF. Showing highest sustained winds instead")
+            drawType = "highest"
+            r = this.winds.highestWindSpeed * 2;
+            dir = this.winds.highestWindDir - 90;
+          } else {
+          r = this.winds.HighestWindGustSpeed * 2;
+          dir = this.winds.HighestWindGustDir - 90;
+          }
+        }
+        baseR = r
         if (r >= 90) {
           r = 90;
         } else if (r <= 20) {
@@ -143,10 +152,10 @@ const app = Vue.createApp({
         this.ctx.fillStyle = "black"
         this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
-        drawWindHead(x, y, dir, drawPrevailing);
+        drawWindHead(x, y, dir)
       };
 
-      drawWindHead = (x, y, dir, drawPrevailing) => {
+      drawWindHead = (x, y, dir) => {
         this.ctx.beginPath();
 
         this.ctx.moveTo(x, y);
@@ -155,11 +164,8 @@ const app = Vue.createApp({
         this.ctx.lineTo(x, y);
         this.ctx.lineWidth = 1;
         this.ctx.stroke();
-        if (drawPrevailing) {
           this.ctx.fillStyle = "red";
-        } else {
-          this.ctx.fillStyle = "green";
-        }
+
 
         this.ctx.fill();
         this.ctx.closePath();
