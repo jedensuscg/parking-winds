@@ -72,6 +72,7 @@ createTafArrays = (forecastData) => {
     windDirection = forecast.wind_dir_degrees ? forecast.wind_dir_degrees : 0;
     windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
     windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
+    windGustDir = forecast.wind_gust_kt ? forecast.wind_dir_degrees : 0;
 
     //determine amount of time taf forecast lasted
     if (timeFrom && timeTo) {
@@ -86,6 +87,7 @@ createTafArrays = (forecastData) => {
       windDirection: parseInt(windDirection),
       windSpeed: parseInt(windSpeed),
       windGust: parseInt(windGust),
+      windGustDir: parseInt(windGustDir),
       durationOfForecast,
     });
   });
