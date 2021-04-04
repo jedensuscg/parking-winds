@@ -5,7 +5,7 @@ const axios = require("axios").default;
 
 const { DateTime } = require("luxon");
 const url =
-  "https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=12&timeType=issue&mostRecent=true&stationString=kecg";
+  "https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=12&timeType=issue&mostRecent=true&stationString=kecg";
 
 const getTaf = (options = { test: false, dataSource: url }) => {
   return new Promise((resolve, reject) => {
