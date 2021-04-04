@@ -34,7 +34,8 @@ const app = Vue.createApp({
         prevailingWindSpeed: 0,
         highestWindDir: 0,
         highestWindSpeed: 0,
-        HighestWindGust: 0,
+        HighestWindGustSpeed: 0,
+        HighestWindGustDir: 0,
       },
       rawTaf: "",
       loadWinds: false,
@@ -42,6 +43,7 @@ const app = Vue.createApp({
       canvas: undefined,
       debugX: 0,
       debugY: 0,
+      drawType: "",
     };
   },
   mounted: function () {
@@ -67,17 +69,32 @@ const app = Vue.createApp({
         });
     },
     draw(e, drawType = "prevailing") {
+      this.drawType = drawType
       drawAirsta = () => {
         (async () => {
+          console.log("start drawing BG")
           await this.drawBackground();
+          console.log("stop drawing bg")
           this.ctx.rect(15, 15, airStaDim.width, airStaDim.height);
-
+          gradient = this.ctx.createLinearGradient(0, 0, 900, 0);
+          gradient.addColorStop(0, "rgb(245, 30, 2)");
+          gradient.addColorStop(0.2222222222222222, "rgb(249, 249, 249)");
+          gradient.addColorStop(0.5, "rgb(19, 0, 187)");
+          gradient.addColorStop(0.797979797979798, "rgb(255, 255, 255)");
+          gradient.addColorStop(1, "rgb(245, 30, 2)");
+          this.ctx.lineWidth = 10
+          this.ctx.strokeStyle = gradient 
           this.ctx.stroke();
-          drawParkingSpot();
+          this.ctx.lineWidth = 2
 
+          drawParkingSpot();
+          console.log("start drawing wind 1")
           await drawWinds(parkingSpots.spot1);
+          console.log("start drawing wind 2")
           await drawWinds(parkingSpots.spot2);
+          console.log("start drawing wind 3")
           await drawWinds(parkingSpots.spot3);
+          console.log("start drawing wind 4")
           await drawWinds(parkingSpots.spot4);
         })();
       };
@@ -103,29 +120,22 @@ const app = Vue.createApp({
         this.ctx.strokeStyle = "#FF0000";
         this.ctx.stroke();
 
-          this.ctx.strokeStyle = "red";
+        this.ctx.strokeStyle = "red";
       };
 
       drawWinds = (spot) => {
         let r, dir, baseR
+
         if (drawType === "prevailing") {
           r = this.winds.prevailingWindSpeed * 2;
           dir = this.winds.prevailingWindDir - 90;
-
         } else if(drawType === "highest") {
             r = this.winds.highestWindSpeed * 2;
             dir = this.winds.highestWindDir - 90;
         } 
         else if(drawType === "gust") {
-          if (this.winds.HighestWindGustSpeed == 0) {
-            alert("No Gust for this TAF. Showing highest sustained winds instead")
-            drawType = "highest"
-            r = this.winds.highestWindSpeed * 2;
-            dir = this.winds.highestWindDir - 90;
-          } else {
           r = this.winds.HighestWindGustSpeed * 2;
           dir = this.winds.HighestWindGustDir - 90;
-          }
         }
         baseR = r
         if (r >= 90) {
@@ -152,10 +162,15 @@ const app = Vue.createApp({
         this.ctx.fillStyle = "black"
         this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
+        console.log("start drawing head")
         drawWindHead(x, y, dir)
+        // Had to do this to stop ghost arrow from drawing.
+        this.ctx.beginPath()
+        this.ctx.closePath()
       };
 
       drawWindHead = (x, y, dir) => {
+        console.log('drawing head')
         this.ctx.beginPath();
 
         this.ctx.moveTo(x, y);
@@ -164,7 +179,7 @@ const app = Vue.createApp({
         this.ctx.lineTo(x, y);
         this.ctx.lineWidth = 1;
         this.ctx.stroke();
-          this.ctx.fillStyle = "red";
+        this.ctx.fillStyle = "red";
 
 
         this.ctx.fill();

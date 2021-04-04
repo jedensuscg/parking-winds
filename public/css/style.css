@@ -1,8 +1,42 @@
 .diagram {
-    width: 950px;
-    float: left;
+    display: flex;
+    position: relative;
+    width: auto;
+    margin: -50px 10px 10px 50px
+}
+.wind-data-container {
+    position:absolute;
+    display: flex;
+    justify-content: space-evenly;
+    left: 65px;
+    top: 40px;
+    width: 800px;
+    background-color: rgba(255, 255, 255, 0.832);
+    border: 2px red solid;
+}
+.wind-data-col {
+    margin: 5px;
+}
+.wind-data-col > p {
+    margin: 5px;
+}
+.wind-data-heading {
+    margin: 5px;
 }
 
+.canvas-footer {
+    position:absolute;
+    text-align: center;
+    left: 307px;
+    bottom: 40px;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.632);
+    border: 2px red solid;
+}
+#airstation {
+
+    padding: 0;
+}
 .debug {
     width: auto;
 }

@@ -12,21 +12,54 @@
 <body>
     <h1>ECAS WINDS</h1>
     <div id="app">
-        
         <br>
         <div class="diagram">
-            <button @click="draw(e, 'prevailing')">PREVAILING WINDS</button> -- <button @click="draw(e, 'highest')">HIGHEST WINDS</button> -- <button @click="draw(e, 'gust')">WIND GUST</button>
-            <canvas id="airstation" width="915" height="627" @mousemove='handleMousemove'></canvas>
+            <div class="wind-data-container">
+                <div class="wind-data-col">
+                    <h3 class="wind-data-heading">PREVAILING WINDS</h3>
+                    <p>Direction: {{winds.prevailingWindDir}}</p>
+                    <p>Speed: {{winds.prevailingWindSpeed}}</p>
+                    <button @click="draw(e, 'prevailing')">SHOW</button>
+                </div>
+                <div class="wind-data-col">
+                    <h3 class="wind-data-heading">STRONGEST WINDS</h3>
+                    <p>Direction: {{winds.highestWindDir}}</p>
+                    <p>Speed: {{winds.highestWindSpeed}}</p>
+                    <button @click="draw(e, 'highest')">SHOW</button>
+                </div>
+                <div class="wind-data-col" v-if="winds.HighestWindGustSpeed == 0">
+                    <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
+                    <p>NO GUSTS FORECASTED IN THIS TAF</p>
+                </div>
+                <div class="wind-data-col" v-else>
+                    <h3 class="wind-data-heading">STRONGEST GUST</h3>
+                    <p>Direction: {{winds.HighestWindGustDir}}</p>
+                    <p>Speed: {{winds.HighestWindGustSpeed}}</p>
+                    <button @click="draw(e, 'gust')">SHOW</button>
+                </div>
+            </div>
+            <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
+                <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
+                <span v-if="drawType == 'gust'">STRONGEST GUST</span>
+            </div>
+            <canvas id="airstation" width="930" height="627" @mousemove='handleMousemove'></canvas>
+            <div class="taf-text">
+                <h4>RAW TAF</h4>
+                <p>{{rawTaf}}</p>
+                <p>This area will display complete decoded TAF data in future.</p>
+            </div>
         </div>
         <div class="debug">
-            <p>DEBUG WINDOW</p> 
+            <h4>DEBUG WINDOW</h4>
+            <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
+                LIVE WINDS to real winds again</p>
             <div v-if="loadWinds">
-                <p>{{rawTaf}}</p>
-                <span>X = {{debugX}} , y = {{debugY}} </span>
-                <p>Prevailing Wind Direction: {{winds.prevailingWindDir}}</p>
-                <p>Prevailing Wind Speed: {{winds.prevailingWindSpeed}}</p>
-                <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir" v-model="winds.prevailingWindDir"><br>
-                <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed" v-model="winds.prevailingWindSpeed"><br><br>
+                <label for="prevailing-Wind-Dir">Direction</label>
+                <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"
+                    v-model="winds.prevailingWindDir"><br>
+                <label for="prevailing-Wind-Speed">Speed</label>
+                <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
+                    v-model="winds.prevailingWindSpeed"><br><br>
                 <button @click="debugWindDraw">TEST WINDS</button> --
                 <button class="create" @click="createDiagram">LIVE WINDS</button>
             </div>
