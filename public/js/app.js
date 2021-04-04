@@ -29,15 +29,26 @@ const parkingSpots = {
 const app = Vue.createApp({
   data() {
     return {
+      loadMsg: "LOADING",
+
       winds: {
-        prevailingWindDir: 0,
-        prevailingWindSpeed: 0,
-        highestWindDir: 0,
-        highestWindSpeed: 0,
-        HighestWindGustSpeed: 0,
-        HighestWindGustDir: 0,
+        prevailingWinds: {
+          direction: 0,
+          speed: 0
+        },
+        highestWinds: {
+          direction: 0,
+          speed: 0
+        },
+        highestGust: {
+          direction: 0,
+          time: 0
+        }
       },
       rawTaf: "",
+      decodeTaf: {
+        forcast: []
+      },
       loadWinds: false,
       ctx: undefined,
       canvas: undefined,
@@ -56,6 +67,7 @@ const app = Vue.createApp({
         .then((response) => response.json())
         .then((data) => {
           console.table(data.winds);
+          this.winds = data.winds
           this.winds.prevailingWindDir = data.winds.prevailingWinds.direction;
           this.winds.prevailingWindSpeed = data.winds.prevailingWinds.speed;
           this.winds.highestWindDir = data.winds.highestWinds.direction;
@@ -63,6 +75,7 @@ const app = Vue.createApp({
           this.winds.HighestWindGustSpeed = data.winds.highestGust.speed;
           this.winds.HighestWindGustDir = data.winds.highestGust.direction;
           this.rawTaf = data.rawText;
+          console.table(this.winds.prevailingWinds.direction)
         })
         .catch((e) => {
           console.log(e);
@@ -127,15 +140,15 @@ const app = Vue.createApp({
         let r, dir, baseR
 
         if (drawType === "prevailing") {
-          r = this.winds.prevailingWindSpeed * 2;
-          dir = this.winds.prevailingWindDir - 90;
+          r = this.winds.prevailingWinds.speed * 2;
+          dir = this.winds.prevailingWinds.direction - 90;
         } else if(drawType === "highest") {
-            r = this.winds.highestWindSpeed * 2;
-            dir = this.winds.highestWindDir - 90;
+            r = this.winds.highestWinds.speed * 2;
+            dir = this.winds.highestWinds.direction - 90;
         } 
         else if(drawType === "gust") {
-          r = this.winds.HighestWindGustSpeed * 2;
-          dir = this.winds.HighestWindGustDir - 90;
+          r = this.winds.highestGust.speed * 2;
+          dir = this.winds.highestGust.direction - 90;
         }
         baseR = r
         if (r >= 90) {

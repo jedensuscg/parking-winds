@@ -11,20 +11,20 @@
 
 <body>
     <h1>ECAS WINDS</h1>
-    <div id="app">
+    <div id="app" v-cloak>
         <br>
         <div class="diagram">
             <div class="wind-data-container">
                 <div class="wind-data-col">
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
-                    <p>Direction: {{winds.prevailingWindDir}}</p>
-                    <p>Speed: {{winds.prevailingWindSpeed}}</p>
+                    <p>Direction: {{winds.prevailingWinds.direction}}</p>
+                    <p>Speed: {{winds.prevailingWinds.speed}}</p>
                     <button @click="draw(e, 'prevailing')">SHOW</button>
                 </div>
                 <div class="wind-data-col">
                     <h3 class="wind-data-heading">STRONGEST WINDS</h3>
-                    <p>Direction: {{winds.highestWindDir}}</p>
-                    <p>Speed: {{winds.highestWindSpeed}}</p>
+                    <p>Direction: {{winds.highestWinds.direction}}</p>
+                    <p>Speed: {{winds.highestWinds.speed}}</p>
                     <button @click="draw(e, 'highest')">SHOW</button>
                 </div>
                 <div class="wind-data-col" v-if="winds.HighestWindGustSpeed == 0">
@@ -33,8 +33,8 @@
                 </div>
                 <div class="wind-data-col" v-else>
                     <h3 class="wind-data-heading">STRONGEST GUST</h3>
-                    <p>Direction: {{winds.HighestWindGustDir}}</p>
-                    <p>Speed: {{winds.HighestWindGustSpeed}}</p>
+                    <p>Direction: {{winds.highestGust.direction}}</p>
+                    <p>Speed: {{winds.highestGust.speed}}</p>
                     <button @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
@@ -56,10 +56,10 @@
             <div v-if="loadWinds">
                 <label for="prevailing-Wind-Dir">Direction</label>
                 <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"
-                    v-model="winds.prevailingWindDir"><br>
+                    v-model="winds.prevailingWinds.direction"><br>
                 <label for="prevailing-Wind-Speed">Speed</label>
                 <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
-                    v-model="winds.prevailingWindSpeed"><br><br>
+                    v-model="winds.prevailingWinds.speed"><br><br>
                 <button @click="debugWindDraw">TEST WINDS</button> --
                 <button class="create" @click="createDiagram">LIVE WINDS</button>
             </div>

@@ -1,3 +1,6 @@
+[v-cloak] {
+    display: none;
+}
 .diagram {
     display: flex;
     position: relative;
