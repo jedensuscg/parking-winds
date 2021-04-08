@@ -20,9 +20,10 @@ const getTimelineParameters =  queryString.stringify({
 }, {arrayFormat: "comma"});
 const axios = require("axios").default;
 
-
+console.log("Fetching Temp")
 async function getTemp() {
   return new Promise((resolve, reject) => {
+    console.log(process.env.NODE_ENV)
     if (process.env.NODE_ENV == "production") {
       axios.get(getTimelineURL + "?" + getTimelineParameters)
     .then(result => result.data.data)
