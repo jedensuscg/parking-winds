@@ -13,6 +13,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/taf", (req, res) => {
+  console.log("starting taf Get")
   if (process.env.NODE_ENV == "development") {
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");

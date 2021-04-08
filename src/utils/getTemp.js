@@ -19,7 +19,6 @@ const getTimelineParameters =  queryString.stringify({
   endTime,
 }, {arrayFormat: "comma"});
 const axios = require("axios").default;
-console.log("Fetching Temp")
 console.log("Environment", process.env.NODE_ENV)
 console.log(apikey)
 async function getTemp() {
