@@ -1,5 +1,6 @@
 const parseString = require("xml2js");
 const calcTafData = require("./calcWindData");
+const getTemp = require("./getTemp")
 const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
 
@@ -53,12 +54,14 @@ buildTafObject = (response) => {
     rawText = baseData.raw_text;
     rawTafData = createTafArrays(baseData.forecast);
     winds = calcTafData.getCalculatedTafData(rawTafData);
+    lowestTemp = getTemp()
   });
   return {
     timeData,
     rawText,
     winds,
     rawTafData,
+    lowestTemp
   };
 };
 
@@ -66,6 +69,7 @@ buildTafObject = (response) => {
 createTafArrays = (forecastData) => {
   let durationOfForecast;
   let tafForecasts = [];
+  
   forecastData.forEach((forecast) => {
     timeFrom = forecast.fcst_time_from;
     timeTo = forecast.fcst_time_to;
