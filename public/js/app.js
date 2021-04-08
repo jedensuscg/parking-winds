@@ -30,7 +30,8 @@ const app = Vue.createApp({
   data() {
     return {
       loadMsg: "LOADING",
-
+      highWindWarning: false,
+      lowTempWarning: false,
       winds: {
         prevailingWinds: {
           direction: 0,
@@ -47,8 +48,9 @@ const app = Vue.createApp({
       },
       rawTaf: "",
       decodeTaf: {
-        forcast: []
+        forecast: []
       },
+      lowestTemp: '',
       loadWinds: false,
       ctx: undefined,
       canvas: undefined,
@@ -75,19 +77,35 @@ const app = Vue.createApp({
           this.winds.HighestWindGustSpeed = data.winds.highestGust.speed;
           this.winds.HighestWindGustDir = data.winds.highestGust.direction;
           this.rawTaf = data.rawText;
+          this.lowestTemp = {
+            time: data.lowestTemp[0],
+            temp: Math.floor(data.lowestTemp[1])
+          }
           console.table(this.winds.prevailingWinds.direction)
+          this.checkForWarnings();
         })
         .catch((e) => {
           console.log(e);
         });
     },
+    checkForWarnings() {
+      if (this.winds.highestWindSpeed > 29) {
+        this.highWindWarning = true
+      }
+      else {
+        this.highWindWarning = false
+      }
+      if (this.lowestTemp.temp < 35) {
+        this.lowTempWarning = true
+      } else {
+        this.lowTempWarning = false
+      }
+    },
     draw(e, drawType = "prevailing") {
       this.drawType = drawType
       drawAirsta = () => {
         (async () => {
-          console.log("start drawing BG")
           await this.drawBackground();
-          console.log("stop drawing bg")
           this.ctx.rect(15, 15, airStaDim.width, airStaDim.height);
           gradient = this.ctx.createLinearGradient(0, 0, 900, 0);
           gradient.addColorStop(0, "rgb(245, 30, 2)");
@@ -99,15 +117,10 @@ const app = Vue.createApp({
           this.ctx.strokeStyle = gradient 
           this.ctx.stroke();
           this.ctx.lineWidth = 2
-
           drawParkingSpot();
-          console.log("start drawing wind 1")
           await drawWinds(parkingSpots.spot1);
-          console.log("start drawing wind 2")
           await drawWinds(parkingSpots.spot2);
-          console.log("start drawing wind 3")
           await drawWinds(parkingSpots.spot3);
-          console.log("start drawing wind 4")
           await drawWinds(parkingSpots.spot4);
         })();
       };
@@ -175,7 +188,6 @@ const app = Vue.createApp({
         this.ctx.fillStyle = "black"
         this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
-        console.log("start drawing head")
         drawWindHead(x, y, dir)
         // Had to do this to stop ghost arrow from drawing.
         this.ctx.beginPath()
@@ -183,7 +195,6 @@ const app = Vue.createApp({
       };
 
       drawWindHead = (x, y, dir) => {
-        console.log('drawing head')
         this.ctx.beginPath();
 
         this.ctx.moveTo(x, y);

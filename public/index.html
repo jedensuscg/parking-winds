@@ -16,6 +16,11 @@
         <div class="diagram">
             <div class="wind-data-container">
                 <div class="wind-data-col">
+                    <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="caution-icons" alt=""><br>
+                        <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
+                        <span>Lowest temperature in next 12 hours</span></div>
+                </div>
+                <div class="wind-data-col">
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
                     <p>Direction: {{winds.prevailingWinds.direction}}</p>
                     <p>Speed: {{winds.prevailingWinds.speed}}</p>
@@ -38,6 +43,20 @@
                     <button @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
+            <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">
+                <div class="icon-divs">
+                    <img src="public/img/caution-icon.png" class="caution-icons" alt=""><br><hr>
+ 
+                </div>
+                <div class="icon-divs" v-if="lowTempWarning">
+                    <img src="public/img/snowflake.png" class="caution-icons" alt=""><br>
+                    <p class="caution-text">FREEZE POSSIBLE</p>
+                </div>
+                <div class="icon-divs" v-if="highWindWarning">
+                    <img src="public/img/windy-red.png" class="caution-icons" alt="">
+                    <p class="caution-text">WINDS > 30KTS</p>
+                </div>
+            </div>
             <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
                 <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
                 <span v-if="drawType == 'gust'">STRONGEST GUST</span>
@@ -53,6 +72,7 @@
             <h4>DEBUG WINDOW</h4>
             <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
                 LIVE WINDS to real winds again</p>
+                {{lowTempWarning}}
             <div v-if="loadWinds">
                 <label for="prevailing-Wind-Dir">Direction</label>
                 <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"

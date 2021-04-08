@@ -12,7 +12,7 @@
     display: flex;
     justify-content: space-evenly;
     left: 65px;
-    top: 40px;
+    top: 20px;
     width: 800px;
     background-color: rgba(255, 255, 255, 0.832);
     border: 2px red solid;
@@ -27,6 +27,9 @@
     margin: 5px;
 }
 
+.taf-text {
+    min-width: 300px;
+}
 .canvas-footer {
     position:absolute;
     text-align: center;
@@ -42,4 +45,24 @@
 }
 .debug {
     width: auto;
+}
+.temp-and-warning {
+    width: 60px;
+    background-color: rgba(255, 255, 255, 0.832);
+    position: absolute;
+    top: 250px;
+    left: 20px;
+}
+.icon-divs{
+    text-align: center;
+}
+.temp-value {
+    font-size: 18px;
+}
+.caution-icons {
+    width: 50px;
+}
+.caution-text {
+    margin-top: 0px;
+    font-size: 10px;
 }
