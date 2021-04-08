@@ -27,9 +27,11 @@ const getTaf = (options = { test: false, dataSource: url }) => {
   });
 };
 
-buildTafObject = (response) => {
+const buildTafObject = async (response) => {
+  let lowestTemp;
   let timeData;
   let rawText;
+  lowestTemp = await getTemp()
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
     if (!response.data) {
@@ -54,7 +56,8 @@ buildTafObject = (response) => {
     rawText = baseData.raw_text;
     rawTafData = createTafArrays(baseData.forecast);
     winds = calcTafData.getCalculatedTafData(rawTafData);
-    lowestTemp = getTemp()
+
+    console.log(lowestTemp, "lowest Temp")
   });
   return {
     timeData,

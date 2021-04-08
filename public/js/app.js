@@ -89,7 +89,7 @@ const app = Vue.createApp({
         });
     },
     checkForWarnings() {
-      if (this.winds.highestWindSpeed > 29) {
+      if (this.winds.highestWindSpeed > 22 || this.winds.HighestWindGustSpeed > 22) {
         this.highWindWarning = true
       }
       else {

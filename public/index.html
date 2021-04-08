@@ -54,7 +54,7 @@
                 </div>
                 <div class="icon-divs" v-if="highWindWarning">
                     <img src="public/img/windy-red.png" class="caution-icons" alt="">
-                    <p class="caution-text">WINDS > 30KTS</p>
+                    <p class="caution-text">FORECAST WINDS > 22KTS</p>
                 </div>
             </div>
             <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
@@ -72,7 +72,6 @@
             <h4>DEBUG WINDOW</h4>
             <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
                 LIVE WINDS to real winds again</p>
-                {{lowTempWarning}}
             <div v-if="loadWinds">
                 <label for="prevailing-Wind-Dir">Direction</label>
                 <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"
@@ -81,7 +80,9 @@
                 <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
                     v-model="winds.prevailingWinds.speed"><br><br>
                 <button @click="debugWindDraw">TEST WINDS</button> --
-                <button class="create" @click="createDiagram">LIVE WINDS</button>
+                <button class="create" @click="createDiagram">LIVE WINDS</button><br>
+                <span>Low Temp Flag Active: {{lowTempWarning}}</span><br>
+                <span>High Wind Flag Active {{highWindWarning}}</span>
             </div>
         </div>
 

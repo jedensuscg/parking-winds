@@ -21,18 +21,25 @@ const getTimelineParameters =  queryString.stringify({
 const axios = require("axios").default;
 
 
-function getTemp() {
-  if (process.env.NODE_ENV == "production") {
-    axios.get(getTimelineURL + "?" + getTimelineParameters)
-  .then(result => result.data.data)
-  .then(data => console.log(data.timelines[0].intervals))
-  } else {
-    const fs = require("fs");
-    const climacellTestData = fs.readFileSync("./devOps/tempData.json", "utf8");
-    const jsonData = JSON.parse(climacellTestData)
-    const tempData = jsonData.data.timelines[0].intervals
-    return getMinTemp(tempData)
-  }
+async function getTemp() {
+  return new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV == "production") {
+      axios.get(getTimelineURL + "?" + getTimelineParameters)
+    .then(result => result.data.data)
+    .then((data) => {
+      lowestTemp = getMinTemp(data.timelines[0].intervals)
+      resolve(lowestTemp)
+    })
+    } else {
+      const fs = require("fs");
+      const climacellTestData = fs.readFileSync("./devOps/tempData.json", "utf8");
+      const jsonData = JSON.parse(climacellTestData)
+      const tempData = jsonData.data.timelines[0].intervals
+      lowestTemp = getMinTemp(tempData)
+      resolve(lowestTemp)
+    }
+  })
+  
 }
 
 function getMinTemp(data) {
