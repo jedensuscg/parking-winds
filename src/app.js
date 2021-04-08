@@ -5,7 +5,7 @@ const fs = require("fs");
 require("dotenv").config();
 const path = require("path");
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.get("/", (req, res) => {
@@ -13,7 +13,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/taf", (req, res) => {
-  console.log("starting taf Get")
   if (process.env.NODE_ENV == "development") {
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");
