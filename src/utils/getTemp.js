@@ -29,6 +29,8 @@ async function getTemp() {
     .then((data) => {
       lowestTemp = getMinTemp(data.timelines[0].intervals)
       resolve(lowestTemp)
+    }).catch((error) => {
+      resolve(["error", 99])
     })
     } else {
       const fs = require("fs");
