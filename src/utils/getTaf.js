@@ -1,6 +1,6 @@
 const parseString = require("xml2js");
 const calcTafData = require("./calcWindData");
-const getTemp = require("./getTemp")
+//const getTemp = require("./getTemp")
 const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
 
