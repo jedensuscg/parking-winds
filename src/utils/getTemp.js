@@ -3,7 +3,7 @@ require("dotenv").config();
 dateAndTime = require("./dateAndTime")
 const queryString = require('query-string')
 const getTimelineURL = "https://api.tomorrow.io/v4/timelines"
-//const apikey = "BgSBfAeutuezgsZbcXm0FeVGcLxJcgpr"
+const apikey = process.env.CLIMACELL_KEY
 const location = "606e5216b7193e0008efd880"
 const fields = ["temperature"]
 const units = "imperial"
@@ -11,7 +11,7 @@ const now = DateTime.utc()
 const startTime = now.toISO()
 const endTime = now.plus( {hours: 12})
 const getTimelineParameters =  queryString.stringify({
-  apikey: process.env.CLIMACELL_KEY,
+  apikey,
   location,
   fields,
   units,
@@ -19,12 +19,14 @@ const getTimelineParameters =  queryString.stringify({
   endTime,
 }, {arrayFormat: "comma"});
 const axios = require("axios").default;
-
 console.log("Fetching Temp")
 console.log("Environment", process.env.NODE_ENV)
+console.log(apikey)
 async function getTemp() {
+  console.log("Inside getTemp")
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {
+      console.log("Inside getTemp Promise")
       axios.get(getTimelineURL + "?" + getTimelineParameters)
     .then(result => result.data.data)
     .then((data) => {
