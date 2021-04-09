@@ -29,6 +29,7 @@ const parkingSpots = {
 const app = Vue.createApp({
   data() {
     return {
+      dataTimestamp: -3600001,
       loadMsg: "LOADING",
       highWindWarning: false,
       lowTempWarning: false,
@@ -208,7 +209,13 @@ const app = Vue.createApp({
     },
     createDiagram() {
       (async () => {
-        await this.fetchData();
+        time = Date.now()
+        console.log(time - this.dataTimestamp)
+        //if (time - this.dataTimestamp > 3600000) {
+          await this.fetchData();
+          this.dataTimestamp = Date.now()
+          console.log("Running new fetch")
+        //}
         this.draw();
         this.loadWinds = true;
       })();

@@ -73,13 +73,16 @@
             <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
                 LIVE WINDS to real winds again</p>
             <div v-if="loadWinds">
-                <label for="prevailing-Wind-Dir">Direction</label>
+                <label for="prevailing-Wind-Dir">Direction</label><br>
                 <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"
                     v-model="winds.prevailingWinds.direction"><br>
-                <label for="prevailing-Wind-Speed">Speed</label>
+                <label for="prevailing-Wind-Speed">Speed</label><br>
                 <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
-                    v-model="winds.prevailingWinds.speed"><br><br>
-                <button @click="debugWindDraw">TEST WINDS</button> --
+                    v-model="winds.prevailingWinds.speed"><br>
+                    <label for="temp-debug">Lowest Forecast Temperature</label><br>
+                    <input type="number" name="temp-debug" id="temp-debug"
+                        v-model="lowestTemp.temp"><br><br>
+                <button @click="debugWindDraw">TEST WINDS</button>
                 <button class="create" @click="createDiagram">LIVE WINDS</button><br>
                 <span>Low Temp Flag Active: {{lowTempWarning}}</span><br>
                 <span>High Wind Flag Active {{highWindWarning}}</span>
