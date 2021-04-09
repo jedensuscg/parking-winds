@@ -22,6 +22,7 @@ const getTimelineParameters =  queryString.stringify({
 
 async function getTemp() {
   console.log("Inside getTemp")
+  console.log(process.env.NODE_ENV)
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {
       console.log("Inside getTemp Promise")
