@@ -27,7 +27,10 @@ async function getTemp() {
     if (process.env.NODE_ENV == "production") {
       console.log("Inside getTemp Promise")
       axios.get(getTimelineURL + "?" + getTimelineParameters)
-    .then(result => result.data.data)
+    .then((result) => {
+      console.log(result.headers)
+      result.data.data
+    })
     .then((data) => {
       lowestTemp = getMinTemp(data.timelines[0].intervals)
       resolve(lowestTemp)

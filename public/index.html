@@ -32,7 +32,7 @@
                     <p>Speed: {{winds.highestWinds.speed}}</p>
                     <button @click="draw(e, 'highest')">SHOW</button>
                 </div>
-                <div class="wind-data-col" v-if="winds.HighestWindGustSpeed == 0">
+                <div class="wind-data-col" v-if="winds.highestGust.speed == 0">
                     <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
                     <p>NO GUSTS FORECASTED IN THIS TAF</p>
                 </div>
