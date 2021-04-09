@@ -70,12 +70,6 @@ const app = Vue.createApp({
         .then((data) => {
           console.table(data.winds);
           this.winds = data.winds
-          this.winds.prevailingWindDir = data.winds.prevailingWinds.direction;
-          this.winds.prevailingWindSpeed = data.winds.prevailingWinds.speed;
-          this.winds.highestWindDir = data.winds.highestWinds.direction;
-          this.winds.highestWindSpeed = data.winds.highestWinds.speed;
-          this.winds.HighestWindGustSpeed = data.winds.highestGust.speed;
-          this.winds.HighestWindGustDir = data.winds.highestGust.direction;
           this.rawTaf = data.rawText;
           this.lowestTemp = {
             time: data.lowestTemp[0],
@@ -89,7 +83,7 @@ const app = Vue.createApp({
         });
     },
     checkForWarnings() {
-      if (this.winds.highestWindSpeed > 22 || this.winds.HighestWindGustSpeed > 22) {
+      if (this.winds.prevailingWinds.speed > 22 || this.winds.highestGust.speed > 22) {
         this.highWindWarning = true
       }
       else {
@@ -254,6 +248,7 @@ const app = Vue.createApp({
     debugWindDraw() {
       this.ctx.clearRect(15, 15, airStaDim.width, airStaDim.height);
       this.draw();
+      this.checkForWarnings()
     },
     handleMousemove(e, data) {
       this.debugX = e.offsetX;

@@ -1,6 +1,6 @@
 const parseString = require("xml2js");
 const calcTafData = require("./calcWindData");
-//const getTemp = require("./getTemp")
+const getTemp = require("./getTemp")
 const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
 
@@ -31,7 +31,7 @@ const buildTafObject = async (response) => {
   let lowestTemp;
   let timeData;
   let rawText;
-  //lowestTemp = await getTemp()
+  lowestTemp = await getTemp()
   console.log("Temp Fetched")
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
@@ -65,7 +65,7 @@ const buildTafObject = async (response) => {
     rawText,
     winds,
     rawTafData,
-    lowestTemp: ["debug", 99]
+    lowestTemp
   };
 };
 

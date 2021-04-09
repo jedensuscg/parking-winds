@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const axios = require("axios").default;
 require("dotenv").config();
 dateAndTime = require("./dateAndTime")
 const queryString = require('query-string')
@@ -18,9 +19,7 @@ const getTimelineParameters =  queryString.stringify({
   startTime,
   endTime,
 }, {arrayFormat: "comma"});
-const axios = require("axios").default;
-console.log("Environment", process.env.NODE_ENV)
-console.log(apikey)
+
 async function getTemp() {
   console.log("Inside getTemp")
   return new Promise((resolve, reject) => {
@@ -49,7 +48,6 @@ async function getTemp() {
 function getMinTemp(data) {
   map = mapTimeAndTemp(data)
   const lowestTemp = [...map.entries()].reduce((total, next) => (next[1] < total[1] ? next : total));
-  console.log(map)
   return lowestTemp
 }
 

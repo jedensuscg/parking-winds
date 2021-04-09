@@ -53,7 +53,6 @@ calcHighestWinds = (rawTafData) => {
 
   //Get the highest wind speed, and create a map with direction at time.
   const highestWindSet = [...windSpeedMap.entries()].reduce((total, next) => (next[0] > total[0] ? next : total));
-  console.log(highestWindSet)
   return {
     speed: highestWindSet[0],
     direction: highestWindSet[1][0],
