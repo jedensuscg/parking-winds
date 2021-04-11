@@ -28,13 +28,11 @@ async function getTemp() {
       console.log("Inside getTemp Promise")
       axios.get(getTimelineURL + "?" + getTimelineParameters)
     .then((result) => {
-      console.log(result.headers)
-      result.data.data
-    })
-    .then((data) => {
-      lowestTemp = getMinTemp(data.timelines[0].intervals)
+      console.log(result.data.data.timelines[0].intervals)
+      lowestTemp = getMinTemp(result.data.data.timelines[0].intervals)
       resolve(lowestTemp)
     }).catch((error) => {
+      console.log(error)
       resolve(["error", 99])
     })
     } else {
