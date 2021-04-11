@@ -8,22 +8,10 @@ const apikey = process.env.CLIMACELL_KEY;
 const location = "606e5216b7193e0008efd880";
 const fields = ["temperature"];
 const units = "imperial";
-const now = DateTime.utc();
-const startTime = now.toISO();
-const endTime = now.plus({ hours: 12 });
-const getTimelineParameters = queryString.stringify(
-  {
-    apikey,
-    location,
-    fields,
-    units,
-    startTime,
-    endTime,
-  },
-  { arrayFormat: "comma" }
-);
+
 
 async function getTemp() {
+  getTimelineParameters = getQueryString();
   console.log("Inside getTemp");
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {
@@ -48,6 +36,25 @@ async function getTemp() {
       resolve(lowestTemp);
     }
   });
+}
+
+function getQueryString() {
+  const now = DateTime.utc();
+  const startTime = now.toISO();
+  const endTime = now.plus({ hours: 12 });
+  const getTimelineParameters = queryString.stringify(
+    {
+      apikey,
+      location,
+      fields,
+      units,
+      startTime,
+      endTime,
+    },
+    { arrayFormat: "comma" }
+  );
+
+  return getTimelineParameters
 }
 
 function getMinTemp(data) {
