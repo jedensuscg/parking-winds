@@ -146,7 +146,7 @@ const app = Vue.createApp({
 
       drawWinds = (spot) => {
         let r, dir, baseR
-
+        this.drawPlanes(spot.x, spot.y, spot.baseHeading);
         if (drawType === "prevailing") {
           r = this.winds.prevailingWinds.speed * 2;
           dir = this.winds.prevailingWinds.direction - 90;
@@ -158,36 +158,49 @@ const app = Vue.createApp({
           r = this.winds.highestGust.speed * 2;
           dir = this.winds.highestGust.direction - 90;
         }
-        baseR = r
+
         if (r >= 90) {
           r = 90;
         } else if (r <= 20) {
           r = 20;
         }
-        const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
-        const displaySpeed = baseR/2 + "kts"
 
         x = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
         y = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
-        textOffset = r + 5;
-        textX = (x + textOffset * Math.cos((Math.PI * dir) / 180) * 1.8) - 35
-        textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
+
         this.ctx.beginPath();
         this.ctx.moveTo(x + 10 * Math.cos((Math.PI * dir) / 180), y + 10 * Math.sin((Math.PI * dir) / 180));
         this.ctx.lineWidth = 8;
         this.ctx.lineTo(x + r * Math.cos((Math.PI * dir) / 180), y + r * Math.sin((Math.PI * dir) / 180));
         this.ctx.stroke();
-        this.ctx.fillStyle = "white"
-        this.ctx.fillRect(textX, textY - 20, 70, 20)
-        this.ctx.font = "10pt Arial"
-        this.ctx.fillStyle = "black"
-        this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
-        this.drawPlanes(spot.x, spot.y, spot.baseHeading);
+
+        //drawWindText(x, y, r, dir, spot)
+
         drawWindHead(x, y, dir)
         // Had to do this to stop ghost arrow from drawing.
         this.ctx.beginPath()
         this.ctx.closePath()
       };
+
+      drawWindText = (x, y, r, dir, spot) => {
+        const baseR = r
+        textOffset = r + 10;
+        textX = (x + r * Math.cos((Math.PI * dir) / 180) * 1.8)
+        textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
+        
+        // textX = spot.x - 35
+        // textY = spot.y  - 50
+        
+        const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
+        const displaySpeed = baseR/2 + "kts"
+
+        this.ctx.fillStyle = "white"
+        this.ctx.fillRect(textX, textY - 20, 70, 20)
+        this.ctx.font = "10pt Arial"
+        this.ctx.fillStyle = "black"
+        this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
+
+      }
 
       drawWindHead = (x, y, dir) => {
         this.ctx.beginPath();
