@@ -1,30 +1,30 @@
-const airStaDim = {
-  width: 900,
-  height: 595,
-};
-const parkingSpots = {
-  spot1: {
-    x: 268,
-    y: 348,
-    baseHeading: 4,
-  },
-  spot2: {
-    x: 375,
-    y: 394,
-    baseHeading: 4,
-  },
-  spot3: {
-    x: 586,
-    y: 302,
-    baseHeading: 272,
-  },
-  spot4: {
-    x: 694,
-    y: 424,
-    baseHeading: 272,
-  },
-  radius: 54,
-};
+// const airStaDim = {
+//   width: 900,
+//   height: 595,
+// };
+// const parkingSpots = {
+//   spot1: {
+//     x: 268,
+//     y: 348,
+//     baseHeading: 4,
+//   },
+//   spot2: {
+//     x: 375,
+//     y: 394,
+//     baseHeading: 4,
+//   },
+//   spot3: {
+//     x: 586,
+//     y: 302,
+//     baseHeading: 272,
+//   },
+//   spot4: {
+//     x: 694,
+//     y: 424,
+//     baseHeading: 272,
+//   },
+//   radius: 54,
+// };
 
 const app = Vue.createApp({
   data() {
@@ -33,6 +33,7 @@ const app = Vue.createApp({
       loadMsg: "LOADING",
       highWindWarning: false,
       lowTempWarning: false,
+      airStation: undefined,
       winds: {
         prevailingWinds: {
           direction: 0,
@@ -76,7 +77,15 @@ const app = Vue.createApp({
             time: data.lowestTemp[0],
             temp: Math.floor(data.lowestTemp[1])
           }
+          this.airStation = {
+            unitName: data.airStation.unit,
+            airStaDim: data.airStation.airStaDim,
+            parkingSpots: data.airStation.parkingSpots,
+            radius: data.airStation.parkingSpots.radius,
+            image: data.airStation.mapImage
+          }
           console.table(this.winds.prevailingWinds.direction)
+          console.table(this.airStation.radius)
           this.checkForWarnings();
         })
         .catch((e) => {
@@ -101,7 +110,7 @@ const app = Vue.createApp({
       drawAirsta = () => {
         (async () => {
           await this.drawBackground();
-          this.ctx.rect(15, 15, airStaDim.width, airStaDim.height);
+          this.ctx.rect(15, 15, this.airStation.airStaDim.width, this.airStation.airStaDim.height);
           gradient = this.ctx.createLinearGradient(0, 0, 900, 0);
           gradient.addColorStop(0, "rgb(245, 30, 2)");
           gradient.addColorStop(0.2222222222222222, "rgb(249, 249, 249)");
@@ -112,32 +121,19 @@ const app = Vue.createApp({
           this.ctx.strokeStyle = gradient 
           this.ctx.stroke();
           this.ctx.lineWidth = 2
-          drawParkingSpot();
-          await drawWinds(parkingSpots.spot1);
-          await drawWinds(parkingSpots.spot2);
-          await drawWinds(parkingSpots.spot3);
-          await drawWinds(parkingSpots.spot4);
+
+          this.airStation.parkingSpots.spots.forEach(spot => {
+            drawParkingSpot(spot)
+          });
+          this.airStation.parkingSpots.spots.forEach(spot => {
+            drawWinds(spot);
+          });
         })();
       };
 
-      drawParkingSpot = () => {
+      drawParkingSpot = (spot) => {
         this.ctx.beginPath();
-        this.ctx.arc(parkingSpots.spot1.x, parkingSpots.spot1.y, parkingSpots.radius, 0, 2 * Math.PI);
-        this.ctx.strokeStyle = "#FF0000";
-        this.ctx.stroke();
-
-        this.ctx.beginPath();
-        this.ctx.arc(parkingSpots.spot2.x, parkingSpots.spot2.y, parkingSpots.radius, 0, 2 * Math.PI);
-        this.ctx.strokeStyle = "#FF0000";
-        this.ctx.stroke();
-
-        this.ctx.beginPath();
-        this.ctx.arc(parkingSpots.spot3.x, parkingSpots.spot3.y, parkingSpots.radius, 0, 2 * Math.PI);
-        this.ctx.strokeStyle = "#FF0000";
-        this.ctx.stroke();
-
-        this.ctx.beginPath();
-        this.ctx.arc(parkingSpots.spot4.x, parkingSpots.spot4.y, parkingSpots.radius, 0, 2 * Math.PI);
+        this.ctx.arc(spot.x, spot.y, this.airStation.radius, 0, 2 * Math.PI);
         this.ctx.strokeStyle = "#FF0000";
         this.ctx.stroke();
 
@@ -182,25 +178,22 @@ const app = Vue.createApp({
         this.ctx.closePath()
       };
 
-      drawWindText = (x, y, r, dir, spot) => {
-        const baseR = r
-        textOffset = r + 10;
-        textX = (x + r * Math.cos((Math.PI * dir) / 180) * 1.8)
-        textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
+      // drawWindText = (x, y, r, dir, spot) => {
+      //   const baseR = r
+      //   textOffset = r + 10;
+      //   textX = (x + r * Math.cos((Math.PI * dir) / 180) * 1.8)
+      //   textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
         
-        // textX = spot.x - 35
-        // textY = spot.y  - 50
-        
-        const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
-        const displaySpeed = baseR/2 + "kts"
+      //   const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
+      //   const displaySpeed = baseR/2 + "kts"
 
-        this.ctx.fillStyle = "white"
-        this.ctx.fillRect(textX, textY - 20, 70, 20)
-        this.ctx.font = "10pt Arial"
-        this.ctx.fillStyle = "black"
-        this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
+      //   this.ctx.fillStyle = "white"
+      //   this.ctx.fillRect(textX, textY - 20, 70, 20)
+      //   this.ctx.font = "10pt Arial"
+      //   this.ctx.fillStyle = "black"
+      //   this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
 
-      }
+      // }
 
       drawWindHead = (x, y, dir) => {
         this.ctx.beginPath();
@@ -234,7 +227,7 @@ const app = Vue.createApp({
       })();
     },
     createCanvas() {
-      this.canvas = document.querySelector("#airstation");
+      this.canvas = document.querySelector("#airStation");
       this.ctx = this.canvas.getContext("2d");
     },
     drawBackground() {
@@ -246,7 +239,7 @@ const app = Vue.createApp({
           self.ctx.drawImage(img, 15, 15);
           resolve();
         };
-        img.src = "public/img/diagram.svg";
+        img.src = this.airStation.image;
       });
     },
     drawPlanes(x, y, dir) {
@@ -261,7 +254,7 @@ const app = Vue.createApp({
           self.ctx.restore();
           resolve();
         };
-        img.src = "public/img/130top.svg";
+        img.src = 'public/img/130top.svg'
       });
     },
     //DEBUG METHODS

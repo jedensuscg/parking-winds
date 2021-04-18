@@ -5,10 +5,11 @@ const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
 
 const { DateTime } = require("luxon");
-const url =
-  "https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=12&timeType=issue&mostRecent=true&stationString=kecg";
+const url = ''
 
-const getTaf = (options = { test: false, dataSource: url }) => {
+const getTaf = (options) => {
+  const url =
+  `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=12&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
