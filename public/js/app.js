@@ -259,7 +259,7 @@ const app = Vue.createApp({
     },
     //DEBUG METHODS
     debugWindDraw() {
-      this.ctx.clearRect(15, 15, airStaDim.width, airStaDim.height);
+      this.ctx.clearRect(15, 15, this.airStation.airStaDim.width, this.airStation.airStaDim.height);
       this.draw();
       this.checkForWarnings()
     },
