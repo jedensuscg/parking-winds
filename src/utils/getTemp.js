@@ -12,10 +12,8 @@ const units = "imperial";
 
 async function getTemp() {
   getTimelineParameters = getQueryString();
-  console.log("Inside getTemp");
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {
-      console.log("Inside getTemp Promise");
       axios
         .get(getTimelineURL + "?" + getTimelineParameters)
         .then((result) => {
@@ -24,7 +22,7 @@ async function getTemp() {
           resolve(lowestTemp);
         })
         .catch((error) => {
-          console.log(error)
+          console.log("ERROR", error)
           resolve(["error", 99]);
         });
     } else {
