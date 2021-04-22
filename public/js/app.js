@@ -2,8 +2,10 @@
 const app = Vue.createApp({
   data() {
     return {
+      firstLoadCheck: true,
       dataTimestamp: -3600001,
       loadMsg: "LOADING",
+      unitToFech: '',
       highWindWarning: false,
       lowTempWarning: false,
       airStation: undefined,
@@ -41,11 +43,22 @@ const app = Vue.createApp({
   },
   mounted: function () {
     this.createCanvas();
-    this.createDiagram();
+    //this.createDiagram();
   },
   methods: {
+    startAgain(){
+      this.firstLoadCheck = true
+      this.ctx.clearRect(15, 15, this.airStation.airStaDim.width, this.airStation.airStaDim.height);
+    },
+    firstLoad(unit) {
+      this.unitToFech = unit
+      console.log(unit)
+      this.createDiagram();
+
+      this.firstLoadCheck = false
+    },
     async fetchData() {
-      await fetch("/taf")
+      await fetch(`/taf/${this.unitToFech}`)
         .then((response) => response.json())
         .then((data) => {
           console.table(data.airStation);

@@ -12,8 +12,14 @@
 <body>
     <h1>ECAS WINDS</h1>
     <div id="app" v-cloak>
+        <button @click="startAgain()" v-show="!firstLoadCheck">SELECT ANOTHER STATION</button>
         <br>
-        <div class="diagram">
+        <div class="select-station" v-show="firstLoadCheck">
+            Select Your Airstation <br>
+            <button @click="firstLoad('kecg')">KECG</button>
+            <button @click="firstLoad('kden')">SAMPLE(uses KDEN</button>
+        </div>
+        <div class="diagram" v-show="!firstLoadCheck">
             <div class="wind-data-container">
                 <div class="wind-data-col">
                     <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="caution-icons" alt=""><br>
@@ -68,7 +74,7 @@
                 <p>This area will display complete decoded TAF data in future.</p>
             </div>
         </div>
-        <div class="debug">
+        <div class="debug" v-if="!firstLoadCheck">
             <h4>DEBUG WINDOW</h4>
             <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
                 LIVE WINDS to real winds again</p>
