@@ -1,30 +1,3 @@
-// const airStaDim = {
-//   width: 900,
-//   height: 595,
-// };
-// const parkingSpots = {
-//   spot1: {
-//     x: 268,
-//     y: 348,
-//     baseHeading: 4,
-//   },
-//   spot2: {
-//     x: 375,
-//     y: 394,
-//     baseHeading: 4,
-//   },
-//   spot3: {
-//     x: 586,
-//     y: 302,
-//     baseHeading: 272,
-//   },
-//   spot4: {
-//     x: 694,
-//     y: 424,
-//     baseHeading: 272,
-//   },
-//   radius: 54,
-// };
 
 const app = Vue.createApp({
   data() {
@@ -59,6 +32,11 @@ const app = Vue.createApp({
       debugX: 0,
       debugY: 0,
       drawType: "",
+      windColors: {
+        light: "green",
+        moderate: "yellow",
+        heavy: "red"
+      }
     };
   },
   mounted: function () {
@@ -141,38 +119,43 @@ const app = Vue.createApp({
       };
 
       drawWinds = (spot) => {
-        let r, dir, baseR
+        let windArrowLength, dir, windSpeed
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
         if (drawType === "prevailing") {
-          r = this.winds.prevailingWinds.speed * 2;
+          windSpeed = this.winds.prevailingWinds.speed
+          windArrowLength = windSpeed * 2;
           dir = this.winds.prevailingWinds.direction - 90;
         } else if(drawType === "highest") {
-            r = this.winds.highestWinds.speed * 2;
+          windSpeed = this.winds.highestWinds.speed
+          windArrowLength = windSpeed * 2;
             dir = this.winds.highestWinds.direction - 90;
         } 
         else if(drawType === "gust") {
-          r = this.winds.highestGust.speed * 2;
+          windSpeed = this.winds.highestGust.speed
+          windArrowLength = windSpeed * 2;
           dir = this.winds.highestGust.direction - 90;
         }
 
-        if (r >= 90) {
-          r = 90;
-        } else if (r <= 20) {
-          r = 20;
+        if (windArrowLength >= 90) {
+          windArrowLength = 90;
+        } else if (windArrowLength <= 20) {
+          windArrowLength = 20;
         }
 
-        x = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
-        y = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
+        startArrowPosX = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
+        startArrowPosY = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
 
         this.ctx.beginPath();
-        this.ctx.moveTo(x + 10 * Math.cos((Math.PI * dir) / 180), y + 10 * Math.sin((Math.PI * dir) / 180));
+        this.ctx.moveTo(startArrowPosX + 10 * Math.cos((Math.PI * dir) / 180), startArrowPosY + 10 * Math.sin((Math.PI * dir) / 180));
         this.ctx.lineWidth = 8;
-        this.ctx.lineTo(x + r * Math.cos((Math.PI * dir) / 180), y + r * Math.sin((Math.PI * dir) / 180));
+        this.ctx.lineTo(startArrowPosX + windArrowLength * Math.cos((Math.PI * dir) / 180), startArrowPosY + windArrowLength * Math.sin((Math.PI * dir) / 180));
+        
+        this.ctx.strokeStyle = this.determineWindColor(windSpeed)
         this.ctx.stroke();
 
         //drawWindText(x, y, r, dir, spot)
 
-        drawWindHead(x, y, dir)
+        drawWindHead(startArrowPosX, startArrowPosY, dir, windSpeed)
         // Had to do this to stop ghost arrow from drawing.
         this.ctx.beginPath()
         this.ctx.closePath()
@@ -195,7 +178,7 @@ const app = Vue.createApp({
 
       // }
 
-      drawWindHead = (x, y, dir) => {
+      drawWindHead = (x, y, dir, windSpeed) => {
         this.ctx.beginPath();
 
         this.ctx.moveTo(x, y);
@@ -204,7 +187,7 @@ const app = Vue.createApp({
         this.ctx.lineTo(x, y);
         this.ctx.lineWidth = 1;
         this.ctx.stroke();
-        this.ctx.fillStyle = "red";
+        this.ctx.fillStyle = this.determineWindColor(windSpeed);
 
 
         this.ctx.fill();
@@ -256,6 +239,18 @@ const app = Vue.createApp({
         };
         img.src = 'public/img/130top.svg'
       });
+    },
+    determineWindColor(windSpeed) {
+      if (windSpeed <= 12) {
+        windColor = this.windColors.light
+      } else if (windSpeed >= 22) {
+        windColor = this.windColors.heavy
+      } else {
+        windColor = this.windColors.moderate
+      }
+      
+
+      return windColor
     },
     //DEBUG METHODS
     debugWindDraw() {
