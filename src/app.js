@@ -18,17 +18,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/taf", (req, res) => {
-  console.log(queryUnit)
   const unit = getUnit(queryUnit.unit)
-  console.log(unit)
   if (process.env.NODE_ENV == "development") {
     IATACode = queryUnit.unit
-    console.log(IATACode)
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");
     console.log("app.js", "Using DEV taf file");
     getTaf({ test: true, dataSource: xmlTestData,})
       .then((response) => {
+        
         response["airStation"] = unit
         res.send(response);
       })

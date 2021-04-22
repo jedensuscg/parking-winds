@@ -48,7 +48,7 @@ const app = Vue.createApp({
       await fetch("/taf")
         .then((response) => response.json())
         .then((data) => {
-          console.table(data.winds);
+          console.table(data.airStation);
           this.winds = data.winds
           this.rawTaf = data.rawText;
           this.lowestTemp = {
