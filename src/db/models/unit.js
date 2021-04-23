@@ -13,7 +13,6 @@ const Unit = mongoose.model("Unit", {
     lowercase: true,
     validate(value) {
       if (value[0] != 'k') {
-        console.log("first letter" , value[0])
         throw new Error('IATA Code must start with K')
       }
       if (value.length != 4) {

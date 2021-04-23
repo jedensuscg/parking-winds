@@ -52,7 +52,6 @@ const app = Vue.createApp({
     },
     firstLoad(unit) {
       this.unitToFech = unit
-      console.log(unit)
       this.createDiagram();
 
       this.firstLoadCheck = false
