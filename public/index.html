@@ -5,20 +5,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <link rel="stylesheet" href="public/css/style.css">
-    <title>ECAS Winds</title>
+    <title>PARKING WINDS</title>
 </head>
 
 <body>
-    <h1>ECAS WINDS</h1>
     <div id="app" v-cloak>
-        <button @click="startAgain()" v-show="!firstLoadCheck">SELECT ANOTHER STATION</button>
+        <h1>PARKING WINDS</h1>
+        <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span ref="selectedUnit"></span></h2>  
+        <div class="menu">
+            <button @click="startAgain()" v-show="!firstLoadCheck">SELECT ANOTHER STATION</button>
         <br>
         <div class="select-station" v-show="firstLoadCheck">
             Select Your Airstation <br>
             <button @click="firstLoad('kecg')">KECG</button>
             <button @click="firstLoad('kden')">SAMPLE(uses KDEN</button>
         </div>
+
+        </div>
+        
         <div class="diagram" v-show="!firstLoadCheck">
             <div class="wind-data-container">
                 <div class="wind-data-col">
@@ -26,27 +32,27 @@
                         <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
                         <span>Lowest temperature in next 12 hours</span></div>
                 </div>
-                <div class="wind-data-col">
+                <div class="wind-data-col" ref='prevailingCol'>
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
                     <p>Direction: {{winds.prevailingWinds.direction}}</p>
                     <p>Speed: {{winds.prevailingWinds.speed}}</p>
-                    <button @click="draw(e, 'prevailing')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
                 </div>
-                <div class="wind-data-col">
+                <div class="wind-data-col" ref='strongestCol'>
                     <h3 class="wind-data-heading">STRONGEST WINDS</h3>
                     <p>Direction: {{winds.highestWinds.direction}}</p>
                     <p>Speed: {{winds.highestWinds.speed}}</p>
-                    <button @click="draw(e, 'highest')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
                 </div>
                 <div class="wind-data-col" v-if="winds.highestGust.speed == 0">
                     <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
                     <p>NO GUSTS FORECASTED IN THIS TAF</p>
                 </div>
-                <div class="wind-data-col" v-else>
+                <div class="wind-data-col" ref='gustCol' v-else>
                     <h3 class="wind-data-heading">STRONGEST GUST</h3>
                     <p>Direction: {{winds.highestGust.direction}}</p>
                     <p>Speed: {{winds.highestGust.speed}}</p>
-                    <button @click="draw(e, 'gust')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
             <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">

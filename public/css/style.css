@@ -1,6 +1,10 @@
 [v-cloak] {
     display: none;
 }
+
+.menu {
+    margin: 10px auto;
+}
 .diagram {
     display: flex;
     position: relative;
@@ -19,6 +23,15 @@
 }
 .wind-data-col {
     margin: 5px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.wind-data-col-active {
+    background-color: rgba(208, 250, 248, 0.832);
+    margin: 3px;
+    border: solid 2px black
 }
 .wind-data-col > p {
     margin: 5px;
@@ -26,6 +39,14 @@
 .wind-data-heading {
     margin: 5px;
 }
+
+.selectWindBtn {
+    border-radius: 5px;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 3px;
+}
+
 
 .taf-text {
     min-width: 300px;
