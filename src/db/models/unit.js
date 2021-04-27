@@ -6,17 +6,17 @@ const Unit = mongoose.model("Unit", {
     required: true,
     trim: true,
   },
-  IATACode: {
+  ICAOCode: {
     type: String,
     trim: true,
     required: true,
     lowercase: true,
     validate(value) {
       if (value[0] != 'k') {
-        throw new Error('IATA Code must start with K')
+        throw new Error('ICAO Code must start with K')
       }
       if (value.length != 4) {
-        throw new Error('IATA Code should only be 4 letters (i.e "KECG")')
+        throw new Error('ICAO Code should only be 4 letters (i.e "KECG")')
       }
     }
   },

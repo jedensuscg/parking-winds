@@ -26,7 +26,7 @@ app.get("/taf/:unit", async (req, res) => {
   let unit;
 
   try {
-    unit = await Unit.findOne({ IATACode: _unit });
+    unit = await Unit.findOne({ ICAOCode: _unit });
     if (!unit) {
       return res.status(404).send("No Unit Found");
     }
@@ -46,8 +46,8 @@ app.get("/taf/:unit", async (req, res) => {
       });
   } else {
     console.log("Prod Mode");
-    IATACode = unit.IATACode;
-    getTaf({ test: false, dataSource: IATACode })
+    ICAOCode = unit.ICAOCode;
+    getTaf({ test: false, dataSource: ICAOCode })
       .then((response) => {
         response["airStation"] = unit;
         res.send(response);

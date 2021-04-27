@@ -27,7 +27,7 @@ router.get("/units/:unit", async (req, res) => {
   const _unit = req.params.unit;
 
   try {
-    const unit = await Unit.findOne({ IATACode: _unit });
+    const unit = await Unit.findOne({ ICAOCode: _unit });
 
     if (!unit) {
       return res.status(404).send("No User Found").send(unit);
@@ -41,7 +41,7 @@ router.get("/units/:unit", async (req, res) => {
 
 router.patch("/units/:unit", async (req, res) => {
   try {
-    const unit = await Unit.findOneAndUpdate({ IATACode: req.params.unit }, req.body, { new: true, runValidators: true });
+    const unit = await Unit.findOneAndUpdate({ ICAOCode: req.params.unit }, req.body, { new: true, runValidators: true });
 
     if (!unit) {
       res.status(404).send("Unit not found");
@@ -56,7 +56,7 @@ router.patch("/units/:unit", async (req, res) => {
 router.delete("/units/:unit", async (req, res) => {
   console.log(req.params.unit);
   try {
-    const unit = await Unit.findOneAndDelete({ IATACode: req.params.unit });
+    const unit = await Unit.findOneAndDelete({ ICAOCode: req.params.unit });
     console.log(unit);
 
     if (!unit) {

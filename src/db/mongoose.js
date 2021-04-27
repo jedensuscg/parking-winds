@@ -14,7 +14,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/ecas-winds-db", {
 
 //  const ecity = new Unit({
 //   unit: "Elizabeth City",
-//   IATACode: "kecg",
+//   ICAOCode: "kecg",
 //   mapImage: "public/img/diagram.svg",
 //   airStaDim: {
 //     width: 900,
@@ -53,7 +53,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/ecas-winds-db", {
 
 // const sample = new Unit({
 //   unit: "Sample Airporty",
-//   IATACode: "Kaaa",
+//   ICAOCode: "Kaaa",
 //   mapImage: "public/img/diagram.svg",
 //   airStaDim: {
 //     width: 900,
