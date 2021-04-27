@@ -12,7 +12,8 @@
 
 <body>
     <div id="app" v-cloak>
-        <h1>PARKING WINDS</h1>
+        <header><h1>PARKING WINDS</h1></header>
+
         <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span ref="selectedUnit"></span></h2>  
         <div class="menu">
             <button @click="startAgain()" v-show="!firstLoadCheck">SELECT ANOTHER STATION</button>

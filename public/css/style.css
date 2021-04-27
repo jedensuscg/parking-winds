@@ -1,7 +1,9 @@
 [v-cloak] {
     display: none;
 }
-
+header {
+    width: 100%;
+}
 .menu {
     margin: 10px auto;
 }
