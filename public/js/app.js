@@ -58,7 +58,7 @@ const app = Vue.createApp({
       this.firstLoadCheck = false
     },
     async fetchData() {
-      await fetch(`/taf/${this.unitToFech}`)
+      await fetch(`./taf/${this.unitToFech}`)
         .then((response) => response.json())
         .then((data) => {
           console.table(data.airStation);

@@ -27,7 +27,6 @@ app.get("/taf/:unit", async (req, res) => {
 
   try {
     unit = await Unit.findOne({ IATACode: _unit });
-    console.log(unit);
     if (!unit) {
       return res.status(404).send("No Unit Found");
     }
