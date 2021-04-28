@@ -12,9 +12,6 @@ const Unit = mongoose.model("Unit", {
     required: true,
     lowercase: true,
     validate(value) {
-      if (value[0] != 'k') {
-        throw new Error('ICAO Code must start with K')
-      }
       if (value.length != 4) {
         throw new Error('ICAO Code should only be 4 letters (i.e "KECG")')
       }

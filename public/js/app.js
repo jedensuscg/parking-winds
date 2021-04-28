@@ -2,6 +2,7 @@
 const app = Vue.createApp({
   data() {
     return {
+      hideDetails: false,
       firstLoadCheck: true,
       dataTimestamp: -3600001,
       loadMsg: "LOADING",

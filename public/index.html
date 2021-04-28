@@ -21,17 +21,41 @@
         <div class="select-station" v-show="firstLoadCheck">
             Select Your Airstation <br>
             <button @click="firstLoad('kecg')">KECG</button>
-            <button @click="firstLoad('kden')">SAMPLE(uses KDEN</button>
+            <button @click="firstLoad('padq')">PADQ</button>
         </div>
 
         </div>
         
         <div class="diagram" v-show="!firstLoadCheck">
-            <div class="wind-data-container">
+            <div class="minimized-wind-details" v-show="hideDetails">
+                <div class="wind-data-col-mini minimized-details">
+                        <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
+                        
+                </div>
+                <div class="wind-data-col-mini minimized-details" ref='prevailingCol'>
+                    <span>Prevailing: {{winds.prevailingWinds.direction}}@{{winds.prevailingWinds.speed}}kts</span>
+                    <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
+                </div>
+                <div class="wind-data-col-mini minimized-details" ref='strongestCol'>
+                    <span>Strongest: {{winds.highestWinds.direction}}@{{winds.highestWinds.speed}}kts</span>
+                    <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
+                </div>
+                <div class="wind-data-col-mini minimized-details" v-if="winds.highestGust.speed == 0">
+                    <span>NO GUSTS</span>
+                </div>
+                <div class="wind-data-col-mini minimized-details" ref='gustCol' v-else>
+                    <span>Gusts: {{winds.highestGust.direction}}@{{winds.highestGust.speed}}</span>
+                    <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
+                </div>
+            </div>
+            <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize Details</button>
+
+            <div class="wind-data-container" v-show="!hideDetails">
                 <div class="wind-data-col">
                     <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="caution-icons" alt=""><br>
                         <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
                         <span>Lowest temperature in next 12 hours</span></div>
+                        <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
                 </div>
                 <div class="wind-data-col" ref='prevailingCol'>
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
@@ -79,6 +103,7 @@
                 <h4>RAW TAF</h4>
                 <p>{{rawTaf}}</p>
                 <p>This area will display complete decoded TAF data in future.</p>
+                <span>X:{{debugX}} Y:{{debugY}}</span>
             </div>
         </div>
         <div class="debug" v-if="!firstLoadCheck">
