@@ -142,7 +142,10 @@ const app = Vue.createApp({
           windArrowLength = windSpeed * 2;
           this.$refs.prevailingCol.classList.add('wind-data-col-active')
           this.$refs.strongestCol.classList.remove('wind-data-col-active')
-          this.$refs.gustCol.classList.remove('wind-data-col-active')
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove('wind-data-col-active')
+          }
+          
           dir = this.winds.prevailingWinds.direction - 90;
         } else if(drawType === "highest") {
           windSpeed = this.winds.highestWinds.speed
@@ -150,7 +153,9 @@ const app = Vue.createApp({
           dir = this.winds.highestWinds.direction - 90;
           this.$refs.prevailingCol.classList.remove('wind-data-col-active')
           this.$refs.strongestCol.classList.add('wind-data-col-active')
-          this.$refs.gustCol.classList.remove('wind-data-col-active')
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove('wind-data-col-active')
+          }
         } 
         else if(drawType === "gust") {
           windSpeed = this.winds.highestGust.speed
