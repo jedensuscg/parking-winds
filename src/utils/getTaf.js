@@ -15,7 +15,7 @@ const getTaf = (options) => {
       axios
         .get(url)
         .then((response) => {
-          const tafData = buildTafObject(response);
+          const tafData = buildTafObject(response, options.location);
           resolve(tafData);
         })
         .catch((error) => {
@@ -28,11 +28,11 @@ const getTaf = (options) => {
   });
 };
 
-const buildTafObject = async (response) => {
+const buildTafObject = async (response, location) => {
   let lowestTemp;
   let timeData;
   let rawText;
-  lowestTemp = await getTemp()
+  lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
     if (!response.data) {

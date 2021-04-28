@@ -5,12 +5,16 @@ dateAndTime = require("./dateAndTime");
 const queryString = require("query-string");
 const getTimelineURL = "https://api.tomorrow.io/v4/timelines";
 const apikey = process.env.CLIMACELL_KEY;
-const location = "606e5216b7193e0008efd880";
+
+let location
+
 const fields = ["temperature"];
 const units = "imperial";
 
 
-async function getTemp() {
+async function getTemp(latLong) {
+  location = latLong
+  console.log(location)
   getTimelineParameters = getQueryString();
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {

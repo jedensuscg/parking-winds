@@ -46,8 +46,9 @@ app.get("/taf/:unit", async (req, res) => {
       });
   } else {
     console.log("Prod Mode");
-    ICAOCode = unit.ICAOCode;
-    getTaf({ test: false, dataSource: ICAOCode })
+    const ICAOCode = unit.ICAOCode;
+    const location = [unit.lat, unit.long]
+    getTaf({ test: false, dataSource: ICAOCode, location})
       .then((response) => {
         response["airStation"] = unit;
         res.send(response);

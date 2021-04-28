@@ -17,6 +17,16 @@ const Unit = mongoose.model("Unit", {
       }
     }
   },
+  lat: {
+    type: Number,
+    trim: true,
+    required: true
+  },
+  long: {
+    type: Number,
+    trim: true,
+    required: true
+  },
   mapImage: {
     type: String,
     required: true,
