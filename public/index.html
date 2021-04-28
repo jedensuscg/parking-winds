@@ -5,42 +5,79 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <link rel="stylesheet" href="public/css/style.css">
-    <title>ECAS Winds</title>
+    <title>PARKING WINDS</title>
 </head>
 
 <body>
-    <h1>ECAS WINDS</h1>
     <div id="app" v-cloak>
+        <header><h1>PARKING WINDS</h1></header>
+
+        <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span ref="selectedUnit"></span></h2>  
+        <div class="menu">
+            <button @click="startAgain()" v-show="!firstLoadCheck">SELECT ANOTHER STATION</button>
         <br>
-        <div class="diagram">
-            <div class="wind-data-container">
+        <div class="select-station" v-show="firstLoadCheck">
+            Select Your Airstation <br>
+            <button @click="firstLoad('kecg')">KECG</button>
+            <button @click="firstLoad('padq')">PADQ</button>
+        </div>
+
+        </div>
+        
+        <div class="diagram" v-show="!firstLoadCheck">
+            <div class="minimized-wind-details" v-show="hideDetails">
+                <div class="wind-data-col-mini minimized-details">
+                        <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
+                        
+                </div>
+                <div class="wind-data-col-mini minimized-details" ref='prevailingCol'>
+                    <span>Prevailing: {{winds.prevailingWinds.direction}}@{{winds.prevailingWinds.speed}}kts</span>
+                    <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
+                </div>
+                <div class="wind-data-col-mini minimized-details" ref='strongestCol'>
+                    <span>Strongest: {{winds.highestWinds.direction}}@{{winds.highestWinds.speed}}kts</span>
+                    <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
+                </div>
+                <div class="wind-data-col-mini minimized-details" v-if="winds.highestGust.speed == 0">
+                    <span>NO GUSTS</span>
+                </div>
+                <div class="wind-data-col-mini minimized-details" ref='gustCol' v-else>
+                    <span>Gusts: {{winds.highestGust.direction}}@{{winds.highestGust.speed}}</span>
+                    <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
+                </div>
+            </div>
+            <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize Details</button>
+
+            <div class="wind-data-container" v-show="!hideDetails">
                 <div class="wind-data-col">
                     <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="caution-icons" alt=""><br>
                         <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
                         <span>Lowest temperature in next 12 hours</span></div>
+                        <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
                 </div>
-                <div class="wind-data-col">
+                <div class="wind-data-col" ref='prevailingCol'>
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
                     <p>Direction: {{winds.prevailingWinds.direction}}</p>
                     <p>Speed: {{winds.prevailingWinds.speed}}</p>
-                    <button @click="draw(e, 'prevailing')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
                 </div>
-                <div class="wind-data-col">
+                <div class="wind-data-col" ref='strongestCol'>
                     <h3 class="wind-data-heading">STRONGEST WINDS</h3>
                     <p>Direction: {{winds.highestWinds.direction}}</p>
                     <p>Speed: {{winds.highestWinds.speed}}</p>
-                    <button @click="draw(e, 'highest')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
                 </div>
                 <div class="wind-data-col" v-if="winds.highestGust.speed == 0">
                     <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
                     <p>NO GUSTS FORECASTED IN THIS TAF</p>
                 </div>
-                <div class="wind-data-col" v-else>
+                <div class="wind-data-col" ref='gustCol' v-else>
                     <h3 class="wind-data-heading">STRONGEST GUST</h3>
                     <p>Direction: {{winds.highestGust.direction}}</p>
                     <p>Speed: {{winds.highestGust.speed}}</p>
-                    <button @click="draw(e, 'gust')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
             <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">
@@ -66,9 +103,10 @@
                 <h4>RAW TAF</h4>
                 <p>{{rawTaf}}</p>
                 <p>This area will display complete decoded TAF data in future.</p>
+                <span>X:{{debugX}} Y:{{debugY}}</span>
             </div>
         </div>
-        <div class="debug">
+        <div class="debug" v-if="!firstLoadCheck">
             <h4>DEBUG WINDOW</h4>
             <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
                 LIVE WINDS to real winds again</p>

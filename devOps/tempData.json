@@ -1,0 +1,91 @@
+{
+    "data": {
+        "timelines": [
+            {
+                "timestep": "1h",
+                "startTime": "2021-04-07T21:17:00Z",
+                "endTime": "2021-04-08T09:17:00Z",
+                "intervals": [
+                    {
+                        "startTime": "2021-04-07T21:17:00Z",
+                        "values": {
+                            "temperature": 74.08
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-07T22:17:00Z",
+                        "values": {
+                            "temperature": 70.34
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-07T23:17:00Z",
+                        "values": {
+                            "temperature": 62.47
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T00:17:00Z",
+                        "values": {
+                            "temperature": 62.33
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T01:17:00Z",
+                        "values": {
+                            "temperature": 59.92
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T02:17:00Z",
+                        "values": {
+                            "temperature": 31
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T03:17:00Z",
+                        "values": {
+                            "temperature": 58.8
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T04:17:00Z",
+                        "values": {
+                            "temperature": 44.66
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T05:17:00Z",
+                        "values": {
+                            "temperature": 58.86
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T06:17:00Z",
+                        "values": {
+                            "temperature": 58.71
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T07:17:00Z",
+                        "values": {
+                            "temperature": 57.99
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T08:17:00Z",
+                        "values": {
+                            "temperature": 57.85
+                        }
+                    },
+                    {
+                        "startTime": "2021-04-08T09:17:00Z",
+                        "values": {
+                            "temperature": 57.49
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

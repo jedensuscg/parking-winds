@@ -2,8 +2,11 @@
 const app = Vue.createApp({
   data() {
     return {
+      hideDetails: false,
+      firstLoadCheck: true,
       dataTimestamp: -3600001,
       loadMsg: "LOADING",
+      unitToFech: '',
       highWindWarning: false,
       lowTempWarning: false,
       airStation: undefined,
@@ -41,14 +44,25 @@ const app = Vue.createApp({
   },
   mounted: function () {
     this.createCanvas();
-    this.createDiagram();
+    //this.createDiagram();
   },
   methods: {
+    startAgain(){
+      this.firstLoadCheck = true
+      this.ctx.clearRect(15, 15, this.airStation.airStaDim.width, this.airStation.airStaDim.height);
+    },
+    firstLoad(unit) {
+      this.unitToFech = unit
+      this.createDiagram();
+      
+
+      this.firstLoadCheck = false
+    },
     async fetchData() {
-      await fetch("/taf")
+      await fetch(`./taf/${this.unitToFech}`)
         .then((response) => response.json())
         .then((data) => {
-          console.table(data.winds);
+          console.table(data.airStation);
           this.winds = data.winds
           this.rawTaf = data.rawText;
           this.lowestTemp = {
@@ -62,6 +76,7 @@ const app = Vue.createApp({
             radius: data.airStation.parkingSpots.radius,
             image: data.airStation.mapImage
           }
+          this.$refs.selectedUnit.textContent = this.airStation.unitName
           console.table(this.winds.prevailingWinds.direction)
           console.table(this.airStation.radius)
           this.checkForWarnings();
@@ -121,19 +136,34 @@ const app = Vue.createApp({
       drawWinds = (spot) => {
         let windArrowLength, dir, windSpeed
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
+
         if (drawType === "prevailing") {
           windSpeed = this.winds.prevailingWinds.speed
           windArrowLength = windSpeed * 2;
+          this.$refs.prevailingCol.classList.add('wind-data-col-active')
+          this.$refs.strongestCol.classList.remove('wind-data-col-active')
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove('wind-data-col-active')
+          }
+          
           dir = this.winds.prevailingWinds.direction - 90;
         } else if(drawType === "highest") {
           windSpeed = this.winds.highestWinds.speed
           windArrowLength = windSpeed * 2;
-            dir = this.winds.highestWinds.direction - 90;
+          dir = this.winds.highestWinds.direction - 90;
+          this.$refs.prevailingCol.classList.remove('wind-data-col-active')
+          this.$refs.strongestCol.classList.add('wind-data-col-active')
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove('wind-data-col-active')
+          }
         } 
         else if(drawType === "gust") {
           windSpeed = this.winds.highestGust.speed
           windArrowLength = windSpeed * 2;
           dir = this.winds.highestGust.direction - 90;
+          this.$refs.prevailingCol.classList.remove('wind-data-col-active')
+          this.$refs.strongestCol.classList.remove('wind-data-col-active')
+          this.$refs.gustCol.classList.add('wind-data-col-active')
         }
 
         if (windArrowLength >= 90) {
@@ -160,23 +190,6 @@ const app = Vue.createApp({
         this.ctx.beginPath()
         this.ctx.closePath()
       };
-
-      // drawWindText = (x, y, r, dir, spot) => {
-      //   const baseR = r
-      //   textOffset = r + 10;
-      //   textX = (x + r * Math.cos((Math.PI * dir) / 180) * 1.8)
-      //   textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
-        
-      //   const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
-      //   const displaySpeed = baseR/2 + "kts"
-
-      //   this.ctx.fillStyle = "white"
-      //   this.ctx.fillRect(textX, textY - 20, 70, 20)
-      //   this.ctx.font = "10pt Arial"
-      //   this.ctx.fillStyle = "black"
-      //   this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
-
-      // }
 
       drawWindHead = (x, y, dir, windSpeed) => {
         this.ctx.beginPath();

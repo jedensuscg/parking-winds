@@ -1,40 +1,56 @@
 const express = require("express");
-const getTaf = require("./utils/getTaf");
-const getUnit = require("./utils/getUnit");
-const { response } = require("express");
+const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
-const path = require("path");
+require("./db/mongoose");
+const getTaf = require("./utils/getTaf");
+const Unit = require("./db/models/unit");
+const unitRouter = require('./routers/unit')
+const publicRouter = require('./routers/public')
+// const { response } = require("express");
+
+
+
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use("/public", express.static(path.join(__dirname, "../public")));
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve("./public/index.html"));
-});
+app.use(express.json());
+app.use(unitRouter)
+app.use(publicRouter)
 
-app.get("/taf", (req, res) => {
-  const unit = getUnit()
+
+app.get("/taf/:unit", async (req, res) => {
+  const _unit = req.params.unit;
+  let unit;
+
+  try {
+    unit = await Unit.findOne({ ICAOCode: _unit });
+    if (!unit) {
+      return res.status(404).send("No Unit Found");
+    }
+  } catch (error) {}
+
   if (process.env.NODE_ENV == "development") {
-    IATACode = unit.IATACode
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");
-    console.log("Using DEV taf file");
+    console.log("app.js", "Using DEV taf file");
     getTaf({ test: true, dataSource: xmlTestData })
       .then((response) => {
-        response["airStation"] = unit
+        response["airStation"] = unit;
         res.send(response);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("ERROR", error);
       });
   } else {
     console.log("Prod Mode");
-    IATACode = unit.IATACode
-    getTaf({ test: false, dataSource: IATACode })
+    const ICAOCode = unit.ICAOCode;
+    const location = [unit.lat, unit.long]
+    getTaf({ test: false, dataSource: ICAOCode, location})
       .then((response) => {
-        response["airStation"] = unit
-        console.log(response.airStation.parkingSpots.spots[2])
+        response["airStation"] = unit;
         res.send(response);
       })
       .catch((error) => {

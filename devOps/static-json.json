@@ -1,0 +1,61 @@
+{
+  "raw_text": "KECG 121724Z 1218/1318 03012KT 6SM -DZ OVC006 FM122200 01012KT P6SM VCSH OVC005 FM130200 01013KT 5SM -DZ OVC004 FM130600 01012KT P6SM OVC005 FM131300 03013KT 5SM -RA OVC005",
+  "station_id": "TEST//TEST//TEST---KECG---TEST//TEST//TEST",
+  "issue_time": "2021-02-12T17:24:00Z",
+  "bulletin_time": "2021-02-12T17:24:00Z",
+  "valid_time_from": "2021-02-12T18:00:00Z",
+  "valid_time_to": "2021-02-13T18:00:00Z",
+  "latitude": "36.27",
+  "longitude": "-76.18",
+  "elevation_m": "2.0",
+  "forecast": [
+    {
+      "fcst_time_from": "2021-02-12T18:00:00Z",
+      "fcst_time_to": "2021-02-12T22:00:00Z",
+      "wind_dir_degrees": "30",
+      "wind_speed_kt": "12",
+      "visibility_statute_mi": "6.0",
+      "wx_string": "-DZ",
+      "sky_condition": { "$": { "sky_cover": "OVC", "cloud_base_ft_agl": "600" } }
+    },
+    {
+      "fcst_time_from": "2021-02-12T22:00:00Z",
+      "fcst_time_to": "2021-02-13T02:00:00Z",
+      "change_indicator": "FM",
+      "wind_dir_degrees": "10",
+      "wind_speed_kt": "12",
+      "visibility_statute_mi": "6.21",
+      "wx_string": "VCSH",
+      "sky_condition": { "$": { "sky_cover": "OVC", "cloud_base_ft_agl": "500" } }
+    },
+    {
+      "fcst_time_from": "2021-02-13T02:00:00Z",
+      "fcst_time_to": "2021-02-13T06:00:00Z",
+      "change_indicator": "FM",
+      "wind_dir_degrees": "10",
+      "wind_speed_kt": "13",
+      "visibility_statute_mi": "5.0",
+      "wx_string": "-DZ",
+      "sky_condition": { "$": { "sky_cover": "OVC", "cloud_base_ft_agl": "400" } }
+    },
+    {
+      "fcst_time_from": "2021-02-13T06:00:00Z",
+      "fcst_time_to": "2021-02-13T13:00:00Z",
+      "change_indicator": "FM",
+      "wind_dir_degrees": "10",
+      "wind_speed_kt": "12",
+      "visibility_statute_mi": "6.21",
+      "sky_condition": { "$": { "sky_cover": "OVC", "cloud_base_ft_agl": "500" } }
+    },
+    {
+      "fcst_time_from": "2021-02-13T13:00:00Z",
+      "fcst_time_to": "2021-02-13T18:00:00Z",
+      "change_indicator": "FM",
+      "wind_dir_degrees": "30",
+      "wind_speed_kt": "13",
+      "visibility_statute_mi": "5.0",
+      "wx_string": "-RA",
+      "sky_condition": { "$": { "sky_cover": "OVC", "cloud_base_ft_agl": "500" } }
+    }
+  ]
+}
