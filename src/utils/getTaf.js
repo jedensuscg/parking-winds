@@ -9,7 +9,7 @@ const url = ''
 
 const getTaf = (options) => {
   const url =
-  `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=12&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
+  `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=24&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
