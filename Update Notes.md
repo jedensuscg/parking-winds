@@ -3,6 +3,7 @@
 - Drawing of parking spots and winds now scale based on number of spots, instead of a set number.
 - Added this Update Notes file for more detailed push notes.
 
-**18APR2021: Migrate To Mongo branch**
-- Inital MongoDB setup.
-- Basic mongoose model of Unit data complete.
+**28APR2021***
+- Migrated unit data to MongoDB. Can now add new units easily.
+- - All CRUD endpoints created. Next up is web based form to add new units.
+- Minor visual changes

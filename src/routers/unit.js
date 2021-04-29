@@ -24,13 +24,13 @@ router.get("/units", async (req, res) => {
 });
 
 router.get("/units/:unit", async (req, res) => {
-  const _unit = req.params.unit;
+  const _unit = req.params.unit.toLowerCase();
 
   try {
     const unit = await Unit.findOne({ ICAOCode: _unit });
 
     if (!unit) {
-      return res.status(404).send("No User Found").send(unit);
+      return res.status(404).send("No Unit Found").send(unit);
     }
 
     res.status(201).send(unit);

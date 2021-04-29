@@ -7,6 +7,7 @@ const getTaf = require("./utils/getTaf");
 const Unit = require("./db/models/unit");
 const unitRouter = require('./routers/unit')
 const publicRouter = require('./routers/public')
+const userRouter = require('./routers/user')
 // const { response } = require("express");
 
 
@@ -19,6 +20,20 @@ app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 app.use(unitRouter)
 app.use(publicRouter)
+app.use(userRouter)
+
+const bcrypt = require('bcryptjs')
+
+const password = async () => {
+  const password = 'James1234'
+  const hashedPassword = await bcrypt.hash(password, 8)
+
+  console.log(password, hashedPassword)
+
+  const isMatch = await bcrypt.compare('James1234', hashedPassword)
+  console.log(isMatch)
+}
+password()
 
 
 app.get("/taf/:unit", async (req, res) => {
@@ -62,3 +77,5 @@ app.get("/taf/:unit", async (req, res) => {
 app.listen(port, () => {
   console.log("Listening on port " + port);
 });
+
+
