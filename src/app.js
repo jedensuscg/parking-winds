@@ -22,18 +22,6 @@ app.use(unitRouter)
 app.use(publicRouter)
 app.use(userRouter)
 
-const bcrypt = require('bcryptjs')
-
-const password = async () => {
-  const password = 'James1234'
-  const hashedPassword = await bcrypt.hash(password, 8)
-
-  console.log(password, hashedPassword)
-
-  const isMatch = await bcrypt.compare('James1234', hashedPassword)
-  console.log(isMatch)
-}
-password()
 
 
 app.get("/taf/:unit", async (req, res) => {
@@ -60,7 +48,6 @@ app.get("/taf/:unit", async (req, res) => {
         console.log("ERROR", error);
       });
   } else {
-    console.log("Prod Mode");
     const ICAOCode = unit.ICAOCode;
     const location = [unit.lat, unit.long]
     getTaf({ test: false, dataSource: ICAOCode, location})
