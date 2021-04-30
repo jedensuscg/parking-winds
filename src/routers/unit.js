@@ -1,6 +1,6 @@
 const express = require("express");
 const router = new express.Router();
-const Unit = require("../db/models/unit");
+const Unit = require("../models/unit");
 
 router.post("/units", async (req, res) => {
   const unit = new Unit(req.body);
