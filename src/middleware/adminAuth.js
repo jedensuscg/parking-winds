@@ -18,6 +18,10 @@ const auth = async(req, res, next) => {
       throw new Error("Please Authenticate")
     }
    
+    console.log(user.access, req.path)
+    if (user.access != "admin") {
+      throw new Error("Invalid Permission to access this route.")
+    }
     req.token = token
     req.user = user //Add the user data to the req, so we don't have to do another DB query
     next()

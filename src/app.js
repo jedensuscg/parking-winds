@@ -8,6 +8,7 @@ const Unit = require("./models/unit");
 const unitRouter = require('./routers/unit')
 const publicRouter = require('./routers/public')
 const userRouter = require('./routers/user')
+const adminRouter = require('./routers/admin')
 
 
 
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(unitRouter)
 app.use(publicRouter)
 app.use(userRouter)
+app.use(adminRouter)
 
 
 app.get("/taf/:unit", async (req, res) => {

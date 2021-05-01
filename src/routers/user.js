@@ -2,9 +2,10 @@ const express = require("express");
 const router = new express.Router();
 const User = require("../models/user");
 const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/adminAuth');
 const { connect } = require("mongodb");
 
-//Create new user
+//CREATE NEW USER
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
 
@@ -17,7 +18,7 @@ router.post("/users", async (req, res) => {
   }
 });
 
-//User Login Route
+//LOGIN USER
 router.post("/users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password);
@@ -28,6 +29,7 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
+//LOGOUT USER
 router.post('/users/logout', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
@@ -42,6 +44,7 @@ router.post('/users/logout', auth, async (req, res) => {
   }
 })
 
+//LOGOUT USER ALL LOCATIONS
 router.post('/users/logoutAll', auth, async (req, res) => {
   try {
     req.user.tokens = []
@@ -54,73 +57,47 @@ router.post('/users/logoutAll', auth, async (req, res) => {
   }
 })
 
-//Get ALL users. Requires Admin access
-router.get("/users", auth, async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch (error) {
-    res.status(500).send();
-  }
-});
-
+//GET OWN PROFILE
 router.get("/users/me", auth, async (req, res) => {
   res.send(req.user)
 });
 
-router.get("/users/:user", async (req, res) => {
-  const _user = req.params.user.toLowerCase();
-
-  try {
-    const user = await User.findOne({ email: _user });
-    console.log(`Fetching User: ${user}`);
-    res.send(user);
-
-    if (!user) {
-      return res.status(404).send("No User Found").send(unit);
-    }
-
-    res.status(201).send(user);
-  } catch (error) {
-    res.status(500).send();
-  }
-});
-
-router.patch("/users/:user", async (req, res) => {
+//UPDATE OWN PROFILE
+router.patch("/users/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
+  const allowedUpdates = ['first_name', 'last_name', 'email', 'password', 'unit']
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: 'Invalid Update '})
+  }
+
   try {
-    const user = await User.findOne({ email: req.params.user.toLowerCase() });
+    updates.forEach((update) => (req.user[update] = req.body[update]));
 
-    updates.forEach((update) => (user[update] = req.body[update]));
-
-    await user.save();
+    await req.user.save();
     // const user = await User.findOneAndUpdate({ last_name: req.params.user.toLowerCase() }, req.body, { new: true, runValidators: true });
 
-    if (!user) {
-      res.status(404).send("User not found");
-    }
-
-    res.send(user);
+    res.send(req.user);
   } catch (error) {
-    return res.status(500).send();
+    return res.status(400).send(error);
   }
 });
 
-
-
-
-router.delete("/users/:user", async (req, res) => {
+//DELETE OWN PROFILE
+router.delete("/users/me", auth, async (req, res) => {
   try {
-    const user = await User.findOneAndDelete({ email: req.params.user.toLowerCase() });
+    await req.user.remove()
 
-    if (!user) {
-      return res.status(404).send("user not found");
-    }
-    console.log("Deleted User:", `${user.first_name} ${user.last_name}`);
-    res.send({ Deleted: user.first_name + " " + user.last_name });
+    console.log("Deleted User:", `${req.user.first_name} ${req.user.last_name}`);
+    
+    res.send({ Deleted: req.user });
   } catch (error) {
     res.status(500).send();
   }
 });
+
+
+
 
 module.exports = router;
