@@ -1,8 +1,10 @@
 const express = require("express");
 const router = new express.Router();
 const User = require("../models/user");
-const auth = require('../middlware/auth')
+const auth = require('../middleware/auth');
+const { connect } = require("mongodb");
 
+//Create new user
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
 
@@ -15,19 +17,45 @@ router.post("/users", async (req, res) => {
   }
 });
 
+//User Login Route
 router.post("/users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password);
     const token = await user.generateAuthToken()
     res.send({ user, token });
   } catch (error) {
-    console.log(error)
-    res.status(400).send(error);
+    res.status(400).send({error: error.message});
   }
 });
 
+router.post('/users/logout', auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token != req.token
+    })
 
-router.get("/users", async (req, res) => {
+    await req.user.save()
+
+    res.send()
+  } catch (error) {
+    res.status(500).send()
+  }
+})
+
+router.post('/users/logoutAll', auth, async (req, res) => {
+  try {
+    req.user.tokens = []
+
+    await req.user.save()
+
+    res.send()
+  } catch (error) {
+    res.status(500).send()
+  }
+})
+
+//Get ALL users. Requires Admin access
+router.get("/users", auth, async (req, res) => {
   try {
     const users = await User.find({});
     res.send(users);
@@ -36,11 +64,15 @@ router.get("/users", async (req, res) => {
   }
 });
 
+router.get("/users/me", auth, async (req, res) => {
+  res.send(req.user)
+});
+
 router.get("/users/:user", async (req, res) => {
   const _user = req.params.user.toLowerCase();
 
   try {
-    const user = await User.findOne({ last_name: _user });
+    const user = await User.findOne({ email: _user });
     console.log(`Fetching User: ${user}`);
     res.send(user);
 
@@ -57,7 +89,7 @@ router.get("/users/:user", async (req, res) => {
 router.patch("/users/:user", async (req, res) => {
   const updates = Object.keys(req.body);
   try {
-    const user = await User.findOne({ last_name: req.params.user.toLowerCase() });
+    const user = await User.findOne({ email: req.params.user.toLowerCase() });
 
     updates.forEach((update) => (user[update] = req.body[update]));
 
@@ -79,13 +111,13 @@ router.patch("/users/:user", async (req, res) => {
 
 router.delete("/users/:user", async (req, res) => {
   try {
-    const user = await User.findOneAndDelete({ last_name: req.params.user.toLowerCase() });
+    const user = await User.findOneAndDelete({ email: req.params.user.toLowerCase() });
 
     if (!user) {
       return res.status(404).send("user not found");
     }
-    console.log("Deleted User:", user);
-    res.send({ Deleted: _user.name });
+    console.log("Deleted User:", `${user.first_name} ${user.last_name}`);
+    res.send({ Deleted: user.first_name + " " + user.last_name });
   } catch (error) {
     res.status(500).send();
   }
