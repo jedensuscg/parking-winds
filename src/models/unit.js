@@ -2,11 +2,12 @@ mongoose = require('mongoose')
 
 
 const Unit = mongoose.model("Unit", {
-  unit: {
+  unitName: {
     type: String,
     unique: true,
     required: true,
     trim: true,
+    lowercase: true,
   },
   ICAOCode: {
     type: String,

@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
   unit: {
     type: String,
     required: [true, "Unit Name Required"],
+    lowercase: true,
   },
   email: {
     type: String,
@@ -42,10 +43,18 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
-  access: {
+  dbAccess: {
     type: String,
     required: true,
     default: "user",
+  },
+  unitAdminPermissions:{
+    type: Array,
+    default: [
+      {create: false},
+      {patch: false},
+      {delete: false}
+    ]
   },
   password: {
     type: String,
@@ -66,12 +75,16 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  adminUnits: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+    }
+  ]
 });
 
 //puts method on instance of User
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-
   const token = jwt.sign({ _id: user._id.toString() }, "thisismynewcourse");
 
   user.tokens = user.tokens.concat({ token });
@@ -110,11 +123,10 @@ userSchema.statics.findByCredentials = async (email, password) => {
 // Hash Plaintext password before saving
 userSchema.pre("save", async function (next) {
   const user = this;
-
+  
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
-
   next();
 });
 

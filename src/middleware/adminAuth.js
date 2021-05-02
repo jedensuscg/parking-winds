@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 
-const auth = async(req, res, next) => {
+const adminAuth = async(req, res, next) => {
   let token;
   try {
 
@@ -18,8 +18,7 @@ const auth = async(req, res, next) => {
       throw new Error("Please Authenticate")
     }
    
-    console.log(user.access, req.path)
-    if (user.access != "admin") {
+    if (user.dbAccess != "admin") {
       throw new Error("Invalid Permission to access this route.")
     }
     req.token = token
@@ -30,4 +29,4 @@ const auth = async(req, res, next) => {
   }
 }
 
-module.exports = auth
+module.exports = adminAuth

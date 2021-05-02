@@ -1,16 +1,19 @@
 const express = require("express");
 const router = new express.Router();
 const User = require("../models/user");
+const Unit = require("../models/unit")
 const auth = require('../middleware/auth');
-const adminAuth = require('../middleware/adminAuth');
 const { connect } = require("mongodb");
 
 //CREATE NEW USER
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
+  console.log(req.body.unit.toLowerCase())
 
   try {
     const token = await user.generateAuthToken()
+    const unit = await Unit.findOne( {unitName: req.body.unit.toLowerCase() } )
+    user.adminUnits.push(unit._id)
     await user.save();
     res.status(201).send({user, token});
   } catch (error) {
@@ -19,7 +22,7 @@ router.post("/users", async (req, res) => {
 });
 
 //LOGIN USER
-router.post("/users/login", async (req, res) => {
+router.post("/users/login",  async (req, res) => {
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password);
     const token = await user.generateAuthToken()

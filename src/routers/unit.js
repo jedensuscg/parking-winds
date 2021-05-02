@@ -1,8 +1,10 @@
 const express = require("express");
 const router = new express.Router();
 const Unit = require("../models/unit");
+const auth = require("../middleware/auth")
+const unitAdminAuth = require("../middleware/unitAdmin")
 
-router.post("/units", async (req, res) => {
+router.post("/units", unitAdminAuth, async (req, res) => {
   const unit = new Unit(req.body);
 
   try {
@@ -39,14 +41,17 @@ router.get("/units/:unit", async (req, res) => {
   }
 });
 
-router.patch("/units/:unit", async (req, res) => {
+router.patch("/units/:unit", unitAdminAuth, async (req, res) => {
   const updates = Object.keys(req.body)
   
   try {
     const unit = await Unit.findOne({ICAOCode: req.params.unit})
     updates.forEach((update) => {
       unit[update] = req.body[update]
+      console.log(updates, req.body[update])
     })
+
+
     await unit.save()
 
     if (!unit) {
@@ -59,7 +64,7 @@ router.patch("/units/:unit", async (req, res) => {
   }
 });
 
-router.delete("/units/:unit", async (req, res) => {
+router.delete("/units/:unit", unitAdminAuth, async (req, res) => {
   try {
     const unit = await Unit.findOneAndDelete({ ICAOCode: req.params.unit });
 
