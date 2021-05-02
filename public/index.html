@@ -27,6 +27,8 @@
         </div>
         
         <div class="diagram" v-show="!firstLoadCheck">
+
+<!-- #region COLLAPSED WIND DATA-->
             <div class="minimized-wind-details" v-show="hideDetails">
                 <div class="wind-data-col-mini minimized-details">
                         <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
@@ -44,42 +46,46 @@
                     <span>NO GUSTS</span>
                 </div>
                 <div class="wind-data-col-mini minimized-details" ref='gustCol' v-else>
-                    <span>Gusts: {{winds.highestGust.direction}}@{{winds.highestGust.speed}}</span>
+                    <span>Gusts: {{winds.highestGust.direction}}@{{winds.highestGust.speed}}kts</span>
                     <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
             <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize Details</button>
+<!-- #endregion -->
 
+<!-- #region UNCOLLAPSED WIND DATA-->
             <div class="wind-data-container" v-show="!hideDetails">
                 <div class="wind-data-col">
-                    <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="caution-icons" alt=""><br>
+                    <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="temp-icon" alt=""><br>
                         <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
                         <span>Lowest temperature in next 12 hours</span></div>
                         <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
                 </div>
                 <div class="wind-data-col" ref='prevailingCol'>
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
-                    <p>Direction: {{winds.prevailingWinds.direction}}</p>
-                    <p>Speed: {{winds.prevailingWinds.speed}}</p>
+                    <p class="wind-data-p">Direction: {{winds.prevailingWinds.direction}}</p>
+                    <p class="wind-data-p">Speed: {{winds.prevailingWinds.speed}}</p>
                     <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
                 </div>
                 <div class="wind-data-col" ref='strongestCol'>
                     <h3 class="wind-data-heading">STRONGEST WINDS</h3>
-                    <p>Direction: {{winds.highestWinds.direction}}</p>
-                    <p>Speed: {{winds.highestWinds.speed}}</p>
+                    <p class="wind-data-p">Direction: {{winds.highestWinds.direction}}</p>
+                    <p class="wind-data-p">Speed: {{winds.highestWinds.speed}}</p>
                     <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
                 </div>
                 <div class="wind-data-col" v-if="winds.highestGust.speed == 0">
                     <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
-                    <p>NO GUSTS FORECASTED IN THIS TAF</p>
+                    <p class="wind-data-p">NO GUSTS FORECASTED IN THIS TAF</p>
                 </div>
                 <div class="wind-data-col" ref='gustCol' v-else>
                     <h3 class="wind-data-heading">STRONGEST GUST</h3>
-                    <p>Direction: {{winds.highestGust.direction}}</p>
-                    <p>Speed: {{winds.highestGust.speed}}</p>
+                    <p class="wind-data-p">Direction: {{winds.highestGust.direction}}</p>
+                    <p class="wind-data-p">Speed: {{winds.highestGust.speed}}</p>
                     <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
+<!-- #endregion -->
+
             <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">
                 <div class="icon-divs">
                     <img src="public/img/caution-icon.png" class="caution-icons" alt=""><br><hr>
@@ -106,6 +112,7 @@
                 <span>X:{{debugX}} Y:{{debugY}}</span>
             </div>
         </div>
+
         <div class="debug" v-if="!firstLoadCheck">
             <h4>DEBUG WINDOW</h4>
             <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show. Click
