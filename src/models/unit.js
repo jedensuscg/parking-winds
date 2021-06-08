@@ -1,7 +1,8 @@
 mongoose = require('mongoose')
 
 
-const Unit = mongoose.model("Unit", {
+
+const unitSchema = new mongoose.Schema({
   unitName: {
     type: String,
     unique: true,
@@ -60,5 +61,13 @@ const Unit = mongoose.model("Unit", {
     ],
   },
 });
+
+
+
+// const Unit = mongoose.model("Unit", {
+  
+// });
+
+const Unit = mongoose.model("Unit", unitSchema); 
 
 module.exports = Unit

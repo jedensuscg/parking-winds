@@ -70,12 +70,13 @@ const app = Vue.createApp({
             temp: Math.floor(data.lowestTemp[1])
           }
           this.airStation = {
-            unitName: data.airStation.unit,
+            unitName: data.airStation.unitName,
             airStaDim: data.airStation.airStaDim,
             parkingSpots: data.airStation.parkingSpots,
             radius: data.airStation.parkingSpots.radius,
             image: data.airStation.mapImage
           }
+ 
           this.$refs.selectedUnit.textContent = this.airStation.unitName
           console.table(this.winds.prevailingWinds.direction)
           console.table(this.airStation.radius)
