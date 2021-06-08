@@ -7,6 +7,11 @@ header {
 .menu {
     margin: 10px auto;
 }
+
+.unit-name {
+    text-transform: capitalize;
+}
+
 .diagram {
     display: flex;
     position: relative;
@@ -59,7 +64,7 @@ header {
     border-radius: 5px;
     width: 75%;
     margin: auto;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .show-details-btn {
@@ -81,16 +86,16 @@ header {
 .wind-data-heading {
     margin: 5px;
 }
-
+.wind-data-p {
+    margin: 2px;
+}
 .selectWindBtn {
     border-radius: 5px;
     width: 50%;
     margin: auto;
     margin-bottom: 3px;
+    margin-top: 3px;
 }
-
-
-
 
 .taf-text {
     min-width: 300px;
@@ -127,6 +132,11 @@ header {
 .caution-icons {
     width: 50px;
 }
+
+.temp-icon {
+    width: 40px;
+}
+
 .caution-text {
     margin-top: 0px;
     font-size: 10px;

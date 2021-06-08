@@ -4,10 +4,12 @@ const fs = require("fs");
 require("dotenv").config();
 require("./db/mongoose");
 const getTaf = require("./utils/getTaf");
-const Unit = require("./db/models/unit");
+const Unit = require("./models/unit");
 const unitRouter = require('./routers/unit')
 const publicRouter = require('./routers/public')
-// const { response } = require("express");
+const userRouter = require('./routers/user')
+const adminRouter = require('./routers/admin')
+
 
 
 
@@ -15,15 +17,20 @@ const publicRouter = require('./routers/public')
 const app = express();
 const port = process.env.PORT || 5000;
 
+
+
+
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 app.use(unitRouter)
 app.use(publicRouter)
+app.use(userRouter)
+app.use(adminRouter)
 
 
 app.get("/taf/:unit", async (req, res) => {
   const _unit = req.params.unit;
-  let unit;
+  let unit; 
 
   try {
     unit = await Unit.findOne({ ICAOCode: _unit });
@@ -45,7 +52,6 @@ app.get("/taf/:unit", async (req, res) => {
         console.log("ERROR", error);
       });
   } else {
-    console.log("Prod Mode");
     const ICAOCode = unit.ICAOCode;
     const location = [unit.lat, unit.long]
     getTaf({ test: false, dataSource: ICAOCode, location})
@@ -54,7 +60,7 @@ app.get("/taf/:unit", async (req, res) => {
         res.send(response);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('ERROR:', error);
       });
   }
 });
@@ -62,3 +68,5 @@ app.get("/taf/:unit", async (req, res) => {
 app.listen(port, () => {
   console.log("Listening on port " + port);
 });
+
+

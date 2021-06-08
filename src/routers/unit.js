@@ -1,8 +1,10 @@
 const express = require("express");
 const router = new express.Router();
-const Unit = require("../db/models/unit");
+const Unit = require("../models/unit");
+const auth = require("../middleware/auth")
+const unitAdminAuth = require("../middleware/unitAdmin")
 
-router.post("/units", async (req, res) => {
+router.post("/units", unitAdminAuth, async (req, res) => {
   const unit = new Unit(req.body);
 
   try {
@@ -24,13 +26,13 @@ router.get("/units", async (req, res) => {
 });
 
 router.get("/units/:unit", async (req, res) => {
-  const _unit = req.params.unit;
+  const _unit = req.params.unit.toLowerCase();
 
   try {
     const unit = await Unit.findOne({ ICAOCode: _unit });
 
     if (!unit) {
-      return res.status(404).send("No User Found").send(unit);
+      return res.status(404).send("No Unit Found").send(unit);
     }
 
     res.status(201).send(unit);
@@ -39,9 +41,17 @@ router.get("/units/:unit", async (req, res) => {
   }
 });
 
-router.patch("/units/:unit", async (req, res) => {
+router.patch("/units/:unit", unitAdminAuth, async (req, res) => {
+  const updates = Object.keys(req.body)
+  
   try {
-    const unit = await Unit.findOneAndUpdate({ ICAOCode: req.params.unit }, req.body, { new: true, runValidators: true });
+    const unit = await Unit.findOne({ICAOCode: req.params.unit})
+    updates.forEach((update) => {
+      unit[update] = req.body[update]
+    })
+
+
+    await unit.save()
 
     if (!unit) {
       res.status(404).send("Unit not found");
@@ -53,11 +63,9 @@ router.patch("/units/:unit", async (req, res) => {
   }
 });
 
-router.delete("/units/:unit", async (req, res) => {
-  console.log(req.params.unit);
+router.delete("/units/:unit", unitAdminAuth, async (req, res) => {
   try {
     const unit = await Unit.findOneAndDelete({ ICAOCode: req.params.unit });
-    console.log(unit);
 
     if (!unit) {
       return res.status(404).send("Unit not found");

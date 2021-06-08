@@ -1,13 +1,18 @@
 mongoose = require('mongoose')
 
-const Unit = mongoose.model("Unit", {
-  unit: {
+
+
+const unitSchema = new mongoose.Schema({
+  unitName: {
     type: String,
+    unique: true,
     required: true,
     trim: true,
+    lowercase: true,
   },
   ICAOCode: {
     type: String,
+    unique: true,
     trim: true,
     required: true,
     lowercase: true,
@@ -56,5 +61,13 @@ const Unit = mongoose.model("Unit", {
     ],
   },
 });
+
+
+
+// const Unit = mongoose.model("Unit", {
+  
+// });
+
+const Unit = mongoose.model("Unit", unitSchema); 
 
 module.exports = Unit

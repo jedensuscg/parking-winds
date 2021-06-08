@@ -14,7 +14,6 @@ const units = "imperial";
 
 async function getTemp(latLong) {
   location = latLong
-  console.log(location)
   getTimelineParameters = getQueryString();
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {
