@@ -60,7 +60,7 @@ app.get("/taf/:unit", async (req, res) => {
         res.send(response);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('ERROR:', error);
       });
   }
 });

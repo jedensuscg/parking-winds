@@ -8,7 +8,6 @@ const { connect } = require("mongodb");
 //CREATE NEW USER
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
-  console.log(req.body.unit.toLowerCase())
 
   try {
     const token = await user.generateAuthToken()

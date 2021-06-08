@@ -48,7 +48,6 @@ router.patch("/units/:unit", unitAdminAuth, async (req, res) => {
     const unit = await Unit.findOne({ICAOCode: req.params.unit})
     updates.forEach((update) => {
       unit[update] = req.body[update]
-      console.log(updates, req.body[update])
     })
 
 
