@@ -197,10 +197,18 @@ const app = Vue.createApp({
         startArrowPosY = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
 
         this.ctx.beginPath();
+
         this.ctx.moveTo(startArrowPosX + 10 * Math.cos((Math.PI * dir) / 180), startArrowPosY + 10 * Math.sin((Math.PI * dir) / 180));
-        this.ctx.lineWidth = 8;
+        this.ctx.lineWidth = 10;
+        this.ctx.lineTo(startArrowPosX + (windArrowLength + 2) * Math.cos((Math.PI * dir) / 180), startArrowPosY + (windArrowLength + 2) * Math.sin((Math.PI * dir) / 180));
+        this.ctx.strokeStyle = 'black'
+        this.ctx.stroke();
+
+        this.ctx.closePath()
+        this.ctx.beginPath();
+        this.ctx.moveTo(startArrowPosX + 10 * Math.cos((Math.PI * dir) / 180), startArrowPosY + 10 * Math.sin((Math.PI * dir) / 180));
+        this.ctx.lineWidth = 6;
         this.ctx.lineTo(startArrowPosX + windArrowLength * Math.cos((Math.PI * dir) / 180), startArrowPosY + windArrowLength * Math.sin((Math.PI * dir) / 180));
-        
         this.ctx.strokeStyle = this.determineWindColor(windSpeed)
         this.ctx.stroke();
 
@@ -220,6 +228,8 @@ const app = Vue.createApp({
         this.ctx.lineTo(x + 15 * Math.cos((Math.PI * (dir + 45)) / 180), y + 15 * Math.sin((Math.PI * (dir + 45)) / 180));
         this.ctx.lineTo(x, y);
         this.ctx.lineWidth = 1;
+        this.ctx.strokeStyle = "black";
+        this.ctx.lineWidth = "3";
         this.ctx.stroke();
         this.ctx.fillStyle = this.determineWindColor(windSpeed);
 

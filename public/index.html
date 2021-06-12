@@ -5,37 +5,59 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="public/css/style.css">
     <title>PARKING WINDS</title>
+
 </head>
 
 <body>
     <div id="app" v-cloak>
-        <header><h1>PARKING WINDS</h1></header>
+        <header>
+            <h1 class="title">PARKING WIND VISUALIZER</h1>
+        </header>
+        <button id="update-btn">View Latest Updates</button>
+        <div id="updateModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times</span>
+                <p>
+                <ul>
+                    <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
+                    <li>Added stroke around wind arrows to make them contrast better against lighter maps</li>
+                    <li>Visual Updates</li>
+                    <li>Added this Update popup</li>
+                </ul>
+                </p>
+            </div>
+        </div>
+        <div class="main-menu">
+            <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span class="unit-name"
+                    ref="selectedUnit"></span></h2>
+            <div class="unit-menu">
+                <button class="select-another-btn  btn-bold" @click="startAgain()" v-show="!firstLoadCheck">SELECT
+                    ANOTHER STATION</button>
+                <br>
+                <div class="select-station" v-show="firstLoadCheck">
+                    <h2 class="subtitle">Select Your Airstation</h2> <br>
+                    <button class="unit-select-btn btn-bold" @click="firstLoad('kecg')">KECG</button>
+                    <button class="unit-select-btn  btn-bold" @click="firstLoad('padq')">PADQ</button>
+                </div>
 
-        <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span class="unit-name" ref="selectedUnit"></span></h2>  
-        <div class="menu">
-            <button @click="startAgain()" v-show="!firstLoadCheck">SELECT ANOTHER STATION</button>
-        <br>
-        <div class="select-station" v-show="firstLoadCheck">
-            Select Your Airstation <br>
-            <button @click="firstLoad('kecg')">KECG</button>
-            <button @click="firstLoad('padq')">PADQ</button>
+            </div>
         </div>
 
-        </div>
-        
+
         <div class="diagram" v-show="!firstLoadCheck">
 
-<!-- #region COLLAPSED WIND DATA-->
+            <!-- #region COLLAPSED WIND DATA-->
             <div class="minimized-wind-details" v-show="hideDetails">
                 <div class="wind-data-col-mini minimized-details">
-                        <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
+                    <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
                 </div>
                 <div class="wind-data-col-mini minimized-details" ref='prevailingCol'>
                     <span>Prevailing: {{winds.prevailingWinds.direction}}@{{winds.prevailingWinds.speed}}kts</span>
-                    <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectPrevailWindBtn"
+                        @click="draw(e, 'prevailing')">SHOW</button>
                 </div>
                 <div class="wind-data-col-mini minimized-details" ref='strongestCol'>
                     <span>Strongest: {{winds.highestWinds.direction}}@{{winds.highestWinds.speed}}kts</span>
@@ -49,26 +71,31 @@
                     <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
-            <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize Details</button>
-<!-- #endregion -->
+            <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize
+                Details</button>
+            <!-- #endregion -->
 
-<!-- #region UNCOLLAPSED WIND DATA-->
+            <!-- #region UNCOLLAPSED WIND DATA-->
             <div class="wind-data-container" v-show="!hideDetails">
                 <div class="wind-data-col">
                     <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="temp-icon" alt=""><br>
                         <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
-                        <span>Lowest temperature in next 12 hours</span></div>
-                        <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
+                        <span>Lowest temperature in next 12 hours</span>
+                    </div>
+                    <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
                 </div>
                 <div class="wind-data-col" ref='prevailingCol'>
                     <h3 class="wind-data-heading">PREVAILING WINDS</h3>
+                    <p class="wind-data-p">Time: All Day </p>
                     <p class="wind-data-p">Direction: {{winds.prevailingWinds.direction}}</p>
                     <p class="wind-data-p">Speed: {{winds.prevailingWinds.speed}}</p>
-                    <button class="selectWindBtn" ref="selectPrevailWindBtn" @click="draw(e, 'prevailing')">SHOW</button>
+                    <button class="selectWindBtn" ref="selectPrevailWindBtn"
+                        @click="draw(e, 'prevailing')">SHOW</button>
                 </div>
                 <div class="wind-data-col" ref='strongestCol'>
                     <h3 class="wind-data-heading">STRONGEST WINDS</h3>
-                    <p class="wind-data-p">Time: {{winds.highestWinds.timeFromLocal}} to {{winds.highestWinds.timeToLocal}} </p>
+                    <p class="wind-data-p">Time: {{winds.highestWinds.timeFromLocal}} to
+                        {{winds.highestWinds.timeToLocal}} </p>
                     <p class="wind-data-p">Direction: {{winds.highestWinds.direction}}</p>
                     <p class="wind-data-p">Speed: {{winds.highestWinds.speed}}</p>
                     <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
@@ -79,18 +106,20 @@
                 </div>
                 <div class="wind-data-col" ref='gustCol' v-else>
                     <h3 class="wind-data-heading">STRONGEST GUST</h3>
-                    <p class="wind-data-p">Time: {{winds.highestGust.timeFromLocal}} to {{winds.highestGust.timeToLocal}} </p>
+                    <p class="wind-data-p">Time: {{winds.highestGust.timeFromLocal}} to
+                        {{winds.highestGust.timeToLocal}} </p>
                     <p class="wind-data-p">Direction: {{winds.highestGust.direction}}</p>
                     <p class="wind-data-p">Speed: {{winds.highestGust.speed}}</p>
                     <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
                 </div>
             </div>
-<!-- #endregion -->
+            <!-- #endregion -->
 
             <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">
                 <div class="icon-divs">
-                    <img src="public/img/caution-icon.png" class="caution-icons" alt=""><br><hr>
- 
+                    <img src="public/img/caution-icon.png" class="caution-icons" alt=""><br>
+                    <hr>
+
                 </div>
                 <div class="icon-divs" v-if="lowTempWarning">
                     <img src="public/img/snowflake.png" class="caution-icons" alt=""><br>
@@ -125,9 +154,8 @@
                 <label for="prevailing-Wind-Speed">Speed</label><br>
                 <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
                     v-model="winds.prevailingWinds.speed"><br>
-                    <label for="temp-debug">Lowest Forecast Temperature</label><br>
-                    <input type="number" name="temp-debug" id="temp-debug"
-                        v-model="lowestTemp.temp"><br><br>
+                <label for="temp-debug">Lowest Forecast Temperature</label><br>
+                <input type="number" name="temp-debug" id="temp-debug" v-model="lowestTemp.temp"><br><br>
                 <button @click="debugWindDraw">TEST WINDS</button>
                 <button class="create" @click="createDiagram">LIVE WINDS</button><br>
                 <span>Low Temp Flag Active: {{lowTempWarning}}</span><br>
@@ -139,6 +167,33 @@
 
     <script src="https://unpkg.com/vue@next"></script>
     <script type="text/javascript" src="public/js/app.js"></script>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("updateModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("update-btn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 
 </html>
