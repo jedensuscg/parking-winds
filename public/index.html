@@ -32,7 +32,6 @@
             <div class="minimized-wind-details" v-show="hideDetails">
                 <div class="wind-data-col-mini minimized-details">
                         <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
-                        
                 </div>
                 <div class="wind-data-col-mini minimized-details" ref='prevailingCol'>
                     <span>Prevailing: {{winds.prevailingWinds.direction}}@{{winds.prevailingWinds.speed}}kts</span>
@@ -69,6 +68,7 @@
                 </div>
                 <div class="wind-data-col" ref='strongestCol'>
                     <h3 class="wind-data-heading">STRONGEST WINDS</h3>
+                    <p class="wind-data-p">Time: {{winds.highestWinds.timeFromLocal}} to {{winds.highestWinds.timeToLocal}} </p>
                     <p class="wind-data-p">Direction: {{winds.highestWinds.direction}}</p>
                     <p class="wind-data-p">Speed: {{winds.highestWinds.speed}}</p>
                     <button class="selectWindBtn" ref="selectStrongWindBtn" @click="draw(e, 'highest')">SHOW</button>
@@ -79,6 +79,7 @@
                 </div>
                 <div class="wind-data-col" ref='gustCol' v-else>
                     <h3 class="wind-data-heading">STRONGEST GUST</h3>
+                    <p class="wind-data-p">Time: {{winds.highestGust.timeFromLocal}} to {{winds.highestGust.timeToLocal}} </p>
                     <p class="wind-data-p">Direction: {{winds.highestGust.direction}}</p>
                     <p class="wind-data-p">Speed: {{winds.highestGust.speed}}</p>
                     <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>

@@ -17,11 +17,19 @@ const app = Vue.createApp({
         },
         highestWinds: {
           direction: 0,
-          speed: 0
+          speed: 0,
+          timeFrom: 0,
+          timeTo: 0,
+          timeFromLocal: 0,
+          timeToLocal: 0,
         },
         highestGust: {
           direction: 0,
-          time: 0
+          time: 0,
+          timeFrom: 0,
+          timeTo: 0,
+          timeFromLocal: 0,
+          timeToLocal: 0,
         }
       },
       rawTaf: "",
@@ -80,11 +88,23 @@ const app = Vue.createApp({
           this.$refs.selectedUnit.textContent = this.airStation.unitName
           console.table(this.winds.prevailingWinds.direction)
           console.table(this.airStation.radius)
+          this.convertToLocalTime();
           this.checkForWarnings();
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    convertToLocalTime(){
+      const highestWindsLocalFrom = new Date(this.winds.highestWinds.timeFrom)
+      const highestWindsLocalTo = new Date(this.winds.highestWinds.timeTo)
+      this.winds.highestWinds.timeFromLocal = highestWindsLocalFrom.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+      this.winds.highestWinds.timeToLocal = highestWindsLocalTo.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+
+      const highestGustLocalFrom = new Date(this.winds.highestGust.time)
+      const highestGustLocalTo = new Date(this.winds.highestGust.timeTo)
+      this.winds.highestGust.timeFromLocal = highestGustLocalFrom.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+      this.winds.highestGust.timeToLocal = highestGustLocalTo.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
     },
     checkForWarnings() {
       if (this.winds.prevailingWinds.speed > 22 || this.winds.highestGust.speed > 22) {
