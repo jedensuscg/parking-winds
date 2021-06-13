@@ -118,5 +118,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-/devOps
+# PM2
+ecosystem.config.js
+
 .vscode

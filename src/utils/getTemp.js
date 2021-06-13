@@ -5,17 +5,18 @@ dateAndTime = require("./dateAndTime");
 const queryString = require("query-string");
 const getTimelineURL = "https://api.tomorrow.io/v4/timelines";
 const apikey = process.env.CLIMACELL_KEY;
-const location = "606e5216b7193e0008efd880";
+
+let location
+
 const fields = ["temperature"];
 const units = "imperial";
 
 
-async function getTemp() {
+async function getTemp(latLong) {
+  location = latLong
   getTimelineParameters = getQueryString();
-  console.log("Inside getTemp");
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV == "production") {
-      console.log("Inside getTemp Promise");
       axios
         .get(getTimelineURL + "?" + getTimelineParameters)
         .then((result) => {
@@ -24,7 +25,7 @@ async function getTemp() {
           resolve(lowestTemp);
         })
         .catch((error) => {
-          console.log(error)
+          console.log("ERROR", error)
           resolve(["error", 99]);
         });
     } else {

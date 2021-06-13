@@ -2,8 +2,11 @@
 const app = Vue.createApp({
   data() {
     return {
+      hideDetails: false,
+      firstLoadCheck: true,
       dataTimestamp: -3600001,
       loadMsg: "LOADING",
+      unitToFech: '',
       highWindWarning: false,
       lowTempWarning: false,
       airStation: undefined,
@@ -14,11 +17,19 @@ const app = Vue.createApp({
         },
         highestWinds: {
           direction: 0,
-          speed: 0
+          speed: 0,
+          timeFrom: 0,
+          timeTo: 0,
+          timeFromLocal: 0,
+          timeToLocal: 0,
         },
         highestGust: {
           direction: 0,
-          time: 0
+          time: 0,
+          timeFrom: 0,
+          timeTo: 0,
+          timeFromLocal: 0,
+          timeToLocal: 0,
         }
       },
       rawTaf: "",
@@ -41,14 +52,25 @@ const app = Vue.createApp({
   },
   mounted: function () {
     this.createCanvas();
-    this.createDiagram();
+    //this.createDiagram();
   },
   methods: {
+    startAgain(){
+      this.firstLoadCheck = true
+      this.ctx.clearRect(15, 15, this.airStation.airStaDim.width, this.airStation.airStaDim.height);
+    },
+    firstLoad(unit) {
+      this.unitToFech = unit
+      this.createDiagram();
+      
+
+      this.firstLoadCheck = false
+    },
     async fetchData() {
-      await fetch("/taf")
+      await fetch(`./taf/${this.unitToFech}`)
         .then((response) => response.json())
         .then((data) => {
-          console.table(data.winds);
+          console.table(data.airStation);
           this.winds = data.winds
           this.rawTaf = data.rawText;
           this.lowestTemp = {
@@ -56,19 +78,33 @@ const app = Vue.createApp({
             temp: Math.floor(data.lowestTemp[1])
           }
           this.airStation = {
-            unitName: data.airStation.unit,
+            unitName: data.airStation.unitName,
             airStaDim: data.airStation.airStaDim,
             parkingSpots: data.airStation.parkingSpots,
             radius: data.airStation.parkingSpots.radius,
             image: data.airStation.mapImage
           }
+ 
+          this.$refs.selectedUnit.textContent = this.airStation.unitName
           console.table(this.winds.prevailingWinds.direction)
           console.table(this.airStation.radius)
+          this.convertToLocalTime();
           this.checkForWarnings();
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    convertToLocalTime(){
+      const highestWindsLocalFrom = new Date(this.winds.highestWinds.timeFrom)
+      const highestWindsLocalTo = new Date(this.winds.highestWinds.timeTo)
+      this.winds.highestWinds.timeFromLocal = highestWindsLocalFrom.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+      this.winds.highestWinds.timeToLocal = highestWindsLocalTo.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+
+      const highestGustLocalFrom = new Date(this.winds.highestGust.time)
+      const highestGustLocalTo = new Date(this.winds.highestGust.timeTo)
+      this.winds.highestGust.timeFromLocal = highestGustLocalFrom.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
+      this.winds.highestGust.timeToLocal = highestGustLocalTo.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
     },
     checkForWarnings() {
       if (this.winds.prevailingWinds.speed > 22 || this.winds.highestGust.speed > 22) {
@@ -121,19 +157,34 @@ const app = Vue.createApp({
       drawWinds = (spot) => {
         let windArrowLength, dir, windSpeed
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
+
         if (drawType === "prevailing") {
           windSpeed = this.winds.prevailingWinds.speed
           windArrowLength = windSpeed * 2;
+          this.$refs.prevailingCol.classList.add('wind-data-col-active')
+          this.$refs.strongestCol.classList.remove('wind-data-col-active')
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove('wind-data-col-active')
+          }
+          
           dir = this.winds.prevailingWinds.direction - 90;
         } else if(drawType === "highest") {
           windSpeed = this.winds.highestWinds.speed
           windArrowLength = windSpeed * 2;
-            dir = this.winds.highestWinds.direction - 90;
+          dir = this.winds.highestWinds.direction - 90;
+          this.$refs.prevailingCol.classList.remove('wind-data-col-active')
+          this.$refs.strongestCol.classList.add('wind-data-col-active')
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove('wind-data-col-active')
+          }
         } 
         else if(drawType === "gust") {
           windSpeed = this.winds.highestGust.speed
           windArrowLength = windSpeed * 2;
           dir = this.winds.highestGust.direction - 90;
+          this.$refs.prevailingCol.classList.remove('wind-data-col-active')
+          this.$refs.strongestCol.classList.remove('wind-data-col-active')
+          this.$refs.gustCol.classList.add('wind-data-col-active')
         }
 
         if (windArrowLength >= 90) {
@@ -146,10 +197,18 @@ const app = Vue.createApp({
         startArrowPosY = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
 
         this.ctx.beginPath();
+
         this.ctx.moveTo(startArrowPosX + 10 * Math.cos((Math.PI * dir) / 180), startArrowPosY + 10 * Math.sin((Math.PI * dir) / 180));
-        this.ctx.lineWidth = 8;
+        this.ctx.lineWidth = 10;
+        this.ctx.lineTo(startArrowPosX + (windArrowLength + 2) * Math.cos((Math.PI * dir) / 180), startArrowPosY + (windArrowLength + 2) * Math.sin((Math.PI * dir) / 180));
+        this.ctx.strokeStyle = 'black'
+        this.ctx.stroke();
+
+        this.ctx.closePath()
+        this.ctx.beginPath();
+        this.ctx.moveTo(startArrowPosX + 10 * Math.cos((Math.PI * dir) / 180), startArrowPosY + 10 * Math.sin((Math.PI * dir) / 180));
+        this.ctx.lineWidth = 6;
         this.ctx.lineTo(startArrowPosX + windArrowLength * Math.cos((Math.PI * dir) / 180), startArrowPosY + windArrowLength * Math.sin((Math.PI * dir) / 180));
-        
         this.ctx.strokeStyle = this.determineWindColor(windSpeed)
         this.ctx.stroke();
 
@@ -161,23 +220,6 @@ const app = Vue.createApp({
         this.ctx.closePath()
       };
 
-      // drawWindText = (x, y, r, dir, spot) => {
-      //   const baseR = r
-      //   textOffset = r + 10;
-      //   textX = (x + r * Math.cos((Math.PI * dir) / 180) * 1.8)
-      //   textY = (y + textOffset * Math.sin((Math.PI * dir) / 180) * 1.25)
-        
-      //   const displayDir = (dir + 90) < 100 ? "0" + (dir + 90) : dir + 90
-      //   const displaySpeed = baseR/2 + "kts"
-
-      //   this.ctx.fillStyle = "white"
-      //   this.ctx.fillRect(textX, textY - 20, 70, 20)
-      //   this.ctx.font = "10pt Arial"
-      //   this.ctx.fillStyle = "black"
-      //   this.ctx.fillText(`${displayDir}@${displaySpeed}`, textX, textY - 5)
-
-      // }
-
       drawWindHead = (x, y, dir, windSpeed) => {
         this.ctx.beginPath();
 
@@ -186,6 +228,8 @@ const app = Vue.createApp({
         this.ctx.lineTo(x + 15 * Math.cos((Math.PI * (dir + 45)) / 180), y + 15 * Math.sin((Math.PI * (dir + 45)) / 180));
         this.ctx.lineTo(x, y);
         this.ctx.lineWidth = 1;
+        this.ctx.strokeStyle = "black";
+        this.ctx.lineWidth = "3";
         this.ctx.stroke();
         this.ctx.fillStyle = this.determineWindColor(windSpeed);
 

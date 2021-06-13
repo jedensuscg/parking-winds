@@ -9,13 +9,14 @@ const url = ''
 
 const getTaf = (options) => {
   const url =
-  `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=12&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
+  `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=24&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
         .get(url)
         .then((response) => {
-          const tafData = buildTafObject(response);
+          
+          const tafData = buildTafObject(response, options.location);
           resolve(tafData);
         })
         .catch((error) => {
@@ -28,14 +29,14 @@ const getTaf = (options) => {
   });
 };
 
-const buildTafObject = async (response) => {
+const buildTafObject = async (response, location) => {
   let lowestTemp;
   let timeData;
   let rawText;
-  lowestTemp = await getTemp()
-  console.log("Temp Fetched")
+  lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
+
     if (!response.data) {
       return response;
     } else {
@@ -59,7 +60,6 @@ const buildTafObject = async (response) => {
     rawTafData = createTafArrays(baseData.forecast);
     winds = calcTafData.getCalculatedTafData(rawTafData);
 
-    console.log(lowestTemp, "lowest Temp")
   });
   return {
     timeData,
@@ -72,9 +72,13 @@ const buildTafObject = async (response) => {
 
 // Create an array for each forecast period.
 createTafArrays = (forecastData) => {
+  console.log(forecastData)
   let durationOfForecast;
   let tafForecasts = [];
   
+  if (!Array.isArray(forecastData)) {
+    forecastData = [forecastData]
+  } 
   forecastData.forEach((forecast) => {
     timeFrom = forecast.fcst_time_from;
     timeTo = forecast.fcst_time_to;

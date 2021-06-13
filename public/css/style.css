@@ -1,12 +1,92 @@
 [v-cloak] {
     display: none;
 }
+
+.background {
+    width: 100vw;
+    height:100vh;
+    background: rgb(234,239,246);
+    background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+}
+.backgroundfull {
+    height:fit-content;
+    min-width: 1400px;
+    background: rgb(234,239,246);
+    background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+}
+header {
+    width: 100%;
+}
+
+.title {
+    width: 50%;
+    font-size: 2em;
+    margin-left: 8%;
+    padding-bottom: 10px;
+    font-family: Helvetica, sans-serif;
+}
+
+#update-btn {
+    font-size: 16px;
+    color: darkblue;
+    margin-bottom: 2px;
+}
+
+.subtitle {
+
+    margin: 0;
+}
+
+.main-menu {
+    background: rgb(179,179,179);
+    background: linear-gradient(133deg, rgba(179,179,179,1) 54%, rgba(4,4,158,1) 55%, rgba(4,4,185,1) 57%, rgba(255,255,255,1) 59%, rgba(255,255,255,1) 62%, rgba(186,22,12,1) 63%, rgba(186,22,12,1) 84%, rgba(179,179,179,1) 85%);
+    padding: 5px;
+    padding-top: 2px;
+    border-bottom: black 5px solid;
+    border-top: black 5px solid;
+}
+.unit-menu {
+    margin: 10px auto;
+}
+
+.unit-name {
+    text-transform: capitalize;
+}
+
+.btn-bold {
+    font-weight: bold;
+    font-size: 16px;
+}
+.unit-select-btn {
+    
+}
+
+.select-another-btn {
+    position: relative;
+    left: 1%
+}
+
+
 .diagram {
     display: flex;
     position: relative;
     width: auto;
-    margin: -50px 10px 10px 50px
+    margin: 10px 10px 10px 50px
 }
+
+
+.minimized-wind-details {
+    position:absolute;
+    display: flex;
+    justify-content:space-around;
+    left: 65px;
+    top: 20px;
+    width: 800px;
+    height: 25px;
+    background-color: rgba(255, 255, 255, 0.832);
+    border: 2px red solid;
+}
+
 .wind-data-container {
     position:absolute;
     display: flex;
@@ -19,12 +99,58 @@
 }
 .wind-data-col {
     margin: 5px;
+    display: flex;
+    flex-direction: column;
+    
 }
-.wind-data-col > p {
-    margin: 5px;
+
+.minimized-details > span {
+    font-size: 14px;
 }
+.minimized-details > .selectWindBtn {
+    height: 15px;
+    font-size: 10px;
+    position: relative;
+    bottom: 2;
+    left: 5px;
+    width: auto;
+}
+
+.hide-details-btn {
+    border-radius: 5px;
+    width: 75%;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.show-details-btn {
+    height: 20px;
+    width: 125px;
+    font-size: 12px;
+    position: absolute;
+    left: 400px;
+    top: 50px;
+    border-radius: 5px;
+}
+
+.wind-data-col-active {
+    background-color: rgba(208, 250, 248, 0.832);
+    margin: 3px;
+    border: solid 2px black
+}
+
 .wind-data-heading {
     margin: 5px;
+}
+.wind-data-p {
+    margin: 2px;
+}
+.selectWindBtn {
+    border-radius: 5px;
+    width: 50%;
+    margin: auto;
+    margin-bottom: 3px;
+    margin-top: 3px;
 }
 
 .taf-text {
@@ -45,6 +171,7 @@
 }
 .debug {
     width: auto;
+    color: rgb(194, 194, 194);
 }
 .temp-and-warning {
     width: 60px;
@@ -62,7 +189,50 @@
 .caution-icons {
     width: 50px;
 }
+
+.temp-icon {
+    width: 40px;
+}
+
 .caution-text {
     margin-top: 0px;
     font-size: 10px;
 }
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
