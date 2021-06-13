@@ -15,6 +15,7 @@ const getTaf = (options) => {
       axios
         .get(url)
         .then((response) => {
+          
           const tafData = buildTafObject(response, options.location);
           resolve(tafData);
         })
@@ -35,6 +36,7 @@ const buildTafObject = async (response, location) => {
   lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
+
     if (!response.data) {
       return response;
     } else {
@@ -70,9 +72,13 @@ const buildTafObject = async (response, location) => {
 
 // Create an array for each forecast period.
 createTafArrays = (forecastData) => {
+  console.log(forecastData)
   let durationOfForecast;
   let tafForecasts = [];
   
+  if (!Array.isArray(forecastData)) {
+    forecastData = [forecastData]
+  } 
   forecastData.forEach((forecast) => {
     timeFrom = forecast.fcst_time_from;
     timeTo = forecast.fcst_time_to;
