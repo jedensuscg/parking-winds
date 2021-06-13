@@ -1,6 +1,19 @@
 [v-cloak] {
     display: none;
 }
+
+.background {
+    width: 100vh;
+    height:100vh;
+    background: rgb(234,239,246);
+    background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+}
+.backgroundfull {
+    height:fit-content;
+    width: fit-content;
+    background: rgb(234,239,246);
+    background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+}
 header {
     width: 100%;
 }
@@ -25,8 +38,8 @@ header {
 }
 
 .main-menu {
-    background: rgb(255,255,255);
-    background: linear-gradient(133deg, rgba(255,255,255,1) 54%, rgba(4,4,185,1) 55%, rgba(4,4,185,1) 57%, rgba(255,255,255,1) 59%, rgba(255,255,255,1) 62%, rgba(186,22,12,1) 63%, rgba(186,22,12,1) 84%, rgba(255,255,255,1) 85%);
+    background: rgb(179,179,179);
+    background: linear-gradient(133deg, rgba(179,179,179,1) 54%, rgba(4,4,158,1) 55%, rgba(4,4,185,1) 57%, rgba(255,255,255,1) 59%, rgba(255,255,255,1) 62%, rgba(186,22,12,1) 63%, rgba(186,22,12,1) 84%, rgba(179,179,179,1) 85%);
     padding: 5px;
     padding-top: 2px;
     border-bottom: black 5px solid;
@@ -58,7 +71,7 @@ header {
     display: flex;
     position: relative;
     width: auto;
-    margin: -10px 10px 10px 50px
+    margin: 10px 10px 10px 50px
 }
 
 
@@ -158,6 +171,7 @@ header {
 }
 .debug {
     width: auto;
+    color: rgb(194, 194, 194);
 }
 .temp-and-warning {
     width: 60px;
