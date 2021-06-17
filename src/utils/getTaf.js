@@ -15,7 +15,6 @@ const getTaf = (options) => {
       axios
         .get(url)
         .then((response) => {
-          
           const tafData = buildTafObject(response, options.location);
           resolve(tafData);
         })
@@ -36,7 +35,7 @@ const buildTafObject = async (response, location) => {
   lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
-
+   
     if (!response.data) {
       return response;
     } else {
@@ -66,7 +65,7 @@ const buildTafObject = async (response, location) => {
     rawText,
     winds,
     rawTafData,
-    lowestTemp
+    lowestTemp,
   };
 };
 
@@ -82,11 +81,11 @@ createTafArrays = (forecastData) => {
   forecastData.forEach((forecast) => {
     timeFrom = forecast.fcst_time_from;
     timeTo = forecast.fcst_time_to;
+    changeIndicator = forecast.change_indicator? forecast.change_indicator : "FM";
     windDirection = forecast.wind_dir_degrees ? forecast.wind_dir_degrees : 0;
     windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
     windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
     windGustDir = forecast.wind_gust_kt ? forecast.wind_dir_degrees : 0;
-
     //determine amount of time taf forecast lasted
     if (timeFrom && timeTo) {
       durationOfForecast = calcForecastDuration(timeFrom, timeTo);
@@ -102,9 +101,10 @@ createTafArrays = (forecastData) => {
       windGust: parseInt(windGust),
       windGustDir: parseInt(windGustDir),
       durationOfForecast,
+      changeIndicator,
     });
   });
-
+  
   return {
     tafForecasts,
   };
