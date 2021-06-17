@@ -7,167 +7,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="public/css/style.css">
+    <link rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon">
     <title>PARKING WINDS</title>
 
 </head>
 
 <body>
 
-        <div id="app" v-cloak>
-            <div v-bind:class="{ backgroundfull: !firstLoadCheck, background: firstLoadCheck }">
-                <header>
-                    <h1 class="title">PARKING WIND VISUALIZER</h1>
-                </header>
-                <button id="update-btn">View Latest Updates</button>
-                <div id="updateModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times</span>
-                        <p>
-                        <ul>
-                            <li>
-                                <h5>FEATURES</h5>
-                            </li>
-                            <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
-                            <li>Added stroke around wind arrows to make them contrast better against lighter maps</li>
-                            <li>Visual Updates</li>
-                            <li>Added this Update popup</li>
-                            <li>
-                                <h5>BUG FIXES</h5>
-                            </li>
-                            <li>Fixed issue where single TAF line would not allow data to load.</li>
-                        </ul>
-                        </p>
-                    </div>
+    <div id="app" v-cloak>
+        <div v-bind:class="{ backgroundfull: !firstLoadCheck, background: firstLoadCheck }">
+            <header>
+                <h1 class="title">PARKING WIND VISUALIZER</h1>
+            </header>
+            <button id="update-btn">Information and Latest Updates</button>
+            <div id="updateModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times</span>
+                    <p>
+                        All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/dataserver">Text Data Server</a>. Temperature information is obtained
+                        from <a href="https://www.tomorrow.io/">Tomorrow.io API v4 </a> with limited usage plan of 500 requests per day.
+                    <ul>
+                        <li>
+                            <h6>NEW FEATURES</h5>
+                        </li>
+                        <li>Added decoded TAF information.</li>
+                        <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
+                        <li>Added stroke around wind arrows to make them contrast better against lighter maps</li>
+                        <li>Visual Updates</li>
+                        <li>Added this Update popup</li>
+                        <li>
+                            <h5>BUG FIXES</h5>
+                        </li>
+                        <li>Fixed issue where single TAF line would not allow data to load.</li>
+                        <li>
+                            <h5>UPCOMING CHANGES</h5>
+                        </li>
+                        <li> Better visualization of TAF data, highlighting a TAF line will draw a corresponding arrow</li>
+                        <li> Differentiation when TAF line forecast period switches into the next day </li>
+                        <li> METAR (current) weather</li>
+                    </ul>
+
+                    <p>Please report any bugs or concerns to James Edens at jedensuscg@gmail.com <br>
+                        View the source code on my <a href="https://github.com/jedensuscg/parking-winds">Github</a>
+                    </p>
+                    </p>
                 </div>
-                <div class="main-menu">
-                    <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span class="unit-name"
-                            ref="selectedUnit"></span></h2>
-                    <div class="unit-menu">
-                        <button class="select-another-btn  btn-bold" @click="startAgain()" v-show="!firstLoadCheck">SELECT
-                            ANOTHER STATION</button>
-                        <br>
-                        <div class="select-station" v-show="firstLoadCheck">
-                            <h2 class="subtitle">Select Your Airstation</h2> <br>
-                            <button class="unit-select-btn btn-bold" @click="firstLoad('kecg')">KECG</button>
-                            <button class="unit-select-btn  btn-bold" @click="firstLoad('padq')">PADQ</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="diagram" v-show="!firstLoadCheck">
-                    <!-- #region COLLAPSED WIND DATA-->
-                    <div class="minimized-wind-details" v-show="hideDetails">
-                        <div class="wind-data-col-mini minimized-details">
-                            <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
-                        </div>
-                        <div class="wind-data-col-mini minimized-details" ref='prevailingCol'>
-                            <span>Prevailing: {{winds.prevailingWinds.direction}}@{{winds.prevailingWinds.speed}}kts</span>
-                            <button class="selectWindBtn" ref="selectPrevailWindBtn"
-                                @click="draw(e, 'prevailing')">SHOW</button>
-                        </div>
-                        <div class="wind-data-col-mini minimized-details" ref='strongestCol'>
-                            <span>Strongest: {{winds.highestWinds.direction}}@{{winds.highestWinds.speed}}kts</span>
-                            <button class="selectWindBtn" ref="selectStrongWindBtn"
-                                @click="draw(e, 'highest')">SHOW</button>
-                        </div>
-                        <div class="wind-data-col-mini minimized-details" v-if="winds.highestGust.speed == 0">
-                            <span>NO GUSTS</span>
-                        </div>
-                        <div class="wind-data-col-mini minimized-details" ref='gustCol' v-else>
-                            <span>Gusts: {{winds.highestGust.direction}}@{{winds.highestGust.speed}}kts</span>
-                            <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
-                        </div>
-                    </div>
-                    <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize
-                        Details</button>
-                    <!-- #endregion -->
-                    <!-- #region UNCOLLAPSED WIND DATA-->
-                    <div class="wind-data-container" v-show="!hideDetails">
-                        <div class="wind-data-col">
-                            <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="temp-icon" alt=""><br>
-                                <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
-                                <span>Lowest temperature in next 12 hours</span>
-                            </div>
-                            <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
-                        </div>
-                        <div class="wind-data-col" ref='prevailingCol'>
-                            <h3 class="wind-data-heading">PREVAILING WINDS</h3>
-                            <p class="wind-data-p">Time: All Day </p>
-                            <p class="wind-data-p">Direction: {{winds.prevailingWinds.direction}}</p>
-                            <p class="wind-data-p">Speed: {{winds.prevailingWinds.speed}}</p>
-                            <button class="selectWindBtn" ref="selectPrevailWindBtn"
-                                @click="draw(e, 'prevailing')">SHOW</button>
-                        </div>
-                        <div class="wind-data-col" ref='strongestCol'>
-                            <h3 class="wind-data-heading">STRONGEST WINDS</h3>
-                            <p class="wind-data-p">Time: {{winds.highestWinds.timeFromLocal}} to
-                                {{winds.highestWinds.timeToLocal}} </p>
-                            <p class="wind-data-p">Direction: {{winds.highestWinds.direction}}</p>
-                            <p class="wind-data-p">Speed: {{winds.highestWinds.speed}}</p>
-                            <button class="selectWindBtn" ref="selectStrongWindBtn"
-                                @click="draw(e, 'highest')">SHOW</button>
-                        </div>
-                        <div class="wind-data-col" v-if="winds.highestGust.speed == 0">
-                            <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
-                            <p class="wind-data-p">NO GUSTS FORECASTED IN THIS TAF</p>
-                        </div>
-                        <div class="wind-data-col" ref='gustCol' v-else>
-                            <h3 class="wind-data-heading">STRONGEST GUST</h3>
-                            <p class="wind-data-p">Time: {{winds.highestGust.timeFromLocal}} to
-                                {{winds.highestGust.timeToLocal}} </p>
-                            <p class="wind-data-p">Direction: {{winds.highestGust.direction}}</p>
-                            <p class="wind-data-p">Speed: {{winds.highestGust.speed}}</p>
-                            <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
-                        </div>
-                    </div>
-                    <!-- #endregion -->
-                    <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">
-                        <div class="icon-divs">
-                            <img src="public/img/caution-icon.png" class="caution-icons" alt=""><br>
-                            <hr>
-                        </div>
-                        <div class="icon-divs" v-if="lowTempWarning">
-                            <img src="public/img/snowflake.png" class="caution-icons" alt=""><br>
-                            <p class="caution-text">FREEZE POSSIBLE</p>
-                        </div>
-                        <div class="icon-divs" v-if="highWindWarning">
-                            <img src="public/img/windy-red.png" class="caution-icons" alt="">
-                            <p class="caution-text">FORECAST WINDS > 22KTS</p>
-                        </div>
-                    </div>
-                    <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
-                        <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
-                        <span v-if="drawType == 'gust'">STRONGEST GUST</span>
-                    </div>
-                    <canvas id="airStation" width="930" height="627" @mousemove='handleMousemove'></canvas>
-                    <div class="taf-text">
-                        <h4>RAW TAF</h4>
-                        <p>{{rawTaf}}</p>
-                        <p>This area will display complete decoded TAF data in future.</p>
-                        <span>X:{{debugX}} Y:{{debugY}}</span>
-                    </div>
-                </div>
-                <div class="debug" v-if="!firstLoadCheck">
-                    <h4>DEBUG WINDOW</h4>
-                    <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show.
-                        Click
-                        LIVE WINDS to real winds again</p>
-                    <div v-if="loadWinds">
-                        <label for="prevailing-Wind-Dir">Direction</label><br>
-                        <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"
-                            v-model="winds.prevailingWinds.direction"><br>
-                        <label for="prevailing-Wind-Speed">Speed</label><br>
-                        <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
-                            v-model="winds.prevailingWinds.speed"><br>
-                        <label for="temp-debug">Lowest Forecast Temperature</label><br>
-                        <input type="number" name="temp-debug" id="temp-debug" v-model="lowestTemp.temp"><br><br>
-                        <button @click="debugWindDraw">TEST WINDS</button>
-                        <button class="create" @click="createDiagram">LIVE WINDS</button><br>
-                        <span>Low Temp Flag Active: {{lowTempWarning}}</span><br>
-                        <span>High Wind Flag Active {{highWindWarning}}</span>
+            </div>
+            <div class="main-menu">
+                <h2 id="selected-unit" v-show="!firstLoadCheck"><span>Viewing: Airstation </span><span class="unit-name"
+                        ref="selectedUnit"></span></h2>
+                <div class="unit-menu">
+                    <button class="select-another-btn  btn-bold" @click="startAgain()" v-show="!firstLoadCheck">SELECT
+                        ANOTHER STATION</button>
+                    <br>
+                    <div class="select-station" v-show="firstLoadCheck">
+                        <h2 class="subtitle">Select Your Airstation</h2> <br>
+                        <button class="unit-select-btn btn-bold" @click="firstLoad('kecg')">KECG</button>
+                        <button class="unit-select-btn  btn-bold" @click="firstLoad('padq')">PADQ</button>
                     </div>
                 </div>
             </div>
+            <div class="diagram" v-show="!firstLoadCheck">
+                <!-- #region COLLAPSED WIND DATA-->
+                <div class="minimized-wind-details" v-show="hideDetails">
+                    <div class="wind-data-col-mini minimized-details">
+                        <span class="temp-value">Low Temp: {{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span>
+                    </div>
+                    <div class="wind-data-col-mini minimized-details" ref='prevailingCol'>
+                        <span>Prevailing: {{winds.prevailingWinds.direction}}@{{winds.prevailingWinds.speed}}kts</span>
+                        <button class="selectWindBtn" ref="selectPrevailWindBtn"
+                            @click="draw(e, 'prevailing')">SHOW</button>
+                    </div>
+                    <div class="wind-data-col-mini minimized-details" ref='strongestCol'>
+                        <span>Strongest: {{winds.highestWinds.direction}}@{{winds.highestWinds.speed}}kts</span>
+                        <button class="selectWindBtn" ref="selectStrongWindBtn"
+                            @click="draw(e, 'highest')">SHOW</button>
+                    </div>
+                    <div class="wind-data-col-mini minimized-details" v-if="winds.highestGust.speed == 0">
+                        <span>NO GUSTS</span>
+                    </div>
+                    <div class="wind-data-col-mini minimized-details" ref='gustCol' v-else>
+                        <span>Gusts: {{winds.highestGust.direction}}@{{winds.highestGust.speed}}kts</span>
+                        <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
+                    </div>
+                </div>
+                <button class="show-details-btn" @click="hideDetails = !hideDetails" v-show="hideDetails">Maximize
+                    Details</button>
+                <!-- #endregion -->
+                <!-- #region UNCOLLAPSED WIND DATA-->
+                <div class="wind-data-container" v-show="!hideDetails">
+                    <div class="wind-data-col">
+                        <div class="icon-divs"><img src="public/img/temp-icon-low.png" class="temp-icon" alt=""><br>
+                            <span class="temp-value">{{lowestTemp.temp}}&#176; @ {{lowestTemp.time}}</span><br>
+                            <span>Lowest temperature in next 12 hours</span>
+                        </div>
+                        <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
+                    </div>
+                    <div class="wind-data-col" ref='prevailingCol'>
+                        <h3 class="wind-data-heading">PREVAILING WINDS</h3>
+                        <p class="wind-data-p">Time: All Day </p>
+                        <p class="wind-data-p">Direction: {{winds.prevailingWinds.direction}}</p>
+                        <p class="wind-data-p">Speed: {{winds.prevailingWinds.speed}}</p>
+                        <button class="selectWindBtn" ref="selectPrevailWindBtn"
+                            @click="draw(e, 'prevailing')">SHOW</button>
+                    </div>
+                    <div class="wind-data-col" ref='strongestCol'>
+                        <h3 class="wind-data-heading">STRONGEST WINDS</h3>
+                        <p class="wind-data-p">Time: {{convertToLocalTime(winds.highestWinds.timeFrom)}} to
+                            {{convertToLocalTime(winds.highestWinds.timeTo)}} </p>
+                        <p class="wind-data-p">Direction: {{winds.highestWinds.direction}}</p>
+                        <p class="wind-data-p">Speed: {{winds.highestWinds.speed}}</p>
+                        <button class="selectWindBtn" ref="selectStrongWindBtn"
+                            @click="draw(e, 'highest')">SHOW</button>
+                    </div>
+                    <div class="wind-data-col" v-if="winds.highestGust.speed == 0">
+                        <h3 class="wind-data-heading">STRONGEST WIND GUST</h3>
+                        <p class="wind-data-p">NO GUSTS FORECASTED IN THIS TAF</p>
+                    </div>
+                    <div class="wind-data-col" ref='gustCol' v-else>
+                        <h3 class="wind-data-heading">STRONGEST GUST</h3>
+                        <p class="wind-data-p">Time: {{convertToLocalTime(this.winds.highestGust.time)}} to
+                            {{convertToLocalTime(this.winds.highestGust.timeTo)}} </p>
+                        <p class="wind-data-p">Direction: {{winds.highestGust.direction}}</p>
+                        <p class="wind-data-p">Speed: {{winds.highestGust.speed}}</p>
+                        <button class="selectWindBtn" ref="selectGustWindBtn" @click="draw(e, 'gust')">SHOW</button>
+                    </div>
+                </div>
+                <!-- #endregion -->
+                <div class="temp-and-warning" v-if="highWindWarning || lowTempWarning">
+                    <div class="icon-divs">
+                        <img src="public/img/caution-icon.png" class="caution-icons" alt=""><br>
+                        <hr>
+                    </div>
+                    <div class="icon-divs" v-if="lowTempWarning">
+                        <img src="public/img/snowflake.png" class="caution-icons" alt=""><br>
+                        <p class="caution-text">FREEZE POSSIBLE</p>
+                    </div>
+                    <div class="icon-divs" v-if="highWindWarning">
+                        <img src="public/img/windy-red.png" class="caution-icons" alt="">
+                        <p class="caution-text">FORECAST WINDS > 22KTS</p>
+                    </div>
+                </div>
+                <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
+                    <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
+                    <span v-if="drawType == 'gust'">STRONGEST GUST</span>
+                </div>
+                <canvas id="airStation" width="930" height="627" @mousemove='handleMousemove'></canvas>
+                <div class="taf-text">
+                    <h4>RAW TAF</h4>
+                    <p>{{rawTaf}}</p>
+
+                    <h4>DECODED TAF DATA</h4>
+                    <div class="decode-taf-line" v-for="forecast in decodeTaf.tafForecasts">
+                        <div class="decode-tafs-wrapper">
+                            <div class="decode-taf-data-row taf-row-blue">
+                                <div class="decode-taf-data-col left-taf-data">
+                                    Change Indicator
+                                </div>
+                                <div class="decode-taf-data-col right-taf-data">
+                                    {{ changeIndicatorToLongForm(forecast.changeIndicator)}}
+                                </div>
+                            </div>
+                            <div class="decode-taf-data-row taf-row-blue">
+                                <div class="decode-taf-data-col left-taf-data">
+                                    Forecast Period
+                                </div>
+                                <div class="decode-taf-data-col right-taf-data">
+                                    {{convertToLocalTime(forecast.timeFrom) }} To {{
+                                    convertToLocalTime(forecast.timeTo)}} Local
+                                </div>
+                            </div>
+                        </div>
+                        <div class="decode-taf-data-row taf-row-yellow">
+                            <div class="decode-taf-data-col left-taf-data">
+                                Winds
+                            </div>
+                            <div class="decode-taf-data-col right-taf-data">
+                                {{ formatNumberToThreeDigits(forecast.windDirection) }} @ {{forecast.windSpeed}} KTS
+                            </div>
+                        </div>
+                        <div class="decode-taf-data-row taf-row-yellow" v-if="forecast.windGust > 0">
+                            <div class="decode-taf-data-col left-taf-data">
+                                Gust
+                            </div>
+                            <div class="decode-taf-data-col right-taf-data">
+                                {{ formatNumberToThreeDigits(forecast.windGust) }} @ {{forecast.windGustDir}}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        <div class="debug" v-if="!firstLoadCheck">
+            <h4>DEBUG WINDOW</h4>
+            <span>X:{{debugX}} Y:{{debugY}}</span>
+            <p>Use this area to see what different wind speeds and directions look like. Click TEST WINDS to show.
+                Click
+                LIVE WINDS to real winds again</p>
+            <div v-if="loadWinds">
+                <label for="prevailing-Wind-Dir">Direction</label><br>
+                <input type="number" name="prevailing-Wind-Dir" id="prevailing-Wind-Dir"
+                    v-model="winds.prevailingWinds.direction"><br>
+                <label for="prevailing-Wind-Speed">Speed</label><br>
+                <input type="number" name="prevailing-Wind-Speed" id="prevailing-Wind-Speed"
+                    v-model="winds.prevailingWinds.speed"><br>
+                <label for="temp-debug">Lowest Forecast Temperature</label><br>
+                <input type="number" name="temp-debug" id="temp-debug" v-model="lowestTemp.temp"><br><br>
+                <button @click="debugWindDraw">TEST WINDS</button>
+                <button class="create" @click="createDiagram">LIVE WINDS</button><br>
+                <span>Low Temp Flag Active: {{lowTempWarning}}</span><br>
+                <span>High Wind Flag Active {{highWindWarning}}</span>
+            </div>
         </div>
+    </div>
+    </div>
 
 
     <script src="https://unpkg.com/vue@next"></script>
