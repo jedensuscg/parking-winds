@@ -55,6 +55,24 @@ const app = Vue.createApp({
 
   },
   methods: {
+    changeIndicatorToLongForm: function (changeIndicator) {
+      let longFormChangeIndicator
+      switch (changeIndicator) {
+
+        case 'FM':
+          longFormChangeIndicator = 'FROM: standard forecast or significant change'
+          break;
+        case 'BECMG':
+          'BECOMING'
+        break;
+        case 'TEMPO ':
+          'TEMPORARY: changes expected for less than half the time period'
+        break;
+        default:
+          break;
+      }
+      return longFormChangeIndicator
+    },
     formatNumberToThreeDigits: function (value) {
        threeDigitValue = ('000' + value).substr(-3)
        return threeDigitValue
@@ -74,7 +92,7 @@ const app = Vue.createApp({
         .then((response) => response.json())
         .then((data) => {
           //console.table(data.airStation);
-
+          console.log(data)
           this.decodeTaf = data.rawTafData;
           console.log(this.decodeTaf.tafForecasts.length);
           this.winds = data.winds;
@@ -99,33 +117,15 @@ const app = Vue.createApp({
           console.log(e);
         });
     },
-    convertToLocalTime() {
-      const highestWindsLocalFrom = new Date(this.winds.highestWinds.timeFrom);
-      const highestWindsLocalTo = new Date(this.winds.highestWinds.timeTo);
-      this.winds.highestWinds.timeFromLocal = highestWindsLocalFrom.toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      this.winds.highestWinds.timeToLocal = highestWindsLocalTo.toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      const highestGustLocalFrom = new Date(this.winds.highestGust.time);
-      const highestGustLocalTo = new Date(this.winds.highestGust.timeTo);
-      this.winds.highestGust.timeFromLocal = highestGustLocalFrom.toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      this.winds.highestGust.timeToLocal = highestGustLocalTo.toLocaleTimeString("en-US", {
+    convertToLocalTime (time) {
+      const localTime = new Date(time);
+      return localTime .toLocaleTimeString("en-US", {
         hour12: false,
         hour: "2-digit",
         minute: "2-digit",
       });
     },
+    
     checkForWarnings() {
       if (this.winds.prevailingWinds.speed > 22 || this.winds.highestGust.speed > 22) {
         this.highWindWarning = true;
