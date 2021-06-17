@@ -19,14 +19,16 @@
             <header>
                 <h1 class="title">PARKING WIND VISUALIZER</h1>
             </header>
-            <button id="update-btn">View Latest Updates</button>
+            <button id="update-btn">Information and Latest Updates</button>
             <div id="updateModal" class="modal">
                 <div class="modal-content">
                     <span class="close">&times</span>
                     <p>
+                        All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/dataserver">Text Data Server</a>. Temperature information is obtained
+                        from <a href="https://www.tomorrow.io/">Tomorrow.io API v4 </a> with limited usage plan of 500 requests per day.
                     <ul>
                         <li>
-                            <h5>FEATURES</h5>
+                            <h6>NEW FEATURES</h5>
                         </li>
                         <li>Added decoded TAF information.</li>
                         <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
@@ -37,7 +39,17 @@
                             <h5>BUG FIXES</h5>
                         </li>
                         <li>Fixed issue where single TAF line would not allow data to load.</li>
+                        <li>
+                            <h5>UPCOMING CHANGES</h5>
+                        </li>
+                        <li> Better visualization of TAF data, highlighting a TAF line will draw a corresponding arrow</li>
+                        <li> Differentiation when TAF line forecast period switches into the next day </li>
+                        <li> METAR (current) weather</li>
                     </ul>
+
+                    <p>Please report any bugs or concerns to James Edens at jedensuscg@gmail.com <br>
+                        View the source code on my <a href="https://github.com/jedensuscg/parking-winds">Github</a>
+                    </p>
                     </p>
                 </div>
             </div>
@@ -144,6 +156,8 @@
                 <div class="taf-text">
                     <h4>RAW TAF</h4>
                     <p>{{rawTaf}}</p>
+
+                    <h4>DECODED TAF DATA</h4>
                     <div class="decode-taf-line" v-for="forecast in decodeTaf.tafForecasts">
                         <div class="decode-tafs-wrapper">
                             <div class="decode-taf-data-row taf-row-blue">
