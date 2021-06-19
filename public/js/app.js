@@ -56,6 +56,7 @@ const app = Vue.createApp({
   },
   methods: {
     changeIndicatorToLongForm: function (changeIndicator) {
+      console.log(changeIndicator)
       let longFormChangeIndicator
       switch (changeIndicator) {
 
@@ -63,10 +64,10 @@ const app = Vue.createApp({
           longFormChangeIndicator = 'FROM: standard forecast or significant change'
           break;
         case 'BECMG':
-          'BECOMING'
+          longFormChangeIndicator = 'BECOMING'
         break;
-        case 'TEMPO ':
-          'TEMPORARY: changes expected for less than half the time period'
+        case 'TEMPO':
+          longFormChangeIndicator = 'TEMPORARY: changes expected for less than half the time period'
         break;
         default:
           break;
@@ -118,12 +119,33 @@ const app = Vue.createApp({
         });
     },
     convertToLocalTime (time) {
-      const localTime = new Date(time);
-      return localTime .toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      const localTimeFull = new Date(time);
+      const today = new Date()
+      console.log(localTimeFull.getDate(),today.getDate())
+      let localTime
+      if (localTimeFull.getDate() === today.getDate()) {
+        localTime = localTimeFull.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      } else {
+        localTime = localTimeFull.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          day: '2-digit',
+          month: 'short'
+        });
+      }
+
+      
+      const localDay = localTimeFull.getDate()
+      const localMonth = (localTimeFull.getMonth()) + 1
+      const localDate = `${localMonth}/${localDay}`
+      localTime = localTime.replace(':', "")
+      localTime = localTime.replace(',', "")
+      return localTime
     },
     
     checkForWarnings() {
