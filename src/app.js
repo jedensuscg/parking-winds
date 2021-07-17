@@ -32,6 +32,7 @@ app.use(adminRouter)
 app.get("/taf/:unit", async (req, res) => {
   const _unit = req.params.unit;
   let unit; 
+  let metarData;
 
   try {
     unit = await Unit.findOne({ ICAOCode: _unit });
@@ -41,7 +42,7 @@ app.get("/taf/:unit", async (req, res) => {
   } catch (error) {}
 
   if (process.env.NODE_ENV == "development") {
-    let metarData;
+    
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");
     const xmlTestMetarData = fs.readFileSync("./devOps/metardata.xml", "utf8");
@@ -66,7 +67,13 @@ app.get("/taf/:unit", async (req, res) => {
     getTaf({ test: false, dataSource: ICAOCode, location})
       .then((response) => {
         response["airStation"] = unit;
-        res.send(response);
+        return response
+      }).then((response) => {
+        getMetar({ test: false, dataSource: _unit }).then((metar) => {
+          metarData = metar
+          response["METAR"] = metarData;
+          res.send(response)
+        })
       })
       .catch((error) => {
         console.log('ERROR:', error);

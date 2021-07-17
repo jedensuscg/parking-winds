@@ -30,21 +30,20 @@
                         <li>
                             <h6>NEW FEATURES</h5>
                         </li>
-                        <li>Added decoded TAF information.</li>
+                        <li>Added current METAR wind data to get current winds at station.</li>
+                        <li>Added addition of date when times move into the next day.</li>
                         <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
                         <li>Added stroke around wind arrows to make them contrast better against lighter maps</li>
                         <li>Visual Updates</li>
-                        <li>Added this Update popup</li>
                         <li>
                             <h5>BUG FIXES</h5>
                         </li>
                         <li>Fixed issue where single TAF line would not allow data to load.</li>
+                        <li>Fixed Decoded TAF Gust speed/direction indication backwards</li>
                         <li>
                             <h5>UPCOMING CHANGES</h5>
                         </li>
                         <li> Better visualization of TAF data, highlighting a TAF line will draw a corresponding arrow</li>
-                        <li> Differentiation when TAF line forecast period switches into the next day </li>
-                        <li> METAR (current) weather</li>
                     </ul>
 
                     <p>Please report any bugs or concerns to James Edens at jedensuscg@gmail.com <br>
@@ -103,6 +102,16 @@
                         </div>
                         <button class="hide-details-btn" @click="hideDetails = !hideDetails">Minimize Details</button>
                     </div>
+                    <div class="wind-data-col" ref='metarCol'>
+                        <h3 class="wind-data-heading">CURRENT WINDS (METAR)</h3>
+                        <p class="wind-data-p">Metar Time: {{convertToLocalTime(metarWinds.observationTime)}}</p>
+                        <p class="wind-data-p">Direction: {{viewingWindDir}}</p>
+                        <p class="wind-data-p">Speed: {{viewingWindSpeed}}</p>
+                        <button class="selectWindBtn inline-btn" ref="selectMetarBtn"
+                            @click="draw(e, 'metarWind')">WIND</button>
+                            <button class="selectWindBtn inline-btn" ref="selectMetarBtn"
+                            @click="draw(e, 'metarGusts')">GUSTS</button>
+                    </div>
                     <div class="wind-data-col" ref='prevailingCol'>
                         <h3 class="wind-data-heading">PREVAILING WINDS</h3>
                         <p class="wind-data-p">Time: All Day </p>
@@ -126,7 +135,7 @@
                     </div>
                     <div class="wind-data-col" ref='gustCol' v-else>
                         <h3 class="wind-data-heading">STRONGEST GUST</h3>
-                        <p class="wind-data-p">Time: {{convertToLocalTime(this.winds.highestGust.time)}} to
+                        <p class="wind-data-p">Time: {{convertToLocalTime(this.winds.highestGust.timeFrom)}} to
                             {{convertToLocalTime(this.winds.highestGust.timeTo)}} </p>
                         <p class="wind-data-p">Direction: {{winds.highestGust.direction}}</p>
                         <p class="wind-data-p">Speed: {{winds.highestGust.speed}}</p>

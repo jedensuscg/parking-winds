@@ -9,6 +9,15 @@ const app = Vue.createApp({
       highWindWarning: false,
       lowTempWarning: false,
       airStation: undefined,
+      viewingWindDir: 0,
+      viewingWindSpeed: 0,
+      metarWinds: {
+        observationTime: '',
+        windSpeed: 0,
+        windDirection: 0,
+        windGustSpeed: 0,
+        windGustDir: 0,
+      },
       winds: {
         prevailingWinds: {
           direction: 0,
@@ -63,10 +72,10 @@ const app = Vue.createApp({
           longFormChangeIndicator = 'FROM: standard forecast or significant change'
           break;
         case 'BECMG':
-          'BECOMING'
+          longFormChangeIndicator = 'BECOMING'
         break;
-        case 'TEMPO ':
-          'TEMPORARY: changes expected for less than half the time period'
+        case 'TEMPO':
+          longFormChangeIndicator = 'TEMPORARY: changes expected for less than half the time period'
         break;
         default:
           break;
@@ -74,29 +83,35 @@ const app = Vue.createApp({
       return longFormChangeIndicator
     },
     formatNumberToThreeDigits: function (value) {
-       threeDigitValue = ('000' + value).substr(-3)
-       return threeDigitValue
+      threeDigitValue = ('000' + value).substr(-3)
+      return threeDigitValue
     },
     startAgain() {
       this.firstLoadCheck = true;
       this.ctx.clearRect(15, 15, this.airStation.airStaDim.width, this.airStation.airStaDim.height);
     },
     firstLoad(unit) {
+
       this.unitToFech = unit;
       this.createDiagram();
 
       this.firstLoadCheck = false;
     },
     async fetchData() {
+
       await fetch(`./taf/${this.unitToFech}`)
         .then((response) => response.json())
         .then((data) => {
+          console.log("Running new fetch");
+          this.viewingWindDir = data.METAR.rawMetarData.metarForecast[0].windDirection
+          this.viewingWindSpeed = data.METAR.rawMetarData.metarForecast[0].windSpeed
           //console.table(data.airStation);
           console.log(data)
           this.decodeTaf = data.rawTafData;
           console.log(this.decodeTaf.tafForecasts.length);
           this.winds = data.winds;
           this.rawTaf = data.rawText;
+          this.metarWinds = data.METAR.rawMetarData.metarForecast[0];
           this.lowestTemp = {
             time: data.lowestTemp[0],
             temp: Math.floor(data.lowestTemp[1]),
@@ -112,20 +127,42 @@ const app = Vue.createApp({
           this.$refs.selectedUnit.textContent = this.airStation.unitName;
           this.convertToLocalTime();
           this.checkForWarnings();
+
         })
         .catch((e) => {
           console.log(e);
         });
     },
     convertToLocalTime (time) {
-      const localTime = new Date(time);
-      return localTime .toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      const localTimeFull = new Date(time);
+      const today = new Date()
+      console.log(localTimeFull.getDate(),today.getDate())
+      let localTime
+      if (localTimeFull.getDate() === today.getDate()) {
+        localTime = localTimeFull.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      } else {
+        localTime = localTimeFull.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          day: '2-digit',
+          month: 'short'
+        });
+      }
+
+      
+      const localDay = localTimeFull.getDate()
+      const localMonth = (localTimeFull.getMonth()) + 1
+      const localDate = `${localMonth}/${localDay}`
+      localTime = localTime.replace(':', "")
+      localTime = localTime.replace(',', "")
+      return localTime
     },
-    
+
     checkForWarnings() {
       if (this.winds.prevailingWinds.speed > 22 || this.winds.highestGust.speed > 22) {
         this.highWindWarning = true;
@@ -182,6 +219,7 @@ const app = Vue.createApp({
           windArrowLength = windSpeed * 2;
           this.$refs.prevailingCol.classList.add("wind-data-col-active");
           this.$refs.strongestCol.classList.remove("wind-data-col-active");
+          this.$refs.metarCol.classList.remove("wind-data-col-active");
           if (this.winds.highestGust.speed > 0) {
             this.$refs.gustCol.classList.remove("wind-data-col-active");
           }
@@ -193,6 +231,7 @@ const app = Vue.createApp({
           dir = this.winds.highestWinds.direction - 90;
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.add("wind-data-col-active");
+          this.$refs.metarCol.classList.remove("wind-data-col-active");
           if (this.winds.highestGust.speed > 0) {
             this.$refs.gustCol.classList.remove("wind-data-col-active");
           }
@@ -202,7 +241,28 @@ const app = Vue.createApp({
           dir = this.winds.highestGust.direction - 90;
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.remove("wind-data-col-active");
+          this.$refs.metarCol.classList.remove("wind-data-col-active");
           this.$refs.gustCol.classList.add("wind-data-col-active");
+        } else if (drawType === 'metarWind') {
+          windSpeed = this.metarWinds.windSpeed;
+          this.viewingWindSpeed = windSpeed
+          windArrowLength = windSpeed * 2;
+          dir = this.metarWinds.windDirection - 90;
+          this.viewingWindDir = dir + 90
+          this.$refs.prevailingCol.classList.remove("wind-data-col-active");
+          this.$refs.strongestCol.classList.remove("wind-data-col-active");
+          this.$refs.gustCol.classList.remove("wind-data-col-active");
+          this.$refs.metarCol.classList.add("wind-data-col-active");
+        } else if (drawType === 'metarGusts') {
+          windSpeed = this.metarWinds.windGust == "0" ? "No Gusts" : this.metarWinds.windGust;
+          this.viewingWindSpeed = windSpeed
+          windArrowLength = windSpeed * 2;
+          dir = this.metarWinds.windGust == "0" ? "No Gusts" : (this.metarWinds.windGustDir - 90);
+          this.viewingWindDir = this.metarWinds.windGust == 0 ? windSpeed : windSpeed + 90
+          this.$refs.prevailingCol.classList.remove("wind-data-col-active");
+          this.$refs.strongestCol.classList.remove("wind-data-col-active");
+          this.$refs.gustCol.classList.remove("wind-data-col-active");
+          this.$refs.metarCol.classList.add("wind-data-col-active");
         }
 
         if (windArrowLength >= 90) {
@@ -267,8 +327,9 @@ const app = Vue.createApp({
       (async () => {
         time = Date.now();
         await this.fetchData();
+
         this.dataTimestamp = Date.now();
-        console.log("Running new fetch");
+
         this.draw();
         this.loadWinds = true;
       })();

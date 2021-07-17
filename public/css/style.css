@@ -92,14 +92,48 @@ header {
     background-color: rgba(255, 255, 255, 0.832);
     border: 2px red solid;
 }
+.inline-btn {
+    display: inline-block;
+}
+
+.taf-metar-toggle-btn {
+	box-shadow:inset 0px 1px 3px 0px #9fb4f2;
+	background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+	background-color:#7892c2;
+	border-radius:5px;
+	border:1px solid #4e6096;
+    width: 100px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:14px;
+	font-weight:bold;
+	padding:8px 8px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #283966;
+}
+.taf-metar-toggle-btn:hover {
+	background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+	background-color:#476e9e;
+}
+.taf-metar-toggle-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.taf-btn {
+    margin-bottom: 70px;
+    margin-top: 5px;
+}
 
 .wind-data-container {
     position:absolute;
     display: flex;
     justify-content: space-evenly;
-    left: 65px;
+    left: 25px;
     top: 20px;
-    width: 800px;
+    width: 880px;
     background-color: rgba(255, 255, 255, 0.832);
     border: 2px red solid;
 }
