@@ -30,6 +30,7 @@
                         <li>
                             <h6>NEW FEATURES</h5>
                         </li>
+
                         <li>Added current METAR wind data to get current winds at station.</li>
                         <li>Added addition of date when times move into the next day.</li>
                         <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
@@ -45,6 +46,7 @@
                             <h5>UPCOMING CHANGES</h5>
                         </li>
                         <li> Better visualization of TAF data, highlighting a TAF line will draw a corresponding arrow</li>
+
                     </ul>
 
                     <p>Please report any bugs or concerns to James Edens at jedensuscg@gmail.com <br>
@@ -194,8 +196,11 @@
                             <div class="decode-taf-data-col left-taf-data">
                                 Winds
                             </div>
-                            <div class="decode-taf-data-col right-taf-data">
+                            <div class="decode-taf-data-col right-taf-data" v-if="forecast.windSpeed > 1 && forecast.changeIndicator != 'TEMPO'">
                                 {{ formatNumberToThreeDigits(forecast.windDirection) }} @ {{forecast.windSpeed}} KTS
+                            </div>
+                            <div class="decode-taf-data-col right-taf-data" v-else>
+                                No Change in winds from previous line
                             </div>
                         </div>
                         <div class="decode-taf-data-row taf-row-yellow" v-if="forecast.windGust > 0">

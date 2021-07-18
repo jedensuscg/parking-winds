@@ -65,6 +65,7 @@ const app = Vue.createApp({
   },
   methods: {
     changeIndicatorToLongForm: function (changeIndicator) {
+      console.log(changeIndicator)
       let longFormChangeIndicator
       switch (changeIndicator) {
 
@@ -141,6 +142,7 @@ const app = Vue.createApp({
     convertToLocalTime (time) {
       const localTimeFull = new Date(time);
       const today = new Date()
+
       let localTime
       if (localTimeFull.getDate() === today.getDate()) {
         localTime = localTimeFull.toLocaleTimeString("en-US", {
