@@ -4,7 +4,8 @@ calcPrevailingWinds = (rawTafData) => {
   let windSpeeds = [];
   let windTimes = [];
   let windGusts = [];
-  // Put each element into individual arrays
+  // Put each element into individual array
+  console.log(rawTafData)
   rawTafData.tafForecasts.forEach((forecast) => {
     windDirections.push(forecast.windDirection);
     windSpeeds.push(forecast.windSpeed);
@@ -17,7 +18,7 @@ calcPrevailingWinds = (rawTafData) => {
   for (let index = 0; index < windSpeeds.length; index++) {
 
     if (windMap.has(windDirections[index])) {
-      
+
       const newTime = windMap.get(windDirections[index])[1] + windTimes[index];
       newWindSpeed = windSpeeds[index] > newWindSpeed ? windSpeeds[index] : newWindSpeed
 
@@ -77,7 +78,7 @@ calcHighestGust = (rawTafData) => {
   return {
     speed: highestWindSet[0],
     direction: highestWindSet[1][0],
-    time: highestWindSet[1][1],
+    timeFrom: highestWindSet[1][1],
     timeTo: highestWindSet[1][2]
   };
 };
