@@ -53,7 +53,6 @@ const buildMetarObject = async (response, location) => {
       validTimeFrom: baseData.valid_time_from,
       validTimeTo: baseData.valid_time_to,
     };
-    console.log(baseData)
     rawMetarText = baseData.METAR.raw_text
     windSpeed = baseData.METAR.wind_gust_kt
     windDirection = baseData.METAR.wind_dir_degrees
@@ -77,17 +76,17 @@ createMetarArrays = (forecast) => {
   
   // forecastData.forEach((forecast) => {
     observationTime = forecast.observation_time;
-    windDirection = forecast.wind_dir_degrees ? forecast.wind_dir_degrees : 0;
+    windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
     windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
     windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
-    windGustDir = forecast.wind_gust_kt ? forecast.wind_dir_degrees : 0;
+    windGustDir = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
 
     metarForecast.push({
       observationTime,
-      windDirection: parseInt(windDirection),
+      windDirection: windDirection == 'Variable'? 'Variable': parseInt(windDirection),
       windSpeed: parseInt(windSpeed),
       windGust: parseInt(windGust),
-      windGustDir: parseInt(windGustDir),
+      windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
     });
   // });
 

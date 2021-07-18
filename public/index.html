@@ -38,6 +38,7 @@
                         <li>
                             <h5>BUG FIXES</h5>
                         </li>
+                        <li>Fixed Variable winds showing as 000 heading. Now says "Variable"</li>
                         <li>Fixed issue where single TAF line would not allow data to load.</li>
                         <li>Fixed Decoded TAF Gust speed/direction indication backwards</li>
                         <li>
@@ -160,6 +161,8 @@
                 <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
                     <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
                     <span v-if="drawType == 'gust'">STRONGEST GUST</span>
+                    <span v-if="drawType == 'metarWind'">CURRENT METAR WINDS</span>
+                    <span v-if="drawType == 'metarGusts'">CURRENT METAR GUSTS</span>
                 </div>
                 <canvas id="airStation" width="930" height="627" @mousemove='handleMousemove'></canvas>
                 <div class="taf-text">
@@ -200,7 +203,7 @@
                                 Gust
                             </div>
                             <div class="decode-taf-data-col right-taf-data">
-                                {{ formatNumberToThreeDigits(forecast.windGust) }} @ {{forecast.windGustDir}}
+                                {{ formatNumberToThreeDigits(forecast.windGustDir) }} @ {{forecast.windGust}}
                             </div>
                         </div>
 

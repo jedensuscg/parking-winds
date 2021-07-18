@@ -83,8 +83,13 @@ const app = Vue.createApp({
       return longFormChangeIndicator
     },
     formatNumberToThreeDigits: function (value) {
+      //if value is not integer, return value
+      if (!isNaN(value)) {
       threeDigitValue = ('000' + value).substr(-3)
       return threeDigitValue
+      } else {
+        return value
+      }
     },
     startAgain() {
       this.firstLoadCheck = true;
@@ -136,7 +141,6 @@ const app = Vue.createApp({
     convertToLocalTime (time) {
       const localTimeFull = new Date(time);
       const today = new Date()
-      console.log(localTimeFull.getDate(),today.getDate())
       let localTime
       if (localTimeFull.getDate() === today.getDate()) {
         localTime = localTimeFull.toLocaleTimeString("en-US", {
@@ -213,7 +217,6 @@ const app = Vue.createApp({
       drawWinds = (spot) => {
         let windArrowLength, dir, windSpeed;
         this.drawPlanes(spot.x, spot.y, spot.baseHeading);
-
         if (drawType === "prevailing") {
           windSpeed = this.winds.prevailingWinds.speed;
           windArrowLength = windSpeed * 2;
@@ -228,7 +231,12 @@ const app = Vue.createApp({
         } else if (drawType === "highest") {
           windSpeed = this.winds.highestWinds.speed;
           windArrowLength = windSpeed * 2;
-          dir = this.winds.highestWinds.direction - 90;
+          if (this.metarWinds.windDirection != "Variable") {
+            dir = this.winds.highestWinds.direction - 90;
+          } else {
+            dir = "Variable"
+          }
+
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.add("wind-data-col-active");
           this.$refs.metarCol.classList.remove("wind-data-col-active");
@@ -238,7 +246,12 @@ const app = Vue.createApp({
         } else if (drawType === "gust") {
           windSpeed = this.winds.highestGust.speed;
           windArrowLength = windSpeed * 2;
-          dir = this.winds.highestGust.direction - 90;
+          if (this.metarWinds.windDirection != "Variable") {
+            dir = this.winds.highestGust.direction - 90;
+          } else {
+            dir = "Variable"
+          }
+          console.log(dir)
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.remove("wind-data-col-active");
           this.$refs.metarCol.classList.remove("wind-data-col-active");
@@ -247,21 +260,42 @@ const app = Vue.createApp({
           windSpeed = this.metarWinds.windSpeed;
           this.viewingWindSpeed = windSpeed
           windArrowLength = windSpeed * 2;
-          dir = this.metarWinds.windDirection - 90;
-          this.viewingWindDir = dir + 90
+          if (this.metarWinds.windDirection != "Variable") {
+            dir = this.metarWinds.windDirection - 90;
+          } else {
+            dir = "Variable"
+          }
+          this.viewingWindDir = dir == "Variable"? dir : dir + 90
+          console.log(dir)
+          console.log(this.viewingWindDir)
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.remove("wind-data-col-active");
-          this.$refs.gustCol.classList.remove("wind-data-col-active");
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove("wind-data-col-active");
+          }
           this.$refs.metarCol.classList.add("wind-data-col-active");
         } else if (drawType === 'metarGusts') {
-          windSpeed = this.metarWinds.windGust == "0" ? "No Gusts" : this.metarWinds.windGust;
-          this.viewingWindSpeed = windSpeed
+          windSpeed = this.metarWinds.windSpeed;
           windArrowLength = windSpeed * 2;
-          dir = this.metarWinds.windGust == "0" ? "No Gusts" : (this.metarWinds.windGustDir - 90);
-          this.viewingWindDir = this.metarWinds.windGust == 0 ? windSpeed : windSpeed + 90
+          if (windSpeed == '0') {
+            windSpeed = "No Gusts"
+            this.viewingWindSpeed = windSpeed
+          } else {
+            this.viewingWindSpeed = windSpeed
+            if (this.metarWinds.windDirection != "Variable") {
+              dir = this.metarWinds.windDirection - 90;
+              this.viewingWindDir = dir + 90
+            } else {
+              dir = "Variable"
+              this.viewingWindDir = dir
+            }
+          }
+        
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.remove("wind-data-col-active");
-          this.$refs.gustCol.classList.remove("wind-data-col-active");
+          if (this.winds.highestGust.speed > 0) {
+            this.$refs.gustCol.classList.remove("wind-data-col-active");
+          }
           this.$refs.metarCol.classList.add("wind-data-col-active");
         }
 
@@ -297,7 +331,7 @@ const app = Vue.createApp({
         this.ctx.stroke();
 
         //drawWindText(x, y, r, dir, spot)
-
+        console.log(windSpeed)
         drawWindHead(startArrowPosX, startArrowPosY, dir, windSpeed);
         // Had to do this to stop ghost arrow from drawing.
         this.ctx.beginPath();
