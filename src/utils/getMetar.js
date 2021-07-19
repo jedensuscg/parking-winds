@@ -1,44 +1,41 @@
 const parseString = require("xml2js");
-const calcTafData = require("./calcWindData");
-const getTemp = require("./getTemp")
 const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
 
 const { DateTime } = require("luxon");
 const url = ''
 
-const getTaf = (options) => {
+const getMetar = async (options) => {
   const url =
-  `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=24&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
+  `https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=${options.dataSource}&hoursBeforeNow=12&mostRecent=true&fields=raw_text,observation_time,temp_c,wind_dir_degrees,wind_speed_kt,wind_gust_kt`;
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
         .get(url)
         .then((response) => {
-          const tafData = buildTafObject(response, options.location);
-          resolve(tafData);
+          const metarData = buildMetarObject(response, options.location);
+          resolve(metarData);
         })
         .catch((error) => {
           reject("error: " + error);
         });
     } else {
-      const tafData = buildTafObject(options.dataSource);
-      resolve(tafData);
+      const metarData = buildMetarObject(options.dataSource);
+      resolve(metarData);
     }
   });
 };
 
-const buildTafObject = async (response, location) => {
-  let lowestTemp;
+const buildMetarObject = async (response, location) => {
   let timeData;
   let rawText;
-  lowestTemp = await getTemp(location)
+
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
-   
     if (!response.data) {
       return response;
     } else {
+      
       return response.data;
     }
   })();
@@ -47,68 +44,54 @@ const buildTafObject = async (response, location) => {
     if (err) {
       return "parse error", err;
     }
-    const baseData = result.response.data.TAF;
 
+    //const baseData = result.response.data.TAF;
+    const baseData = result.response.data
     //object relating to TAF times
     timeData = {
       issueTime: baseData.issue_time,
       validTimeFrom: baseData.valid_time_from,
       validTimeTo: baseData.valid_time_to,
     };
-
-    rawText = baseData.raw_text;
-    rawTafData = createTafArrays(baseData.forecast);
+    rawMetarText = baseData.METAR.raw_text
+    windSpeed = baseData.METAR.wind_gust_kt
+    windDirection = baseData.METAR.wind_dir_degrees
     
-    winds = calcTafData.getCalculatedTafData(rawTafData);
+    rawMetarData = createMetarArrays(baseData.METAR);
+    //winds = calcTafData.getCalculatedTafData(rawTafData);
 
   });
   return {
-    timeData,
-    rawText,
-    winds,
-    rawTafData,
-    lowestTemp,
+    //timeData,
+    rawMetarText,
+    //winds,
+    rawMetarData,
+    //lowestTemp
   };
 };
 
 // Create an array for each forecast period.
-createTafArrays = (forecastData) => {
-  console.log(forecastData)
-  let durationOfForecast;
-  let tafForecasts = [];
+createMetarArrays = (forecast) => {
+  let metarForecast = [];
   
-  if (!Array.isArray(forecastData)) {
-    forecastData = [forecastData]
-  } 
-  forecastData.forEach((forecast) => {
-    timeFrom = forecast.fcst_time_from;
-    timeTo = forecast.fcst_time_to;
-    changeIndicator = forecast.change_indicator? forecast.change_indicator : "FM";
+  // forecastData.forEach((forecast) => {
+    observationTime = forecast.observation_time;
     windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
     windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
     windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
-    windGustDir = forecast.wind_gust_kt ? forecast.wind_dir_degrees : 0;
-    //determine amount of time taf forecast lasted
-    if (timeFrom && timeTo) {
-      durationOfForecast = calcForecastDuration(timeFrom, timeTo);
-    } else {
-      durationOfForecast = 0;
-    }
+    windGustDir = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
 
-    tafForecasts.push({
-      timeFrom,
-      timeTo,
+    metarForecast.push({
+      observationTime,
       windDirection: windDirection == 'Variable'? 'Variable': parseInt(windDirection),
       windSpeed: parseInt(windSpeed),
       windGust: parseInt(windGust),
-      windGustDir: parseInt(windGustDir),
-      durationOfForecast,
-      changeIndicator,
+      windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
     });
-  });
-  
+  // });
+
   return {
-    tafForecasts,
+    metarForecast,
   };
 };
 
@@ -119,4 +102,4 @@ calcForecastDuration = (timeFrom, timeTo) => {
   return (durationOfForecast = diff.toObject().minutes);
 };
 
-module.exports = getTaf;
+module.exports = getMetar;
