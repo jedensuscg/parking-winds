@@ -3,6 +3,7 @@ const calcTafData = require("./calcWindData");
 const getTemp = require("./getTemp")
 const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
+const logger = require('./logger');
 
 const { DateTime } = require("luxon");
 const url = ''
@@ -32,10 +33,10 @@ const buildTafObject = async (response, location) => {
   let lowestTemp;
   let timeData;
   let rawText;
+
   lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
-   
     if (!response.data) {
       return response;
     } else {
@@ -45,10 +46,11 @@ const buildTafObject = async (response, location) => {
 
   parser.parseString(xmlToParse, (err, result) => {
     if (err) {
+      logger.error("error", err)
       return "parse error", err;
+
     }
     const baseData = result.response.data.TAF;
-
     //object relating to TAF times
     timeData = {
       issueTime: baseData.issue_time,
@@ -58,7 +60,6 @@ const buildTafObject = async (response, location) => {
 
     rawText = baseData.raw_text;
     rawTafData = createTafArrays(baseData.forecast);
-    
     winds = calcTafData.getCalculatedTafData(rawTafData);
 
   });

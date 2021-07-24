@@ -87,7 +87,6 @@ getCalculatedTafData = (rawTafData) => {
   prevailingWinds = calcPrevailingWinds(rawTafData);
   highestWinds = calcHighestWinds(rawTafData);
   highestGust = calcHighestGust(rawTafData)
-
   return {
     prevailingWinds,
     highestWinds,
