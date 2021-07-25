@@ -59,7 +59,7 @@ app.get("/taf/:unit", async (req, res) => {
         })
       })
       .catch((error) => {
-        logger.error(error)
+        logger.log({level: 'error', message: error})
       });
   } else {
     const ICAOCode = unit.ICAOCode;

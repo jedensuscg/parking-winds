@@ -20,6 +20,7 @@ const getTaf = (options) => {
           resolve(tafData);
         })
         .catch((error) => {
+          logger.log({level: 'error', message: error})
           reject("error: " + error);
         });
     } else {
@@ -46,8 +47,8 @@ const buildTafObject = async (response, location) => {
 
   parser.parseString(xmlToParse, (err, result) => {
     if (err) {
-      logger.error("error", err)
-      return "parse error", err;
+      logger.log({level: 'error', message: err, })
+      return err;
 
     }
     const baseData = result.response.data.TAF;
@@ -74,7 +75,6 @@ const buildTafObject = async (response, location) => {
 
 // Create an array for each forecast period.
 createTafArrays = (forecastData) => {
-  console.log(forecastData)
   let durationOfForecast;
   let tafForecasts = [];
   
