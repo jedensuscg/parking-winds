@@ -38,7 +38,7 @@ app.get("/taf/:unit", async (req, res) => {
       return res.status(404).send("No Unit Found");
     }
   } catch (error) {
-    logger.error(error)
+    logger.log(err.stack)
   }
 
   if (process.env.NODE_ENV == "development") {
@@ -59,7 +59,7 @@ app.get("/taf/:unit", async (req, res) => {
         })
       })
       .catch((error) => {
-        logger.log({level: 'error', message: error})
+        logger.log(err.stack)
       });
   } else {
     const ICAOCode = unit.ICAOCode;
@@ -79,7 +79,7 @@ app.get("/taf/:unit", async (req, res) => {
         })
       })
       .catch((error) => {
-        logger.error(error)
+        logger.log(error.stack)
       });
   }
 });

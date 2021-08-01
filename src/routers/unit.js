@@ -2,7 +2,8 @@ const express = require("express");
 const router = new express.Router();
 const Unit = require("../models/unit");
 const auth = require("../middleware/auth")
-const unitAdminAuth = require("../middleware/unitAdmin")
+const unitAdminAuth = require("../middleware/unitAdmin");
+const logger = require("../utils/logger");
 
 router.post("/units", unitAdminAuth, async (req, res) => {
   const unit = new Unit(req.body);
@@ -11,6 +12,7 @@ router.post("/units", unitAdminAuth, async (req, res) => {
     await unit.save();
     res.status(201).send(unit);
   } catch (error) {
+    logger.error(error.stack)
     res.status(400).send(error);
   }
 });
@@ -37,6 +39,7 @@ router.get("/units/:unit", async (req, res) => {
 
     res.status(201).send(unit);
   } catch (error) {
+    logger.error(error.stack)
     res.status(500).send();
   }
 });

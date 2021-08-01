@@ -20,7 +20,7 @@ const getTaf = (options) => {
           resolve(tafData);
         })
         .catch((error) => {
-          logger.log({level: 'error', message: error})
+          logger.error(error.stack)
           reject("error: " + error);
         });
     } else {
@@ -47,7 +47,7 @@ const buildTafObject = async (response, location) => {
 
   parser.parseString(xmlToParse, (err, result) => {
     if (err) {
-      logger.log({level: 'error', message: err, })
+      logger.log(err.stack)
       return err;
 
     }

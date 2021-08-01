@@ -1,8 +1,9 @@
 const { createLogger, format,transports} = require("winston");
-const {combine,timestamp,cli,json,label,printf} = format;
+const {combine,timestamp,cli,json,label,printf,errors} = format;
 //require("dotenv").config();
 
 const logFormat = combine(
+  errors({ stack: true }),
   timestamp(),
   printf((info) => {
     return `${JSON.stringify({ timestamp: info.timestamp, level: info.level, message: info.message })}`;
@@ -36,16 +37,11 @@ const logger = createLogger({
     new transports.File({
       filename: "error.log",
       level: "error",
-      format: combine(
-        format.errors({
-          stack: true
-        }),
-        logFormat
-      ),
+      format: logFormat
     }),
     new transports.File({
       filename: "combined.log",
-      format: logFormat,
+      format: logFormat
     }),
   ],
   // exceptionHandlers: [

@@ -21,12 +21,12 @@ async function getTemp(latLong) {
       axios
         .get(getTimelineURL + "?" + getTimelineParameters)
         .then((result) => {
-          const data = result.data.dat;
+          const data = result.data.data;
           lowestTemp = getMinTemp(data.timelines[0].intervals);
           resolve(lowestTemp);
         })
         .catch((error) => {
-          logger.error({level: 'error', message: error})
+          logger.error(error.stack)
           resolve(["error", 99]);
         });
     } else {
@@ -60,9 +60,14 @@ function getQueryString() {
 }
 
 function getMinTemp(data) {
-  map = mapTimeAndTemp(data);
-  const lowestTemp = [...map.entries()].reduce((total, next) => (next[1] < total[1] ? next : total));
-  return lowestTemp;
+  try {
+    map = mapTimeAndTemp(data);
+    const lowestTemp = [...map.entries()].reduce((total, next) => (next[1] < total[1] ? next : total));
+    return lowestTemp;
+  } catch (error) {
+    logger.error(error.stack)
+  }
+
 }
 
 function mapTimeAndTemp(data) {

@@ -1,3 +1,5 @@
+const logger = require("./logger");
+
 calcPrevailingWinds = (rawTafData) => {
   let windMap = new Map();
   let windDirections = [];
@@ -15,20 +17,23 @@ calcPrevailingWinds = (rawTafData) => {
 
   //Map elements with wind direction as key, adding up the time duration of each unique wind direction.
   let newWindSpeed = 0
-  for (let index = 0; index < windSpeeds.length; index++) {
+  try {
+    for (let index = 0; index < windSpeeds.length; index++) {
 
-    if (windMap.has(windDirections[index])) {
-
-      const newTime = windMap.get(windDirections[index])[1] + windTimes[index];
-      newWindSpeed = windSpeeds[index] > newWindSpeed ? windSpeeds[index] : newWindSpeed
-
-      windMap.set(windDirections[index], [newWindSpeed, newTime]);
-
-    } else {
-      windMap.set(windDirections[index], [windSpeeds[index], windTimes[index]]);
-      newWindSpeed = windSpeeds[index]
+      if (windMap.has(windDirections[index])) {
+  
+        const newTime = windMap.get(windDirections[index])[1] + windTimes[index];
+        newWindSpeed = windSpeeds[index] > newWindSpeed ? windSpeeds[index] : newWindSpeed
+  
+        windMap.set(windDirections[index], [newWindSpeed, newTime]);
+  
+      } else {
+        windMap.set(windDirections[index], [windSpeeds[index], windTimes[index]]);
+        newWindSpeed = windSpeeds[index]
+      }
     }
-  }
+
+  
 
   const prevailingWindDirectionMap = [...windMap.entries()].reduce((a, b) => (b[1][1] > a[1][1] ? b : a));
 
@@ -40,6 +45,9 @@ calcPrevailingWinds = (rawTafData) => {
     speed: prevailingWindSpeed,
     time: prevailingWindTime,
   };
+} catch (error) {
+  logger.error({message: error.stack})
+}
 };
 
 calcHighestWinds = (rawTafData) => {
