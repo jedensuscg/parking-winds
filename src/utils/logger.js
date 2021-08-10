@@ -2,20 +2,22 @@ const { createLogger, format,transports} = require("winston");
 const {combine,timestamp,cli,json,label,printf,errors} = format;
 //require("dotenv").config();
 
-const logFormat = combine(
-  errors({ stack: true }),
-  timestamp(),
-  printf((info) => {
-    return `${JSON.stringify({ timestamp: info.timestamp, level: info.level, message: info.message })}`;
-  }),
-);
+const logLevels = { 
+  error: 0,
+  warn: 1,
+  request: 2,
+  info: 3,
+  http: 4,
+  verbose: 5,
+  debug: 6,
+  silly: 7
+};
 
-const errorFormat = combine(
-  timestamp(),
-  printf((info) => {
-    return `${JSON.stringify({ timestamp: info.timestamp, level: info.level, message: info.message })}`;
-  }),
-);
+const logFormat = printf(({ timestamp, level, message, label }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
+});
+
+
 
 const cliFormat = combine(
   format.errors({
@@ -29,19 +31,25 @@ const cliFormat = combine(
 );
 
 const logger = createLogger({
-  level: "info",
+  levels: logLevels,
+  format: combine(timestamp(), logFormat),
   defaultMeta: {
     name: "Parking Winds",
   },
   transports: [
     new transports.File({
-      filename: "error.log",
+      filename: "logs/error.log",
       level: "error",
-      format: logFormat
+      format: format.json()
     }),
     new transports.File({
-      filename: "combined.log",
-      format: logFormat
+      filename: "logs/requests.log",
+      level: "request",
+      format: format.json()
+    }),
+    new transports.File({
+      filename: "logs/combined.log",
+      format: format.json()
     }),
   ],
   // exceptionHandlers: [

@@ -12,6 +12,7 @@ const userRouter = require('./routers/user')
 const adminRouter = require('./routers/admin')
 const logger = require('./utils/logger');
 const winston = require('winston');
+const { error } = require("./utils/logger");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -31,14 +32,14 @@ app.get("/taf/:unit", async (req, res) => {
   const _unit = req.params.unit;
   let unit; 
   let metarData;
-
+  const ip = req.ip
   try {
     unit = await Unit.findOne({ ICAOCode: _unit });
     if (!unit) {
       return res.status(404).send("No Unit Found");
     }
   } catch (error) {
-    logger.log(err.stack)
+    logger.error(err.stack)
   }
 
   if (process.env.NODE_ENV == "development") {
@@ -74,12 +75,13 @@ app.get("/taf/:unit", async (req, res) => {
           response["METAR"] = metarData;
 
         }).then(() => {
-          //TODO console.log(response) add log for data retrieved
+          console.log(response)
+          logger.log({level: 'request', message: `Request from IP: ${ip}. Data Received: ${JSON.stringify(response)}`})
           res.send(response)
         })
       })
       .catch((error) => {
-        logger.log(error.stack)
+        logger.error(error.stack)
       });
   }
 });
