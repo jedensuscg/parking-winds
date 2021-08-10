@@ -17,6 +17,7 @@ const getMetar = async (options) => {
           resolve(metarData);
         })
         .catch((error) => {
+          logger.error(error.stack)
           reject("error: " + error);
         });
     } else {
@@ -35,7 +36,6 @@ const buildMetarObject = async (response, location) => {
     if (!response.data) {
       return response;
     } else {
-      
       return response.data;
     }
   })();
@@ -45,7 +45,7 @@ const buildMetarObject = async (response, location) => {
       return "parse error", err;
     }
 
-    //const baseData = result.response.data.TAF;
+
     const baseData = result.response.data
     //object relating to TAF times
     timeData = {
@@ -58,7 +58,7 @@ const buildMetarObject = async (response, location) => {
     windDirection = baseData.METAR.wind_dir_degrees
     
     rawMetarData = createMetarArrays(baseData.METAR);
-    //winds = calcTafData.getCalculatedTafData(rawTafData);
+
 
   });
   return {
@@ -74,21 +74,25 @@ const buildMetarObject = async (response, location) => {
 createMetarArrays = (forecast) => {
   let metarForecast = [];
   
-  // forecastData.forEach((forecast) => {
-    observationTime = forecast.observation_time;
-    windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
-    windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
-    windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
-    windGustDir = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
+    try {
+      observationTime = forecast.observation_time;
+      windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
+      windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
+      windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
+      windGustDir = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
+  
+      metarForecast.push({
+        observationTime,
+        windDirection: windDirection == 'Variable'? 'Variable': parseInt(windDirection),
+        windSpeed: parseInt(windSpeed),
+        windGust: parseInt(windGust),
+        windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
+      });
+    } catch (error) {
+      logger.error(error.stack)
+    }
 
-    metarForecast.push({
-      observationTime,
-      windDirection: windDirection == 'Variable'? 'Variable': parseInt(windDirection),
-      windSpeed: parseInt(windSpeed),
-      windGust: parseInt(windGust),
-      windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
-    });
-  // });
+
 
   return {
     metarForecast,

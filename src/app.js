@@ -10,10 +10,9 @@ const unitRouter = require('./routers/unit')
 const publicRouter = require('./routers/public')
 const userRouter = require('./routers/user')
 const adminRouter = require('./routers/admin')
-
-
-
-
+const logger = require('./utils/logger');
+const winston = require('winston');
+const { error } = require("./utils/logger");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -33,16 +32,18 @@ app.get("/taf/:unit", async (req, res) => {
   const _unit = req.params.unit;
   let unit; 
   let metarData;
-
+  const ip = req.ip
   try {
     unit = await Unit.findOne({ ICAOCode: _unit });
     if (!unit) {
       return res.status(404).send("No Unit Found");
     }
-  } catch (error) {}
+  } catch (error) {
+    logger.error(err.stack)
+  }
 
   if (process.env.NODE_ENV == "development") {
-    
+
     const fs = require("fs");
     const xmlTestData = fs.readFileSync("./devOps/tafdata.xml", "utf8");
     const xmlTestMetarData = fs.readFileSync("./devOps/metardata.xml", "utf8");
@@ -59,7 +60,7 @@ app.get("/taf/:unit", async (req, res) => {
         })
       })
       .catch((error) => {
-        console.log("ERROR", error);
+        logger.log(err.stack)
       });
   } else {
     const ICAOCode = unit.ICAOCode;
@@ -75,44 +76,20 @@ app.get("/taf/:unit", async (req, res) => {
 
         }).then(() => {
           console.log(response)
+          logger.log({level: 'request', message: `Request from IP: ${ip}. Data Received: ${JSON.stringify(response)}`})
           res.send(response)
         })
       })
       .catch((error) => {
-        console.log('ERROR:', error);
+        logger.error(error.stack)
       });
   }
 });
 
-// app.get("/metar/:unit", async (req, res) => {
-//   const _unit = req.params.unit;
-//   let unit; 
-//   if (process.env.NODE_ENV == "development") {
-//     const fs = require("fs");
-//     const xmlTestData = fs.readFileSync("./devOps/metardata.xml", "utf8");
-//     console.log("app.js", "Using DEV metar file");
-//     getMetar({ test: true, dataSource: xmlTestData })
-//       .then((response) => {
-//         console.log(xmlTestData)
-//         res.send(response);
-//       })
-//       .catch((error) => {
-//         console.log("ERROR", error);
-//       });
-//   } else {
-//     getMetar({ test: false, dataSource: _unit})
-//       .then((response) => {
-//         response["airStation"] = unit;
-//         res.send(response);
-//       })
-//       .catch((error) => {
-//         console.log('ERROR:', error);
-//       });
-//   }
-// });
+
 
 app.listen(port, () => {
-  console.log("Listening on port " + port);
+  logger.info("Listening on port " + port);
 });
 
 

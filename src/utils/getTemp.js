@@ -5,6 +5,7 @@ dateAndTime = require("./dateAndTime");
 const queryString = require("query-string");
 const getTimelineURL = "https://api.tomorrow.io/v4/timelines";
 const apikey = process.env.CLIMACELL_KEY;
+const logger = require('./logger')
 
 let location
 
@@ -25,7 +26,7 @@ async function getTemp(latLong) {
           resolve(lowestTemp);
         })
         .catch((error) => {
-          console.log("ERROR", error)
+          logger.error(error.stack)
           resolve(["error", 99]);
         });
     } else {
@@ -59,9 +60,14 @@ function getQueryString() {
 }
 
 function getMinTemp(data) {
-  map = mapTimeAndTemp(data);
-  const lowestTemp = [...map.entries()].reduce((total, next) => (next[1] < total[1] ? next : total));
-  return lowestTemp;
+  try {
+    map = mapTimeAndTemp(data);
+    const lowestTemp = [...map.entries()].reduce((total, next) => (next[1] < total[1] ? next : total));
+    return lowestTemp;
+  } catch (error) {
+    logger.error(error.stack)
+  }
+
 }
 
 function mapTimeAndTemp(data) {

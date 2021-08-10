@@ -1,0 +1,71 @@
+const { createLogger, format,transports} = require("winston");
+const {combine,timestamp,cli,json,label,printf,errors} = format;
+//require("dotenv").config();
+
+const logLevels = { 
+  error: 0,
+  warn: 1,
+  request: 2,
+  info: 3,
+  http: 4,
+  verbose: 5,
+  debug: 6,
+  silly: 7
+};
+
+const logFormat = printf(({ timestamp, level, message, label }) => {
+  return `${timestamp} [${label}] ${level}: ${message}`;
+});
+
+
+
+const cliFormat = combine(
+  format.errors({
+    stack: true
+  }),
+  cli({
+    colors: {
+      info: "blue",
+    },
+  })
+);
+
+const logger = createLogger({
+  levels: logLevels,
+  format: combine(timestamp(), logFormat),
+  defaultMeta: {
+    name: "Parking Winds",
+  },
+  transports: [
+    new transports.File({
+      filename: "logs/error.log",
+      level: "error",
+      format: format.json()
+    }),
+    new transports.File({
+      filename: "logs/requests.log",
+      level: "request",
+      format: format.json()
+    }),
+    new transports.File({
+      filename: "logs/combined.log",
+      format: format.json()
+    }),
+  ],
+  // exceptionHandlers: [
+  //   new transports.File({
+  //     filename: "exceptions.log",
+  //   })
+  // ],
+});
+
+if (process.env.NODE_ENV !== "production") {
+  logger.add(
+    new transports.Console({
+      format: cliFormat,
+
+    })
+  );
+}
+
+module.exports = logger;

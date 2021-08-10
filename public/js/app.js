@@ -65,7 +65,6 @@ const app = Vue.createApp({
   },
   methods: {
     changeIndicatorToLongForm: function (changeIndicator) {
-      console.log(changeIndicator)
       let longFormChangeIndicator
       switch (changeIndicator) {
 
@@ -268,8 +267,6 @@ const app = Vue.createApp({
             dir = "Variable"
           }
           this.viewingWindDir = dir == "Variable"? dir : dir + 90
-          console.log(dir)
-          console.log(this.viewingWindDir)
           this.$refs.prevailingCol.classList.remove("wind-data-col-active");
           this.$refs.strongestCol.classList.remove("wind-data-col-active");
           if (this.winds.highestGust.speed > 0) {
