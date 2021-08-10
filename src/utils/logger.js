@@ -38,17 +38,17 @@ const logger = createLogger({
   },
   transports: [
     new transports.File({
-      filename: "logs/error.log",
+      filename: "/var/log/parking-winds/testing/error.log",
       level: "error",
       format: format.json()
     }),
     new transports.File({
-      filename: "logs/requests.log",
+      filename: "/var/log/parking-winds/testing/log/requests.log",
       level: "request",
       format: format.json()
     }),
     new transports.File({
-      filename: "logs/combined.log",
+      filename: "/var/log/parking-winds/testing/log/combined.log",
       format: format.json()
     }),
   ],
