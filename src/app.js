@@ -56,9 +56,8 @@ app.get("/taf/:unit", async (req, res) => {
         getMetar({ test: true, dataSource: xmlTestMetarData }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;
-          console.log(response)
-          const jsonData = JSON.stringify(response).replace(/\\/g, "")
-          logger.log({level: 'request', message: `Request from IP: ${ip}`, dataReceived: `${jsonData}`})
+
+          logger.log({level: 'request', message: `Request from IP: ${ip}`, dataReceived: `${JSON.stringify(response)}`})
           res.send(response)
         })
       })

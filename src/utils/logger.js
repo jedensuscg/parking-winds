@@ -51,9 +51,13 @@ const logger = createLogger({
       filename: "/var/log/parking-winds/testing/log/combined.log",
       format: format.json()
     }),
-    new transports.Console({
+    new transports.File({
+      filename: "combined.log",
       format: format.json()
     }),
+    // new transports.Console({
+    //   format: format.json()
+    // }),
   ],
   // exceptionHandlers: [
   //   new transports.File({
@@ -65,12 +69,17 @@ const logger = createLogger({
 if (process.env.NODE_ENV !== "production") {
   logger.clear().add(
     new transports.File({
-      filename: "logs/requests.log",
+      filename: "requests.log",
       level: "request",
       format: combine(timestamp(), logFormat, format.json()),
     }),
     new transports.File({
-      filename: "logs/combined.log",
+      filename: "error.log",
+      level: "error",
+      format: format.json()
+    }),
+    new transports.File({
+      filename: "combined.log",
       format: format.json()
     }),
     new transports.Console({
