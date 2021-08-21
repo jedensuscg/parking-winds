@@ -20,6 +20,7 @@ const getTaf = (options) => {
           resolve(tafData);
         })
         .catch((error) => {
+          logger.error(error.stack)
           reject("error: " + error);
         });
     } else {
@@ -37,17 +38,23 @@ const buildTafObject = async (response, location) => {
   lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
-    if (!response.data) {
-      return response;
-    } else {
-      return response.data;
+    try {
+      if (!response.data) {
+        return response;
+      } else {
+        // Online source
+        return response.data;
+      }
+    } catch (error) {
+      logger.error(error.stack)
     }
+
   })();
 
   parser.parseString(xmlToParse, (err, result) => {
     if (err) {
-      logger.error("error", err)
-      return "parse error", err;
+      logger.log(err.stack)
+      return err;
 
     }
     const baseData = result.response.data.TAF;
@@ -74,7 +81,6 @@ const buildTafObject = async (response, location) => {
 
 // Create an array for each forecast period.
 createTafArrays = (forecastData) => {
-  console.log(forecastData)
   let durationOfForecast;
   let tafForecasts = [];
   
