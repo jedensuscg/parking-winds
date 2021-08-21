@@ -27,7 +27,7 @@ app.use(publicRouter)
 app.use(userRouter)
 app.use(adminRouter)
 
-
+app.set('trust proxy', true)
 app.get("/taf/:unit", async (req, res) => {
   const _unit = req.params.unit;
   let unit; 
