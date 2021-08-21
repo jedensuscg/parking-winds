@@ -197,7 +197,7 @@
                             <div class="decode-taf-data-col left-taf-data">
                                 Winds
                             </div>
-                            <div class="decode-taf-data-col right-taf-data" v-if="forecast.windSpeed > 1 && forecast.changeIndicator != 'TEMPO'">
+                            <div class="decode-taf-data-col right-taf-data" v-if="forecast.windSpeed > 1">
                                 {{ formatNumberToThreeDigits(forecast.windDirection) }} @ {{forecast.windSpeed}} KTS
                             </div>
                             <div class="decode-taf-data-col right-taf-data" v-else>
