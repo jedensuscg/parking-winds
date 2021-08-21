@@ -1,69 +1,64 @@
 <response xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:noNamespaceSchemaLocation="http://www.aviationweather.gov/static/adds/schema/taf1_2.xsd">
-<request_index>640079354</request_index>
+<request_index>165124014</request_index>
 <data_source name="tafs"/>
 <request type="retrieve"/>
 <errors/>
 <warnings/>
-<time_taken_ms>10</time_taken_ms>
+<time_taken_ms>13</time_taken_ms>
 <data num_results="1">
 <TAF>
-<raw_text>KECG 191120Z 1912/2012 23011G18KT P6SM SCT250 FM191600 24013G21KT P6SM SCT050 FM192200 22012G19KT P6SM SCT050 FM200000 21011KT P6SM SCT250 FM200700 24011KT P6SM BKN250 WS020/25045KT</raw_text>
+<raw_text>TAF COR KECG 211800Z 2118/2218 35006KT P6SM VCTS BKN040CB TEMPO 2118/2121 4SM TSRA BKN025CB FM212300 29003KT P6SM SCT040 FM220200 24003KT P6SM SCT250 FM221600 24006KT P6SM SCT040</raw_text>
 <station_id>KECG</station_id>
-<issue_time>2021-06-19T11:20:00Z</issue_time>
-<bulletin_time>2021-06-19T11:20:00Z</bulletin_time>
-<valid_time_from>2021-06-19T12:00:00Z</valid_time_from>
-<valid_time_to>2021-06-20T12:00:00Z</valid_time_to>
+<issue_time>2021-08-21T18:00:00Z</issue_time>
+<bulletin_time>2021-08-21T18:09:00Z</bulletin_time>
+<valid_time_from>2021-08-21T18:00:00Z</valid_time_from>
+<valid_time_to>2021-08-22T18:00:00Z</valid_time_to>
 <latitude>36.27</latitude>
 <longitude>-76.18</longitude>
 <elevation_m>2.0</elevation_m>
 <forecast>
-<fcst_time_from>2021-02-12T18:00:00Z</fcst_time_from>
-<fcst_time_to>2021-02-12T22:00:00Z</fcst_time_to>
-<wind_dir_degrees>360</wind_dir_degrees>
-<wind_speed_kt>15</wind_speed_kt>
-<wind_gust_kt>30</wind_gust_kt>
-<visibility_statute_mi>6.0</visibility_statute_mi>
-<wx_string>-DZ</wx_string>
-<sky_condition sky_cover="OVC" cloud_base_ft_agl="600"/>
+<fcst_time_from>2021-08-21T18:00:00Z</fcst_time_from>
+<fcst_time_to>2021-08-21T23:00:00Z</fcst_time_to>
+<wind_dir_degrees>350</wind_dir_degrees>
+<wind_speed_kt>6</wind_speed_kt>
+<visibility_statute_mi>6.21</visibility_statute_mi>
+<wx_string>VCTS</wx_string>
+<sky_condition sky_cover="BKN" cloud_base_ft_agl="4000" cloud_type="CB"/>
 </forecast>
 <forecast>
-<fcst_time_from>2021-06-19T16:00:00Z</fcst_time_from>
-<fcst_time_to>2021-06-19T22:00:00Z</fcst_time_to>
+<fcst_time_from>2021-08-21T18:00:00Z</fcst_time_from>
+<fcst_time_to>2021-08-21T21:00:00Z</fcst_time_to>
+<change_indicator>TEMPO</change_indicator>
+<visibility_statute_mi>4.0</visibility_statute_mi>
+<wx_string>TSRA</wx_string>
+<sky_condition sky_cover="BKN" cloud_base_ft_agl="2500" cloud_type="CB"/>
+</forecast>
+<forecast>
+<fcst_time_from>2021-08-21T23:00:00Z</fcst_time_from>
+<fcst_time_to>2021-08-22T02:00:00Z</fcst_time_to>
+<change_indicator>FM</change_indicator>
+<wind_dir_degrees>290</wind_dir_degrees>
+<wind_speed_kt>3</wind_speed_kt>
+<visibility_statute_mi>6.21</visibility_statute_mi>
+<sky_condition sky_cover="SCT" cloud_base_ft_agl="4000"/>
+</forecast>
+<forecast>
+<fcst_time_from>2021-08-22T02:00:00Z</fcst_time_from>
+<fcst_time_to>2021-08-22T16:00:00Z</fcst_time_to>
 <change_indicator>FM</change_indicator>
 <wind_dir_degrees>240</wind_dir_degrees>
-<wind_speed_kt>13</wind_speed_kt>
-<wind_gust_kt>21</wind_gust_kt>
-<visibility_statute_mi>6.21</visibility_statute_mi>
-<sky_condition sky_cover="SCT" cloud_base_ft_agl="5000"/>
-</forecast>
-<forecast>
-<fcst_time_from>2021-06-19T22:00:00Z</fcst_time_from>
-<fcst_time_to>2021-06-20T00:00:00Z</fcst_time_to>
-<change_indicator>FM</change_indicator>
-<wind_dir_degrees>220</wind_dir_degrees>
-<wind_speed_kt>12</wind_speed_kt>
-<wind_gust_kt>19</wind_gust_kt>
-<visibility_statute_mi>6.21</visibility_statute_mi>
-<sky_condition sky_cover="SCT" cloud_base_ft_agl="5000"/>
-</forecast>
-<forecast>
-<fcst_time_from>2021-06-20T00:00:00Z</fcst_time_from>
-<fcst_time_to>2021-06-20T07:00:00Z</fcst_time_to>
-<change_indicator>FM</change_indicator>
-<wind_dir_degrees>210</wind_dir_degrees>
-<wind_speed_kt>30</wind_speed_kt>
+<wind_speed_kt>3</wind_speed_kt>
 <visibility_statute_mi>6.21</visibility_statute_mi>
 <sky_condition sky_cover="SCT" cloud_base_ft_agl="25000"/>
 </forecast>
 <forecast>
-<fcst_time_from>2021-06-20T07:00:00Z</fcst_time_from>
-<fcst_time_to>2021-06-20T12:00:00Z</fcst_time_to>
+<fcst_time_from>2021-08-22T16:00:00Z</fcst_time_from>
+<fcst_time_to>2021-08-22T18:00:00Z</fcst_time_to>
 <change_indicator>FM</change_indicator>
-<wind_dir_degrees>0</wind_dir_degrees>
+<wind_dir_degrees>240</wind_dir_degrees>
 <wind_speed_kt>6</wind_speed_kt>
-<visibility_statute_mi>5.0</visibility_statute_mi>
-<wx_string>-RA</wx_string>
-<sky_condition sky_cover="OVC" cloud_base_ft_agl="500"/>
+<visibility_statute_mi>6.21</visibility_statute_mi>
+<sky_condition sky_cover="SCT" cloud_base_ft_agl="4000"/>
 </forecast>
 </TAF>
 </data>

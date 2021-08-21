@@ -26,7 +26,8 @@ async function getTemp(latLong) {
           resolve(lowestTemp);
         })
         .catch((error) => {
-          logger.error(error.stack)
+          console.log(getTimelineURL + "?" + getTimelineParameters)
+          logger.error(error.response.data)
           resolve(["error", 99]);
         });
     } else {

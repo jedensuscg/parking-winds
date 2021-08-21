@@ -38,11 +38,17 @@ const buildTafObject = async (response, location) => {
   lowestTemp = await getTemp(location)
   // Check if using online source or local xml test file.
   const xmlToParse = (() => {
-    if (!response.data) {
-      return response;
-    } else {
-      return response.data;
+    try {
+      if (!response.data) {
+        return response;
+      } else {
+        // Online source
+        return response.data;
+      }
+    } catch (error) {
+      logger.error(error.stack)
     }
+
   })();
 
   parser.parseString(xmlToParse, (err, result) => {

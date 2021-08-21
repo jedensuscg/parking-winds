@@ -7,7 +7,6 @@ calcPrevailingWinds = (rawTafData) => {
   let windTimes = [];
   let windGusts = [];
   // Put each element into individual array
-  console.log(rawTafData)
   rawTafData.tafForecasts.forEach((forecast) => {
     windDirections.push(forecast.windDirection);
     windSpeeds.push(forecast.windSpeed);
