@@ -55,9 +55,9 @@ const logger = createLogger({
       filename: "combined.log",
       format: format.json()
     }),
-    // new transports.Console({
-    //   format: format.json()
-    // }),
+    new transports.Console({
+      format: format.json()
+    }),
   ],
   // exceptionHandlers: [
   //   new transports.File({
