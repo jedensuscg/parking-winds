@@ -5,7 +5,7 @@ const app = Vue.createApp({
       firstLoadCheck: true,
       dataTimestamp: -3600001,
       loadMsg: "LOADING",
-      unitToFech: "",
+      unitToFetch: "",
       highWindWarning: false,
       lowTempWarning: false,
       airStation: undefined,
@@ -41,6 +41,7 @@ const app = Vue.createApp({
         },
       },
       rawTaf: "",
+      rawMetarText: '',
       decodeTaf: {},
       lowestTemp: "",
       loadWinds: false,
@@ -97,14 +98,14 @@ const app = Vue.createApp({
     },
     firstLoad(unit) {
 
-      this.unitToFech = unit;
+      this.unitToFetch = unit;
       this.createDiagram();
 
       this.firstLoadCheck = false;
     },
     async fetchData() {
 
-      await fetch(`./taf/${this.unitToFech}`)
+      await fetch(`./taf/${this.unitToFetch}`)
         .then((response) => response.json())
         .then((data) => {
           console.log("Running new fetch");
@@ -117,6 +118,7 @@ const app = Vue.createApp({
           this.winds = data.winds;
           this.rawTaf = data.rawText;
           this.metarWinds = data.METAR.rawMetarData.metarForecast[0];
+          this.rawMetarText = data.METAR.rawMetarText
           this.lowestTemp = {
             time: data.lowestTemp[0],
             temp: Math.floor(data.lowestTemp[1]),
@@ -274,7 +276,7 @@ const app = Vue.createApp({
           }
           this.$refs.metarCol.classList.add("wind-data-col-active");
         } else if (drawType === 'metarGusts') {
-          windSpeed = this.metarWinds.windSpeed;
+          windSpeed = this.metarWinds.windGust;
           windArrowLength = windSpeed * 2;
           if (windSpeed == '0') {
             windSpeed = "No Gusts"
