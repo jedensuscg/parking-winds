@@ -1,6 +1,11 @@
+
 const app = Vue.createApp({
   data() {
     return {
+      input: {
+        email: "",
+        password: ""
+      },
       hideDetails: false,
       firstLoadCheck: true,
       dataTimestamp: -3600001,
@@ -104,7 +109,6 @@ const app = Vue.createApp({
       this.firstLoadCheck = false;
     },
     async fetchData() {
-
       await fetch(`./taf/${this.unitToFetch}`)
         .then((response) => response.json())
         .then((data) => {
@@ -140,6 +144,15 @@ const app = Vue.createApp({
           console.log(e);
         });
     },
+    async login() {
+      if(this.input.username != "" && this.input.password != "") {
+          await fetch('./users/login', {method: 'POST', body: this.input})
+          .then(response => response.json())
+          .then(data => console.log(data))
+      } else {
+          console.log("A username and password must be present");
+      }
+  },
     convertToLocalTime (time) {
       const localTimeFull = new Date(time);
       const today = new Date()
