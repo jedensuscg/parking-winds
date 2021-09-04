@@ -1,10 +1,17 @@
 const express = require("express");
 const router = new express.Router();
+const cookieParser = require('cookie-parser');
 const User = require("../models/user");
 const Unit = require("../models/unit")
 const auth = require('../middleware/auth');
 const { connect } = require("mongodb");
+const { response } = require("express");
 
+
+// Parsers for POST data
+router.use(express.json({limit: '20mb'}));
+router.use(express.urlencoded({ extended: false, limit: '20mb' }));
+router.use(cookieParser())
 //CREATE NEW USER
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
@@ -22,9 +29,19 @@ router.post("/users", async (req, res) => {
 
 //LOGIN USER
 router.post("/users/login",  async (req, res) => {
+
+ 
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password);
     const token = await user.generateAuthToken()
+    res.cookie('token', token,
+    {
+      maxAge: 604800016,
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax'
+
+    })
     res.send({ user, token });
   } catch (error) {
     res.status(400).send({error: error.message});

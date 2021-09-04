@@ -4,9 +4,10 @@ const User = require("../models/user");
 
 const auth = async (req, res, next) => {
   let token;
-
+  console.log(req.cookies)
   try {
-    token = req.header("Authorization").replace("Bearer ", ""); //Gets token of req header
+    token = req.cookies.token
+    //token = req.header("Authorization").replace("Bearer ", ""); //Gets token of req header
 
     const decoded = jwt.verify(token, "thisismynewcourse"); // Verifies it
     

@@ -145,8 +145,13 @@ const app = Vue.createApp({
         });
     },
     async login() {
-      if(this.input.username != "" && this.input.password != "") {
-          await fetch('./users/login', {method: 'POST', body: this.input})
+      if(this.input.email != "" && this.input.password != "") {
+        console.log(JSON.stringify(this.input))
+          await fetch('./users/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(this.input)
+          })
           .then(response => response.json())
           .then(data => console.log(data))
       } else {

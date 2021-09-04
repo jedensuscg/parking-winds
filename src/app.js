@@ -1,4 +1,5 @@
 const express = require("express");
+const https = require('https')
 const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
@@ -13,15 +14,17 @@ const adminRouter = require('./routers/admin')
 const logger = require('./utils/logger');
 const winston = require('winston');
 const { error } = require("./utils/logger");
-
+console.log(process.cwd())
+const cert = fs.readFileSync(path.join(__dirname, "../cert.crt"))
+const key = fs.readFileSync(path.join(__dirname, "../cert.key"))
 const app = express();
 const port = process.env.PORT || 5000;
 
 
 
-
 app.use("/public", express.static(path.join(__dirname, "../public")));
 app.use(express.json());
+
 app.use(unitRouter)
 app.use(publicRouter)
 app.use(userRouter)
@@ -88,10 +91,10 @@ app.get("/taf/:unit", async (req, res) => {
 });
 
 
-
-app.listen(port, () => {
-  logger.info("Listening on port " + port);
-});
+https.createServer({ key, cert }, app).listen(5000);
+// app.listen(port, () => {
+//   logger.info("Listening on port " + port);
+// });
 
 
 
