@@ -2,6 +2,7 @@ const express = require("express");
 const https = require('https')
 const path = require("path");
 const fs = require("fs");
+const cookieParser = require('cookie-parser');
 require("dotenv").config();
 require("./db/mongoose");
 const getMetar = require("./utils/getMetar")
@@ -11,18 +12,33 @@ const unitRouter = require('./routers/unit')
 const publicRouter = require('./routers/public')
 const userRouter = require('./routers/user')
 const adminRouter = require('./routers/admin')
+const auth = require('./middleware/auth');
 const logger = require('./utils/logger');
 const winston = require('winston');
 const { error } = require("./utils/logger");
-console.log(process.cwd())
-const cert = fs.readFileSync(path.join(__dirname, "../cert.crt"))
-const key = fs.readFileSync(path.join(__dirname, "../cert.key"))
+
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(cookieParser())
 
+// SSL Self Signed Certs for Dev environment.
+let key, cert
+try {
+  console.log("Using SSL Dev certs")
+  cert = fs.readFileSync(path.join(__dirname, "../cert.crt"))
+  key = fs.readFileSync(path.join(__dirname, "../cert.key"))
+} catch (error) {
+  console.log('SLL Dev certs not found')
+}
 
 
 app.use("/public", express.static(path.join(__dirname, "../public")));
+
+app.get("/", auth, async (req, res) => {
+
+  
+  res.sendFile(path.resolve("./public/index.html"))
+ })
 app.use(express.json());
 
 app.use(unitRouter)
@@ -31,6 +47,8 @@ app.use(userRouter)
 app.use(adminRouter)
 
 app.set('trust proxy', true)
+
+
 app.get("/taf/:unit", async (req, res) => {
   const _unit = req.params.unit;
   let unit; 
