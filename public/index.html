@@ -58,7 +58,7 @@
 
             </div>
             <div id="login">
-                <h1>Login</h1>
+                <h1>Login {{isValidated}}</h1>
                 <input type="text" name="email" v-model="input.email" placeholder="Email" />
                 <input type="password" name="password" v-model="input.password" placeholder="Password" />
                 <button type="button" v-on:click="login()">Login</button>

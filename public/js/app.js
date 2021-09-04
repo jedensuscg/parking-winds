@@ -6,6 +6,7 @@ const app = Vue.createApp({
         email: "",
         password: ""
       },
+      isValidated: false,
       hideDetails: false,
       firstLoadCheck: true,
       dataTimestamp: -3600001,
@@ -144,16 +145,20 @@ const app = Vue.createApp({
           console.log(e);
         });
     },
+    async checkLogin() {
+      
+    },
     async login() {
       if(this.input.email != "" && this.input.password != "") {
-        console.log(JSON.stringify(this.input))
           await fetch('./users/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(this.input)
           })
           .then(response => response.json())
-          .then(data => console.log(data))
+          .then((data) => {
+            this.isValidated = true
+          })
       } else {
           console.log("A username and password must be present");
       }

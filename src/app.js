@@ -35,7 +35,6 @@ try {
 app.use("/public", express.static(path.join(__dirname, "../public")));
 
 app.get("/", auth, async (req, res) => {
-
   
   res.sendFile(path.resolve("./public/index.html"))
  })

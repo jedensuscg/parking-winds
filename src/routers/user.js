@@ -29,7 +29,7 @@ router.post("/users", async (req, res) => {
 
 //LOGIN USER
 router.post("/users/login",  async (req, res) => {
-  
+
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password);
     const token = await user.generateAuthToken()
@@ -41,7 +41,13 @@ router.post("/users/login",  async (req, res) => {
       sameSite: 'lax'
 
     })
-    res.send({ user });
+    res.send({ user:{
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      unit: user.email
+
+    } });
   } catch (error) {
     res.status(400).send({error: error.message});
   }
