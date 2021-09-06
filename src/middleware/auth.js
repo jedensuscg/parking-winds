@@ -3,18 +3,16 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const auth = async (req, res, next) => {
-  let token;
   console.log(req.originalUrl);
 
   if (req.originalUrl != "/") {
     try {
-      token = req.cookies.token;
-      //token = req.header("Authorization").replace("Bearer ", ""); //Gets token of req header
-
+      const token = req.header("Authorization").replace("Bearer ", ""); //Gets token of req header
+      console.log(token)
       user = await decodeAndGetUser(token)
       // const decoded = jwt.verify(token, "thisismynewcourse"); // Verifies it
       // const user = await User.findOne({ _id: decoded._id, "tokens.token": token }); //Verifies token still exists in user token array. If not user has logged out.
-      
+      console.log(user)
       if (!user) {
         throw new Error("Please Authenticate");
       }
@@ -27,8 +25,8 @@ const auth = async (req, res, next) => {
       res.status(401).send({ error: error.message });
     }
   } else {
-    if (req.cookies.token) {
-      token = req.cookies.token;
+    if (req.header.token) {
+      token = req.header("Authorization").replace("Bearer ", ""); //Gets token of req header
       const user = await decodeAndGetUser
       if (!user) {
         console.log("user not logged in");
