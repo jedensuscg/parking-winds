@@ -12,7 +12,7 @@
 <temp_c>31.1</temp_c>
 <wind_dir_degrees>080</wind_dir_degrees>
 <wind_speed_kt>20</wind_speed_kt>
-<wind_gust_kt>40</wind_gust_kt>
+<wind_gust_kt>15</wind_gust_kt>
 </METAR>
 </data>
 </response>
