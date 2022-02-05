@@ -160,6 +160,10 @@
                         <img src="public/img/windy-red.png" class="caution-icons" alt="">
                         <p class="caution-text">FORECAST WINDS > 22KTS</p>
                     </div>
+                    <div class="icon-divs" v-if="hangarWindWarning">
+                        <img src="public/img/hangar-winds.png" class="caution-icons" alt="">
+                        <p class="caution-text">HANGAR DOOR WARNING</p>
+                    </div>
                 </div>
                 <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
                     <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
@@ -169,8 +173,11 @@
                 </div>
                 <canvas id="airStation" width="930" height="627" @mousemove='handleMousemove'></canvas>
                 <div class="taf-text">
+                    <h4><a v-bind:href="'https://aviationweather.gov/taf/data?ids=' + unitToFetch + '&format=decoded&metars=on&date=&submit=Get+TAF+data'" target="_blank">Direct link to full data on Aviationweather.gov</a></h4>
                     <h4>RAW TAF</h4>
                     <p>{{rawTaf}}</p>
+                    <h4>RAW METAR</h4>
+                    <p>{{rawMetarText}}</p>
 
                     <h4>DECODED TAF DATA</h4>
                     <div class="decode-taf-line" v-for="forecast in decodeTaf.tafForecasts">

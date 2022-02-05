@@ -5,8 +5,9 @@ const app = Vue.createApp({
       firstLoadCheck: true,
       dataTimestamp: -3600001,
       loadMsg: "LOADING",
-      unitToFech: "",
+      unitToFetch: "",
       highWindWarning: false,
+      hangarWindWarning: false,
       lowTempWarning: false,
       airStation: undefined,
       viewingWindDir: 0,
@@ -41,6 +42,7 @@ const app = Vue.createApp({
         },
       },
       rawTaf: "",
+      rawMetarText: '',
       decodeTaf: {},
       lowestTemp: "",
       loadWinds: false,
@@ -97,14 +99,14 @@ const app = Vue.createApp({
     },
     firstLoad(unit) {
 
-      this.unitToFech = unit;
+      this.unitToFetch = unit;
       this.createDiagram();
-
+      
       this.firstLoadCheck = false;
     },
     async fetchData() {
 
-      await fetch(`./taf/${this.unitToFech}`)
+      await fetch(`./taf/${this.unitToFetch}`)
         .then((response) => response.json())
         .then((data) => {
           console.log("Running new fetch");
@@ -117,6 +119,7 @@ const app = Vue.createApp({
           this.winds = data.winds;
           this.rawTaf = data.rawText;
           this.metarWinds = data.METAR.rawMetarData.metarForecast[0];
+          this.rawMetarText = data.METAR.rawMetarText
           this.lowestTemp = {
             time: data.lowestTemp[0],
             temp: Math.floor(data.lowestTemp[1]),
@@ -169,11 +172,23 @@ const app = Vue.createApp({
     },
 
     checkForWarnings() {
-      if (this.winds.prevailingWinds.speed > 22 || this.winds.highestGust.speed > 22) {
-        this.highWindWarning = true;
-      } else {
-        this.highWindWarning = false;
-      }
+      this.highWindWarning = false
+      this.hangarWindWarning = false
+      this.lowTempWarning = false
+      speeds = [this.winds.prevailingWinds.speed,this.winds.highestWinds.speed,this.winds.highestGust.speed,this.metarWinds.windSpeed,this.metarWinds.windGustSpeed]
+      directions = [this.winds.prevailingWinds.direction,this.winds.highestWinds.direction,this.winds.highestGust.direction,this.metarWinds.windDirection,this.metarWinds.windGustDir]
+      console.log("dir" + directions)
+      speeds.forEach(speed => {
+        if(speed > 22) {
+          this.highWindWarning = true
+          directions.forEach(dir => {
+            if (dir >= 110 && dir <= 310) {
+              console.log("hangar wind")
+              this.hangarWindWarning = true
+            }
+          });
+        }
+      });
       if (this.lowestTemp.temp < 35) {
         this.lowTempWarning = true;
       } else {
@@ -203,6 +218,9 @@ const app = Vue.createApp({
           this.airStation.parkingSpots.spots.forEach((spot) => {
             drawWinds(spot);
           });
+          drawWinds({"x":405,"y":186,"baseHeading": false})
+          
+
         })();
       };
 
@@ -216,8 +234,13 @@ const app = Vue.createApp({
       };
 
       drawWinds = (spot) => {
-        let windArrowLength, dir, windSpeed;
-        this.drawPlanes(spot.x, spot.y, spot.baseHeading);
+        let windArrowLength, dir, windSpeed,drawHangar;
+        if (!spot.baseHeading === false) {
+          this.drawPlanes(spot.x, spot.y, spot.baseHeading);
+        } else {
+          drawHangar = true
+        }
+
         if (drawType === "prevailing") {
           windSpeed = this.winds.prevailingWinds.speed;
           windArrowLength = windSpeed * 2;
@@ -274,7 +297,7 @@ const app = Vue.createApp({
           }
           this.$refs.metarCol.classList.add("wind-data-col-active");
         } else if (drawType === 'metarGusts') {
-          windSpeed = this.metarWinds.windSpeed;
+          windSpeed = this.metarWinds.windGust;
           windArrowLength = windSpeed * 2;
           if (windSpeed == '0') {
             windSpeed = "No Gusts"
@@ -303,9 +326,14 @@ const app = Vue.createApp({
         } else if (windArrowLength <= 20) {
           windArrowLength = 20;
         }
+        if (!drawHangar) {
+          startArrowPosX = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
+          startArrowPosY = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
+        } else {
+          startArrowPosX = spot.x + 1 * Math.cos((Math.PI * dir) / 180);
+          startArrowPosY = spot.y + 1 * Math.sin((Math.PI * dir) / 180);
+        }
 
-        startArrowPosX = spot.x + 54 * Math.cos((Math.PI * dir) / 180);
-        startArrowPosY = spot.y + 54 * Math.sin((Math.PI * dir) / 180);
 
         this.ctx.beginPath();
 
