@@ -9,7 +9,8 @@ const { DateTime } = require("luxon");
 const url = ''
 
 const getTaf = (options) => {
-  const url =
+  const url = 'https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=tafs&stationString=${options.dataSource}&hoursBeforeNow=24&format=xml&mostRecent=true';
+  const urlOrignal =
   `https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=tafs&requestType=retrieve&format=xml&hoursBeforeNow=24&timeType=issue&mostRecent=true&stationString=${options.dataSource}`;
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
