@@ -1,13 +1,13 @@
 const parseString = require("xml2js");
 const parser = new parseString.Parser({ explicitArray: false });
 const axios = require("axios").default;
+const logger = require("./logger");
 
 const { DateTime } = require("luxon");
 const url = ''
 
 const getMetar = async (options) => {
-  const url =
-  `https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=${options.dataSource}&hoursBeforeNow=12&mostRecent=true&fields=raw_text,observation_time,temp_c,wind_dir_degrees,wind_speed_kt,wind_gust_kt`;
+  const url = 'https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=${options.dataSource}&hoursBeforeNow=12&format=xml&mostRecent=true&fields=raw_text,observation_time,temp_c,wind_dir_degrees,wind_speed_kt,wind_gust_kt'
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
