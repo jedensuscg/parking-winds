@@ -25,13 +25,13 @@
                 <div class="modal-content">
                     <span class="close">&times</span>
                     <p>
-                        All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/dataserver">Text Data Server</a>. Temperature information is obtained
+                        All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/data/api/">Data API</a>. Temperature information is obtained
                         from <a href="https://www.tomorrow.io/">Tomorrow.io API v4 </a> with limited usage plan of 500 requests per day.
                     <ul>
                         <li>
                             <h6>NEW FEATURES</h5>
                         </li>
-
+                        <li></li>
                         <li>Added current METAR wind data to get current winds at station.</li>
                         <li>Added addition of date when times move into the next day.</li>
                         <li>Added the time frames that strongest gusts and strongest winds can be expected</li>
@@ -40,9 +40,8 @@
                         <li>
                             <h5>BUG FIXES</h5>
                         </li>
-                        <li>Fixed Variable winds showing as 000 heading. Now says "Variable"</li>
-                        <li>Fixed issue where single TAF line would not allow data to load.</li>
-                        <li>Fixed Decoded TAF Gust speed/direction indication backwards</li>
+                        <li>The NWS changed the API address. Made changes to allow continued use.</li>
+                        <li>Fixed direct link to TAF data.</li>
                         <li>
                             <h5>UPCOMING CHANGES</h5>
                         </li>
@@ -173,7 +172,7 @@
                 </div>
                 <canvas id="airStation" width="930" height="627" @mousemove='handleMousemove'></canvas>
                 <div class="taf-text">
-                    <h4><a v-bind:href="'https://aviationweather.gov/taf/data?ids=' + unitToFetch + '&format=decoded&metars=on&date=&submit=Get+TAF+data'" target="_blank">Direct link to full data on Aviationweather.gov</a></h4>
+                    <h4><a v-bind:href="'https://aviationweather.gov/data/taf/?id=' + unitToFetch + '&format=decoded&metars=on&date=&submit=Get+TAF+data'" target="_blank">Direct link to full data on Aviationweather.gov</a></h4>
                     <h4>RAW TAF</h4>
                     <p>{{rawTaf}}</p>
                     <h4>RAW METAR</h4>
