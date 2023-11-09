@@ -122,3 +122,7 @@ dist
 ecosystem.config.js
 
 .vscode
+ca.crt
+ca.key
+cert.crt
+cert.key

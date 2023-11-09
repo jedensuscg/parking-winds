@@ -160,6 +160,10 @@
                         <img src="public/img/windy-red.png" class="caution-icons" alt="">
                         <p class="caution-text">FORECAST WINDS > 22KTS</p>
                     </div>
+                    <div class="icon-divs" v-if="hangarWindWarning">
+                        <img src="public/img/hangar-winds.png" class="caution-icons" alt="">
+                        <p class="caution-text">HANGAR DOOR WARNING</p>
+                    </div>
                 </div>
                 <div class="canvas-footer">DISPLAYING <span v-if="drawType == 'prevailing'">PREVAILING WINDS</span>
                     <span v-if="drawType == 'highest'">STRONGEST WINDS</span>
