@@ -67,14 +67,17 @@ app.get("/taf/:unit", async (req, res) => {
   } else {
     const ICAOCode = unit.ICAOCode;
     const location = [unit.lat, unit.long]
+    
     getTaf({ test: false, dataSource: ICAOCode, location})
       .then((response) => {
         response["airStation"] = unit;
         return response
       }).then((response) => {
+        console.log("getting metar");
         getMetar({ test: false, dataSource: _unit }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;
+          
 
         }).then(() => {
           logger.log({level: 'request', message: `Request from IP: ${ip}`, dataReceived: `${JSON.stringify(response)}`})
