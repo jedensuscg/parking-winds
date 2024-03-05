@@ -36,64 +36,70 @@ var map = L.map('map').setView([unit.lat,unit.long], 19);
 document.body.onload = function() {
 
 // Azure Maps
-//   L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
-//     attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
-//     maxZoom: 19,
-//     minZoom: 17,
-//     //Add your Azure Maps key to the map SDK. Get an Azure Maps key at https://azure.com/maps. NOTE: The primary key should be used as the key.
-//     subscriptionKey: '9cHjOG8GmLwhGGBZvLhAAkiFtpjayDmPkSUDQsh1m_U',
+  L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
+    attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
+    maxZoom: 19,
+    minZoom: 17,
+    //Add your Azure Maps key to the map SDK. Get an Azure Maps key at https://azure.com/maps. NOTE: The primary key should be used as the key.
+    subscriptionKey: '9cHjOG8GmLwhGGBZvLhAAkiFtpjayDmPkSUDQsh1m_U',
 
-//     /*
-//         Tileset ID specifies which data layers to render in the tiles. Can be:
+    /*
+        Tileset ID specifies which data layers to render in the tiles. Can be:
                              
-//         'microsoft.base.road',  
-//         'microsoft.base.darkgrey',
-//         'microsoft.imagery', 
-//         'microsoft.weather.infrared.main', 
-//         'microsoft.weather.radar.main', 
-//         'microsoft.base.hybrid.road',
-//         'microsoft.base.labels.road '
-//     */
-//     tilesetId: 'microsoft.imagery',
+        'microsoft.base.road',  
+        'microsoft.base.darkgrey',
+        'microsoft.imagery', 
+        'microsoft.weather.infrared.main', 
+        'microsoft.weather.radar.main', 
+        'microsoft.base.hybrid.road',
+        'microsoft.base.labels.road '
+    */
+    tilesetId: 'microsoft.imagery',
 
-//     //The language of labels. Supported languages: https://docs.microsoft.com/en-us/azure/azure-maps/supported-languages
-//     language: 'en-US',
+    //The language of labels. Supported languages: https://docs.microsoft.com/en-us/azure/azure-maps/supported-languages
+    language: 'en-US',
 
-//     //The regional view of the map. Supported views: https://aka.ms/AzureMapsLocalizationViews
-//     view: 'Auto'
+    //The regional view of the map. Supported views: https://aka.ms/AzureMapsLocalizationViews
+    view: 'Auto'
 
-// }).addTo(map);
+}).addTo(map);
 
-// Base Map
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
+//----------------- Base Map
+  // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // maxZoom: 19,
+  // attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  // }).addTo(map);
+// ---END BASE MAP
+  console.log(unitData.airStation.parkingSpots.spots.length);
+  
+  var parkingSpotArray = []
 
-  var marker1,marker2
+  unitData.airStation.parkingSpots.spots.forEach(function (spot, index) {
+    console.log(index)
+    parkingSpotArray.push(L.marker([tempSpotPos[index].lat, tempSpotPos[index].long], {icon:airplaneIconFull, rotationAngle: spot.baseHeading, rotationOrigin: 'center center'}).addTo(map));
+  });
 
-    marker1 = L.marker([spot1.lat, spot1.long], {icon:airplaneIconFull}).addTo(map);
-    marker2 = L.marker([spot2.lat, spot2.long], {icon:airplaneIconFull, rotationAngle: 272, rotationOrigin: 'center center'}).addTo(map);
 
   
 
   map.on("zoomend", function() {
     var currentZoom = map.getZoom();
-    console.log("Zoom level before IF: " + currentZoom);
-    console.log("marker 2 iconAnchor: " + marker2.options.icon.options.iconAnchor);
    if(currentZoom <= 17 ) {
-      marker1.setIcon(airplaneIconQuarter);
-      marker2.setIcon(airplaneIconQuarter);
+      parkingSpotArray.forEach((spot) => {
+        spot.setIcon(airplaneIconQuarter);
+      });
       
       console.log(" Switch to quarter: Zoom level: " + currentZoom);
     } else if (currentZoom == 18 ) {
-      marker1.setIcon(airplaneIconHalf);
-      marker2.setIcon(airplaneIconHalf);
+      parkingSpotArray.forEach((spot) => {
+        spot.setIcon(airplaneIconHalf);
+      });
       
       console.log(" Switch to half: Zoom level: " + currentZoom);
     } else {
-      marker1.setIcon(airplaneIconFull);
-      marker2.setIcon(airplaneIconFull);
+      parkingSpotArray.forEach((spot) => {
+        spot.setIcon(airplaneIconFull);
+      });
       console.log(" Switch to full: Zoom level: " + currentZoom);
     }
 
