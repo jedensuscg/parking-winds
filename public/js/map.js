@@ -1,7 +1,7 @@
 const L = window.leaflet
 
 var airplaneIconFull = L.icon({
-  iconUrl: 'img/130top.svg',
+  iconUrl: 'public/img/130top.svg',
 
   iconSize:     [140, 140], // size of the icon
   shadowSize:   [80, 80], // size of the shadow
@@ -11,7 +11,7 @@ var airplaneIconFull = L.icon({
 
 });
 var airplaneIconHalf = L.icon({
-  iconUrl: 'img/130top.svg',
+  iconUrl: 'public/img/130top.svg',
 
   iconSize:     [80, 80], // size of the icon
   shadowSize:   [40, 40], // size of the shadow
@@ -20,7 +20,7 @@ var airplaneIconHalf = L.icon({
   popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 var airplaneIconQuarter = L.icon({
-  iconUrl: 'img/130top.svg',
+  iconUrl: 'public/img/130top.svg',
 
   iconSize:     [40, 40], // size of the icon
   shadowSize:   [20, 20], // size of the shadow
