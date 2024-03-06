@@ -68,8 +68,8 @@ let unitData = {
   let padq = 
   {
   code:"PADQ",
-  lat:57.736640113097494,
-  long:-152.50423875963983
+  lat:57.73654328450417,
+  long:-152.5043862000004,
   }
 
   let unit = 
@@ -80,28 +80,49 @@ let unitData = {
     
   var tempSpotPos = []
 
-  let kecgspot1 = 
-  {
-    lat:36.26280538331262,
-    long:-76.17423728721101
+  let parkingSpotsKecg = [
+    {
+      spot:1,
+      lat:36.26280538331262,
+      long:-76.17423728721101
+    },
+    {
+      spot:2,
+      lat:36.26265615697597,
+      long:-76.17369828612773
+    },
+    {
+      spot:3,
+      lat:36.262394469523336,
+      long:-76.17217487450256
+    },
+    {
+      spot:4,
+      lat:36.26288756581106,
+      long:-76.17268588055424
+    }
+  ]
+
+  let parkingSpotsPadq = [
+    {
+      spot:1,
+      lat:57.73620537850443, 
+      long:-152.50348579566182
+    },
+    {
+      spot:2,
+      lat:57.73742526156234, 
+      long:-152.5050834130002
+    },
+    {
+      spot:3,
+      lat:57.73710168156802, 
+      long:-152.50563582022312
+    },
+  ]
   
-  }
-  let kecgspot2 = 
-  {
-    lat:36.26265615697597,
-    long:-76.17369828612773
-  }
-  let kecgspot3 = 
-  {
-    lat:36.262394469523336,
-    long:-76.17217487450256
-  }
-  let kecgspot4 = 
-  {
-    lat:36.26288756581106,
-    long:-76.17268588055424
-  }
-  tempSpotPos.push(kecgspot1, kecgspot2, kecgspot3, kecgspot4)
+  tempSpotPos = parkingSpotsKecg;
+  console.log(tempSpotPos)
 
 function getData() {
   console.log("Getting Data")

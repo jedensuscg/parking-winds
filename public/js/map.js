@@ -29,28 +29,32 @@ let airplaneIconQuarter = L.icon({
   popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
-
-
 let map = L.map('map').setView([36.262862536771785, -76.17342389086477], 19);
+
 window.addEventListener('DOMContentLoaded', () => {
   let kecgButton = document.getElementById('kecgButton');
   let padqButton = document.getElementById('padqButton');
   kecgButton.addEventListener('click', function() {
+    unitToFetch = "kecg";
     unit.lat = kecg.lat;
     unit.long = kecg.long;
+    tempSpotPos = parkingSpotsKecg;
     drawMap();
   });
   
   padqButton.addEventListener('click', function() {
+    unitToFetch = "padq";
     unit.lat = padq.lat;
     unit.long = padq.long;
+    tempSpotPos = parkingSpotsPadq;
     drawMap();
   });
 });
 
-
+// Initial Load
 drawMap();
 
+// Fetch data from server and draw the map
 function drawMap() {
   console.log("DRAW MAP " + unit.lat + " " + unit.long);
   getData().then(() => {
@@ -127,11 +131,16 @@ function drawMap() {
         console.log("Coordinates: " + event.latlng.toString());
       });
 
+      map.on("moveend", function() {
+        let inView = checkForUnitInView();
+        console.log("In View: " + inView);
+      });
+
 }).catch(() => {});
 }
 
 
-
+// Add markers for current airstation to map
 function addToLayerGroup() {
 
   let parkingSpotArray = []
@@ -142,6 +151,13 @@ function addToLayerGroup() {
   return L.layerGroup(parkingSpotArray);
 }
 
-
+function checkForUnitInView() {
+  
+  let bounds = map.getBounds();
+  
+  let inView = bounds.contains([unit.lat, unit.long]);
+  console.log("In View: " + inView);
+  return inView;
+}
 
 
