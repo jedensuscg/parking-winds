@@ -46,6 +46,8 @@ let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   });
 
+  
+
 let satMap = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
       attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
       maxZoom: 19,
@@ -80,19 +82,14 @@ window.addEventListener('DOMContentLoaded', () => {
   let kecgButton = document.getElementById('kecgButton');
   let padqButton = document.getElementById('padqButton');
   let toggleMapTypeButton = document.getElementById('mapTypeButton');
+  
   kecgButton.addEventListener('click', function() {
     unitToFetch = "kecg";
-    unit.lat = kecg.lat;
-    unit.long = kecg.long;
-    tempSpotPos = parkingSpotsKecg;
     drawMap();
   });
   
   padqButton.addEventListener('click', function() {
     unitToFetch = "padq";
-    unit.lat = padq.lat;
-    unit.long = padq.long;
-    tempSpotPos = parkingSpotsPadq;
     drawMap();
   });
 
@@ -112,7 +109,7 @@ drawMap();
 
 // Fetch data from server and draw the map
 function drawMap() {
-  console.log("DRAW MAP " + unit.lat + " " + unit.long);
+
   getData().then(() => {
   map.setView([unit.lat, unit.long], 18);
   
@@ -184,10 +181,12 @@ function drawMap() {
 function addToLayerGroup() {
 
   let parkingSpotArray = []
-      unitData.airStation.parkingSpots.spots.forEach(function (spot, index) {
-        console.log(index)
-        parkingSpotArray.push(L.marker([tempSpotPos[index].lat, tempSpotPos[index].long], {icon:airplaneIconHalf, rotationAngle: spot.baseHeading, rotationOrigin: 'center center'}));
-      });
+  parkingSpots.forEach(function (spot) {
+    console.log(spot.spot)
+    parkingSpotArray.push(L.marker([spot.lat, spot.long], {icon:airplaneIconHalf, rotationAngle: spot.baseHeading, rotationOrigin: 'center center'}));
+
+  });
+  console.log(parkingSpotArray);
   return L.layerGroup(parkingSpotArray);
 }
 
