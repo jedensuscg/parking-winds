@@ -58,9 +58,53 @@ let unitData = {
     },
   };
 
-  setTimeout(function(){
-    //do what you need here
-}, 2000);
+  let kecg = 
+  {
+  code:"KECG",
+  lat:36.26286,
+  long:-76.17386
+  }
+
+  let padq = 
+  {
+  code:"PADQ",
+  lat:57.736640113097494,
+  long:-152.50423875963983
+  }
+
+  let unit = 
+  {
+    lat:36.26286,
+    long:-76.17386
+  }
+    
+  var tempSpotPos = []
+
+  let kecgspot1 = 
+  {
+    lat:36.26280538331262,
+    long:-76.17423728721101
+  
+  }
+  let kecgspot2 = 
+  {
+    lat:36.26265615697597,
+    long:-76.17369828612773
+  }
+  let kecgspot3 = 
+  {
+    lat:36.262394469523336,
+    long:-76.17217487450256
+  }
+  let kecgspot4 = 
+  {
+    lat:36.26288756581106,
+    long:-76.17268588055424
+  }
+  tempSpotPos.push(kecgspot1, kecgspot2, kecgspot3, kecgspot4)
+
+function getData() {
+  console.log("Getting Data")
   var dataPromise = new Promise((resolve, reject) => {
     fetch(`./taf/${this.unitToFetch}`)
     .then((response) => {
@@ -77,35 +121,16 @@ let unitData = {
       unitData = data;
       testData.textContent = JSON.stringify(unitData.airStation);
       JSONLoaded = true;
-      resolve();
+      console.log("Data Loaded: " + JSONLoaded);
+      resolve(unitData);
     })
     // When has failed, the `catch()` handler is called with
     .catch((error) => {
+      console.log(error)
       testData.textContent = `Could not fetch data: ${error}`;
       reject();
     });
-    
   });
-let unit = {
-  lat:36.26286,
-  long:-76.17386}
+  return dataPromise;
+}
   
-var tempSpotPos = []
-let spot1 = {
-  lat:36.26280538331262,
-  long:-76.17423728721101
-
-}
-let spot2 = {
-  lat:36.26265615697597,
-  long:-76.17369828612773
-}
-let spot3 = {
-  lat:36.262394469523336,
-  long:-76.17217487450256
-}
-let spot4 = {
-  lat:36.26288756581106,
-  long:-76.17268588055424
-}
-tempSpotPos.push(spot1, spot2, spot3, spot4)
