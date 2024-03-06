@@ -65,23 +65,23 @@ let unitData = {
     fetch(`./taf/${this.unitToFetch}`)
     .then((response) => {
       JSONLoaded = false;
+      // If the response is not ok, throw an error
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`);
       }
+      
       return response.json();
     })
-    // When response.text() has succeeded, the `then()` handler is called with
-    // the text, and we copy it into the `poemDisplay` box.
+    // When the page is loaded, the `then()` method is called with the response
     .then((data) => {
       unitData = data;
       testData.textContent = JSON.stringify(unitData.airStation);
       JSONLoaded = true;
       resolve();
     })
-    // Catch any errors that might happen, and display a message
-    // in the `poemDisplay` box.
+    // When has failed, the `catch()` handler is called with
     .catch((error) => {
-      testData.textContent = `Could not fetch verse: ${error}`;
+      testData.textContent = `Could not fetch data: ${error}`;
       reject();
     });
     
