@@ -1,4 +1,5 @@
 var unitToFetch = "kecg";
+var JSONLoaded;
 let unitData = {
     hideDetails: false,
     firstLoadCheck: true,
@@ -57,33 +58,34 @@ let unitData = {
     },
   };
 
-
-fetch(`./taf/${this.unitToFetch}`)
-  // fetch() returns a promise. When we have received a response from the server,
-  // the promise's `then()` handler is called with the response.
-  .then((response) => {
-    // Our handler throws an error if the request did not succeed.
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-    // Otherwise (if the response succeeded), our handler fetches the response
-    // as text by calling response.text(), and immediately returns the promise
-    // returned by `response.text()`.
-    return response.json();
-  })
-  // When response.text() has succeeded, the `then()` handler is called with
-  // the text, and we copy it into the `poemDisplay` box.
-  .then((data) => {
-    unitData = data;
-    testData.textContent = JSON.stringify(unitData.airStation);
+  setTimeout(function(){
+    //do what you need here
+}, 2000);
+  var dataPromise = new Promise((resolve, reject) => {
+    fetch(`./taf/${this.unitToFetch}`)
+    .then((response) => {
+      JSONLoaded = false;
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.json();
+    })
+    // When response.text() has succeeded, the `then()` handler is called with
+    // the text, and we copy it into the `poemDisplay` box.
+    .then((data) => {
+      unitData = data;
+      testData.textContent = JSON.stringify(unitData.airStation);
+      JSONLoaded = true;
+      resolve();
+    })
+    // Catch any errors that might happen, and display a message
+    // in the `poemDisplay` box.
+    .catch((error) => {
+      testData.textContent = `Could not fetch verse: ${error}`;
+      reject();
+    });
     
-  })
-  // Catch any errors that might happen, and display a message
-  // in the `poemDisplay` box.
-  .catch((error) => {
-    testData.textContent = `Could not fetch verse: ${error}`;
   });
-
 let unit = {
   lat:36.26286,
   long:-76.17386}
@@ -95,9 +97,8 @@ let spot1 = {
 
 }
 let spot2 = {
-  lat:36.26267129589269,
-  long:-76.17368997198285
-
+  lat:36.26265615697597,
+  long:-76.17369828612773
 }
 let spot3 = {
   lat:36.262394469523336,

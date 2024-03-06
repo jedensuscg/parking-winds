@@ -39,7 +39,7 @@ app.get("/taf/:unit", async (req, res) => {
       return res.status(404).send("No Unit Found");
     }
   } catch (error) {
-    logger.error(err.stack)
+    logger.error(error.stack)
   }
 
   if (process.env.NODE_ENV == "development") {
