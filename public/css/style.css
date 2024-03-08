@@ -17,6 +17,18 @@
 header {
     width: 100%;
 }
+.small-banner{
+    width: 400px;
+    margin-left: 20%;
+    background-color: #db3300;
+}
+#beta-notice {
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+#beta-link {
+    text-align: center;
+}
 
 .title {
     width: 50%;
