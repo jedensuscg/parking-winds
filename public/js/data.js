@@ -148,13 +148,13 @@ function populateTaf() {
     // Create a new grid container for each forecast
     const gridContainer = document.createElement('div');
     gridContainer.className = 'grid-container';
-
+    console.log(taf)
     // Create rows for each property within the forecast
     createGridRow(gridContainer, 'Change Indicator', changeIndicatorToLongForm(taf.changeIndicator),'grid-blue');
     createGridRow(gridContainer, 'Forecast Period:', `${formatNumberToThreeDigits(taf.timeFrom)} to ${formatNumberToThreeDigits(taf.timeTo)}`,'grid-blue');
     createGridRow(gridContainer, 'Winds:', `${taf.windSpeed} knots at ${taf.windDirection} degrees`, 'grid-yellow');
-    if (taf.windGustSpeed > 0) {
-      createGridRow(gridContainer, 'Gust:', `${taf.windGustSpeed} knots`,'grid-yellow');
+    if (taf.windGust > 0) {
+      createGridRow(gridContainer, 'Gust:', `${taf.windGust} knots`,'grid-yellow');
     }
 
     // Append the new grid container to the main TAF container
