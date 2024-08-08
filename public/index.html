@@ -22,30 +22,32 @@
     <title>Parking Winds V2 BETA</title>
 </head>
 <body>
-    <div id="title">PARKING WINDS VISUALIZER VERSION 2</div>
+    <div id="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
     <div class="container">
         <div class="left-column">
-            <div id="map"></div>
+            <div id="map">
+                <button class="mapTypeButton">Switch to Satellite Map</button>
+            </div>
         </div>
 
         <div class="right-column">
-            <p class="bold">SELECT UNIT</p>
+            <p class="header">SELECT UNIT</p>
             <div class="controls">
                 <button class="unit-button" id="kecgButton">KECG</button><br>
                 <button class="unit-button" id="padqButton">PADQ</button><br>
             </div>
-            <button id="mapTypeButton">Toggle Map Type</button>
+
             <div class="taf-text">
-                <h4><a v-bind:href="'https://aviationweather.gov/data/taf/?id=' + unitToFetch + '&format=decoded&metars=on&date=&submit=Get+TAF+data'" target="_blank">Direct link to full data on Aviationweather.gov</a></h4>
+                <h3 id="direct-link"></h3>
                 <div id="metarDiv">
-                    <h4>METAR</h4>
-                    <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
+                    <p class="header">METAR</p>
                     <p id="metarTextField">Error Getting Metar</p>
+                    <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
                 </div>
                 <div id="tafDiv">
-                    <h4>RAW TAF</h4>
+                    <p class="header">RAW TAF</p>
                     <p id="tafTextField">Error Getting TAF</p>
-                    <h4>DECODED TAF</h4>
+                    <p class="header">DECODED TAF</p>
                     <div class="taf-grid-container">
                         
                     </div>

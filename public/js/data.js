@@ -125,6 +125,8 @@ function getData() {
 
 function populateMetar(swapMetarButton) {
   rawMetarMode = !rawMetarMode
+  linkHeader = document.querySelector("#direct-link");
+  linkHeader.innerHTML = `<a href="https://aviationweather.gov/data/taf/?id=${unitToFetch}&metar=yes" target="_blank">Direct link to full data on Aviationweather.gov</a>`
   if (rawMetarMode) {
     swapMetarButton.innerText = "Show Decoded METAR"
     metarTextField.textContent = rawMetarText
@@ -138,11 +140,8 @@ function populateMetar(swapMetarButton) {
 
 function populateTaf() {
   const tafDiv = document.querySelector(".taf-grid-container");
-  tafDiv.innerHTML = ''; // Clear previous content if any
-
-  const tafTextField = document.createElement('div');
+  const tafTextField = document.querySelector("#tafTextField");
   tafTextField.innerHTML = `${rawTaf}`;
-  tafDiv.appendChild(tafTextField);
 
   decodeTaf.tafForecasts.forEach(taf => {
     // Create a new grid container for each forecast

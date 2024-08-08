@@ -1,16 +1,37 @@
 .container {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    width: 100vw;
-    height:100vh;
+    width: 99vw;
+    height:90vh;
     background: rgb(234,239,246);
     background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+    margin: 0px;
+    padding: 0px;
+}
+p {
+    margin: 8px;
 }
 
+.right-column {
+    height: 98%;
+    overflow-y: scroll;
 
+}
 
+.left-column {
+    height: 100%
+}
+.header {
+    margin: 10px;
+    font-family: Helvetica, sans-serif;
+    font-weight: bold;
+}
+#tafTextField {
+    margin: 5px;
+}
 #title {
-    width: 50%;
+    column-span: all;
+    width: 90%;
     font-size: 2em;
     margin-top: 10px;
     margin-left: 8%;
@@ -18,14 +39,31 @@
     font-family: Helvetica, sans-serif;
 }
 #map { 
-    height: 900px;
+    
+    height:95%;
     margin-right: 10px;
+    overflow-y: hidden;
 }
 .controls {
     display: flex;
     padding: 3px;
 }
 
+#swapMetarButton {
+    background-color: #9c3100;
+    color: white;
+    padding: 5px 5px;
+    cursor: pointer;
+
+}
+.mapTypeButton {
+    z-index: 500;
+    position: absolute;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+}
 .unit-button {
     float: left;
     padding: 3px;
@@ -35,15 +73,15 @@
     width: 25%;
     float: right;
     background-color: #f1f1f1;
-    overflow-y: scroll;
-}
 
+}
 
 .grid-container {
     display: grid;
     grid-template-columns: auto 1fr;
     padding: 2px;
     margin: 3px;
+
 }
 .grid-blue {
     padding: 2px;
@@ -76,9 +114,10 @@
 }
 
 button {
-    background-color: #9c3100;
+    background-color: #8a2c00;
     color: white;
     padding: 10px 10px;
     cursor: pointer;
+    border-radius: 5%;
 
 }

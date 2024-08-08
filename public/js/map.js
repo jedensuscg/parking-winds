@@ -84,7 +84,7 @@ let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 window.addEventListener('DOMContentLoaded', () => {
   let kecgButton = document.getElementById('kecgButton');
   let padqButton = document.getElementById('padqButton');
-  let toggleMapTypeButton = document.getElementById('mapTypeButton');
+  let toggleMapTypeButton = document.querySelector('.mapTypeButton');
   
   kecgButton.addEventListener('click', function() {
     unitToFetch = "kecg";
@@ -100,12 +100,37 @@ window.addEventListener('DOMContentLoaded', () => {
     if (map.hasLayer(OSM)) {
         map.addLayer(satMap);
         map.removeLayer(OSM);
+        toggleMapTypeButton.innerText = "Switch to Street Map";
     } else {
         map.addLayer(OSM);
         map.removeLayer(satMap);
+        toggleMapTypeButton.innerText = "Switch to Satellite Map";
     }
 })
 });
+
+//Add Map type button
+L.Control.Watermark = L.Control.extend({
+  onAdd: function(map) {
+      var img = L.DomUtil.create('img');
+
+      img.src = '../../docs/images/logo.png';
+      img.style.width = '200px';
+
+      return img;
+  },
+
+  onRemove: function(map) {
+      // Nothing to do here
+  }
+});
+
+L.control.watermark = function(opts) {
+  return new L.Control.Watermark(opts);
+}
+
+L.control.watermark({ position: 'bottomleft' }).addTo(map);
+
 
 // Initial Load
 drawMap();
