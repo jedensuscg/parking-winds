@@ -126,15 +126,20 @@ function getData() {
 function populateMetar(swapMetarButton) {
   rawMetarMode = !rawMetarMode
   linkHeader = document.querySelector("#direct-link");
-  linkHeader.innerHTML = `<a href="https://aviationweather.gov/data/taf/?id=${unitToFetch}&metar=yes" target="_blank">Direct link to full data on Aviationweather.gov</a>`
+  linkHeader.innerHTML = `<a href="https://aviationweather.gov/data/taf/?id=${unitToFetch}&metar=yes&decoded=yes" target="_blank">Direct link to full data on Aviationweather.gov</a>`
   if (rawMetarMode) {
     swapMetarButton.innerText = "Show Decoded METAR"
     metarTextField.textContent = rawMetarText
   } else {
     swapMetarButton.innerText = "Show RAW METAR"
+    console.log(metarWinds)
     metarTextField.innerHTML = 
           `<span>Time: ${metarWinds.observationTime}</span><br>
-          <span> Wind: ${metarWinds.windSpeed} knots at ${metarWinds.windDirection} degrees</span><br>`
+          <span> Wind: ${metarWinds.windSpeed}@${metarWinds.windDirection}</span><br>`
+    if (metarWinds.windGustSpeed > 0) {
+      metarTextField.innerHTML += `<span> Gust: ${metarWinds.windGustSpeed} knots</span><br>`
+    }
+    metarTextField.innerHTML += `NOTE: Clouds and visibility are not currently not decoded. Server side updates are in progress.`
   }
 }
 
@@ -151,7 +156,12 @@ function populateTaf() {
     // Create rows for each property within the forecast
     createGridRow(gridContainer, 'Change Indicator', changeIndicatorToLongForm(taf.changeIndicator),'grid-blue');
     createGridRow(gridContainer, 'Forecast Period:', `${formatNumberToThreeDigits(taf.timeFrom)} to ${formatNumberToThreeDigits(taf.timeTo)}`,'grid-blue');
-    createGridRow(gridContainer, 'Winds:', `${taf.windSpeed} knots at ${taf.windDirection} degrees`, 'grid-yellow');
+    if (taf.windSpeed == 0 && taf.windDirection == 0 && taf.changeIndicator == 'TEMPO') {
+      createGridRow(gridContainer, 'Winds', 'No wind changes in this TEMPO line', 'grid-yellow');
+    } else {
+      createGridRow(gridContainer, 'Winds:', `${taf.windSpeed}@${taf.windDirection}`, 'grid-yellow');
+    }
+
     if (taf.windGust > 0) {
       createGridRow(gridContainer, 'Gust:', `${taf.windGust} knots`,'grid-yellow');
     }

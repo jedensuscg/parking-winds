@@ -7,13 +7,14 @@ const { DateTime } = require("luxon");
 const url = ''
 
 const getMetar = async (options) => {
-  const url = `https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=${options.dataSource}&hoursBeforeNow=12&format=xml&mostRecent=true&fields=raw_text,observation_time,temp_c,wind_dir_degrees,wind_speed_kt,wind_gust_kt`
+  const url = `https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=${options.dataSource}&hoursBeforeNow=12&format=xml&mostRecent=true`
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
         .get(url)
         .then((response) => {
           const metarData = buildMetarObject(response, options.location);
+
           resolve(metarData);
         })
         .catch((error) => {
@@ -54,8 +55,9 @@ const buildMetarObject = async (response, location) => {
       validTimeTo: baseData.valid_time_to,
     };
     rawMetarText = baseData.METAR.raw_text
-    windSpeed = baseData.METAR.wind_gust_kt
+    windSpeed = baseData.METAR.wind_speed_kt
     windDirection = baseData.METAR.wind_dir_degrees
+
     
     rawMetarData = createMetarArrays(baseData.METAR);
 
