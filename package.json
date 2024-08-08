@@ -10,17 +10,18 @@
   "author": "James Edens",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
+    "@azure/arm-maps": "^3.1.0",
+    "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "luxon": "^1.25.0",
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.4",
     "query-string": "^7.0.0",
     "validator": "^13.5.2",
     "winston": "^3.3.3",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.6.2"
   }
 }

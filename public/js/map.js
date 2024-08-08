@@ -46,38 +46,41 @@ let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   });
 
-  
-
-let satMap = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
-      attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
-      maxZoom: 19,
-      minZoom: 17,
-      //Add your Azure Maps key to the map SDK. Get an Azure Maps key at https://azure.com/maps. NOTE: The primary key should be used as the key.
-      subscriptionKey: '9cHjOG8GmLwhGGBZvLhAAkiFtpjayDmPkSUDQsh1m_U',
-  
-      /*
-          Tileset ID specifies which data layers to render in the tiles. Can be:
-                               
-          'microsoft.base.road',  
-          'microsoft.base.darkgrey',
-          'microsoft.imagery', 
-          'microsoft.weather.infrared.main', 
-          'microsoft.weather.radar.main', 
-          'microsoft.base.hybrid.road',
-          'microsoft.base.labels.road '
-      */
-      tilesetId: 'microsoft.imagery',
-  
-      //The language of labels. Supported languages: https://docs.microsoft.com/en-us/azure/azure-maps/supported-languages
-      language: 'en-US',
-  
-      //The regional view of the map. Supported views: https://aka.ms/AzureMapsLocalizationViews
-      view: 'Auto'
-  
+  var satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
   });
 
+// let satMap = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
+//       attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
+//       maxZoom: 19,
+//       minZoom: 17,
+//       //Add your Azure Maps key to the map SDK. Get an Azure Maps key at https://azure.com/maps. NOTE: The primary key should be used as the key.
+//       subscriptionKey: '9cHjOG8GmLwhGGBZvLhAAkiFtpjayDmPkSUDQsh1m_U',
+  
+//       /*
+//           Tileset ID specifies which data layers to render in the tiles. Can be:
+                               
+//           'microsoft.base.road',  
+//           'microsoft.base.darkgrey',
+//           'microsoft.imagery', 
+//           'microsoft.weather.infrared.main', 
+//           'microsoft.weather.radar.main', 
+//           'microsoft.base.hybrid.road',
+//           'microsoft.base.labels.road '
+//       */
+//       tilesetId: 'microsoft.imagery',
+  
+//       //The language of labels. Supported languages: https://docs.microsoft.com/en-us/azure/azure-maps/supported-languages
+//       language: 'en-US',
+  
+//       //The regional view of the map. Supported views: https://aka.ms/AzureMapsLocalizationViews
+//       view: 'Auto'
+  
+//   });
+
 // Assign unit buttons events.
-//TODO Replace with prgrammatical assignment based on number of units in DB.
+//TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
+
 window.addEventListener('DOMContentLoaded', () => {
   let kecgButton = document.getElementById('kecgButton');
   let padqButton = document.getElementById('padqButton');
@@ -111,44 +114,12 @@ drawMap();
 function drawMap() {
 
   getData().then(() => {
-  map.setView([unit.lat, unit.long], 18);
+  map.setView([airStation.lat, airStation.long], 18);
   
-    // Azure Maps
-    //   L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
-    //     attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
-    //     maxZoom: 19,
-    //     minZoom: 17,
-    //     //Add your Azure Maps key to the map SDK. Get an Azure Maps key at https://azure.com/maps. NOTE: The primary key should be used as the key.
-    //     subscriptionKey: '9cHjOG8GmLwhGGBZvLhAAkiFtpjayDmPkSUDQsh1m_U',
-    
-    //     /*
-    //         Tileset ID specifies which data layers to render in the tiles. Can be:
-                                 
-    //         'microsoft.base.road',  
-    //         'microsoft.base.darkgrey',
-    //         'microsoft.imagery', 
-    //         'microsoft.weather.infrared.main', 
-    //         'microsoft.weather.radar.main', 
-    //         'microsoft.base.hybrid.road',
-    //         'microsoft.base.labels.road '
-    //     */
-    //     tilesetId: 'microsoft.imagery',
-    
-    //     //The language of labels. Supported languages: https://docs.microsoft.com/en-us/azure/azure-maps/supported-languages
-    //     language: 'en-US',
-    
-    //     //The regional view of the map. Supported views: https://aka.ms/AzureMapsLocalizationViews
-    //     view: 'Auto'
-    
-    // }).addTo(map);
-    
-    // Open Street Map (Default)
     OSM.addTo(map);
 
-
-
     // Add parking spot markers to map
-    let parkingSpots = addToLayerGroup();
+    let parkingSpots = addParkingSpotsToLayer();
     parkingSpots.addTo(map);
   
     // Changes icon on zoom
@@ -169,7 +140,7 @@ function drawMap() {
     // Currently only shows if the current unit is in view
     map.on("moveend", function() {
       let inView = checkForUnitInView();
-      console.log("In View: " + inView);
+
     });
 
 }).catch(() => {});
@@ -178,15 +149,14 @@ function drawMap() {
 //#region FUNCTIONS
 
 //Add markers for current airstation to map
-function addToLayerGroup() {
-
+function addParkingSpotsToLayer() {
   let parkingSpotArray = []
-  parkingSpots.forEach(function (spot) {
-    console.log(spot.spot)
+  airStation.parkingSpots.forEach(function (spot) {
+
     parkingSpotArray.push(L.marker([spot.lat, spot.long], {icon:airplaneIconHalf, rotationAngle: spot.baseHeading, rotationOrigin: 'center center'}));
 
   });
-  console.log(parkingSpotArray);
+
   return L.layerGroup(parkingSpotArray);
 }
 
@@ -218,8 +188,8 @@ function changeIconOnZoom(parkingSpots) {
 function checkForUnitInView() {
   let bounds = map.getBounds();
   
-  let inView = bounds.contains([unit.lat, unit.long]);
-  console.log("In View: " + inView);
+  let inView = bounds.contains([airStation.lat, airStation.long]);
+
   return inView;
 }
 //#endregion

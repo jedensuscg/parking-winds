@@ -1,5 +1,81 @@
+.container {
+    width: 100vw;
+    height:100vh;
+    background: rgb(234,239,246);
+    background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+}
+#title {
+    width: 50%;
+    font-size: 2em;
+    margin-top: 10px;
+    margin-left: 8%;
+    margin-bottom: 10px;
+    font-family: Helvetica, sans-serif;
+}
 #map { 
-    height: 700px;
-    width: 75%;
+    height: 800px;
+    width: 65%;
     float: left;
+    margin-right: 10px;
+}
+.controls {
+    display: flex;
+    padding: 3px;
+}
+
+.unit-button {
+    float: left;
+    padding: 3px;
+}
+#taf-text{
+    height: 700px;
+    width: 25%;
+    float: right;
+    background-color: #f1f1f1;
+    overflow-y: scroll;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: 2px;
+    margin: 3px;
+}
+.grid-blue {
+    padding: 2px;
+    margin: 1px 0px;
+    background: rgb(122, 236, 236);
+}
+
+.grid-yellow {
+    background: rgb(246,228,174);
+    padding: 2px;
+    margin: 1px 0px;
+}
+
+.grid-left {
+    padding: 2px;
+    border-right: 1px solid #000000;
+    text-align: right;
+    margin: 1px 0px;
+}
+
+.grid-right {
+    padding: 2px;
+    margin: 1px 0px;
+
+}
+
+.bold {
+    font-weight: bold;
+    margin: 1px;
+}
+
+button {
+    background-color: #9c3100;
+    color: white;
+    padding: 10px 10px;
+    cursor: pointer;
+
 }
