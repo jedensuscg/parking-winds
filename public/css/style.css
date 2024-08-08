@@ -1,7 +1,15 @@
 [v-cloak] {
     display: none;
 }
+.new-feature-link {
+    color: #070046;
+    text-decoration: none;
+}
 
+
+.new-feature-link:visited {
+    color: #160064;
+}
 .background {
     width: 100vw;
     height:100vh;
@@ -20,7 +28,7 @@ header {
 .small-banner{
     width: 400px;
     margin-left: 20%;
-    background-color: #db3300;
+    background-color: #fc3838;
 }
 #beta-notice {
     color: rgb(0, 0, 0);
