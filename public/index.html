@@ -22,35 +22,38 @@
     <title>Parking Winds V2 BETA</title>
 </head>
 <body>
+    <div id="title">PARKING WINDS VISUALIZER VERSION 2</div>
     <div class="container">
-        <div id="title">PARKING WINDS VISUALIZER VERSION 2</div>
-        <div id="map"></div>
-        <p class="bold">SELECT UNIT</p>
-        <div class="controls">
-            <button class="unit-button" id="kecgButton">KECG</button><br>
-            <button class="unit-button" id="padqButton">PADQ</button><br>
+        <div class="left-column">
+            <div id="map"></div>
         </div>
-        <button id="mapTypeButton">Toggle Map Type</button>
-        <div class="taf-text">
-            <h4><a v-bind:href="'https://aviationweather.gov/data/taf/?id=' + unitToFetch + '&format=decoded&metars=on&date=&submit=Get+TAF+data'" target="_blank">Direct link to full data on Aviationweather.gov</a></h4>
-            <div id="metarDiv">
-                <h4>METAR</h4>
-                <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
-                <p id="metarTextField">Error Getting Metar</p>
+
+        <div class="right-column">
+            <p class="bold">SELECT UNIT</p>
+            <div class="controls">
+                <button class="unit-button" id="kecgButton">KECG</button><br>
+                <button class="unit-button" id="padqButton">PADQ</button><br>
             </div>
-            <div id="tafDiv">
-                <h4>RAW TAF</h4>
-                <p id="tafTextField">Error Getting TAF</p>
-                <h4>DECODED TAF</h4>
-                <div class="taf-grid-container">
-                    
+            <button id="mapTypeButton">Toggle Map Type</button>
+            <div class="taf-text">
+                <h4><a v-bind:href="'https://aviationweather.gov/data/taf/?id=' + unitToFetch + '&format=decoded&metars=on&date=&submit=Get+TAF+data'" target="_blank">Direct link to full data on Aviationweather.gov</a></h4>
+                <div id="metarDiv">
+                    <h4>METAR</h4>
+                    <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
+                    <p id="metarTextField">Error Getting Metar</p>
                 </div>
-                    
+                <div id="tafDiv">
+                    <h4>RAW TAF</h4>
+                    <p id="tafTextField">Error Getting TAF</p>
+                    <h4>DECODED TAF</h4>
+                    <div class="taf-grid-container">
+                        
+                    </div>
+                        
+                </div>
+                
             </div>
-            
         </div>
-
-
     </div>
 
     <script src="public/js/data.js"></script>

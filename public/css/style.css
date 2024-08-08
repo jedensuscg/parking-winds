@@ -1,9 +1,14 @@
 .container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
     width: 100vw;
     height:100vh;
     background: rgb(234,239,246);
     background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
 }
+
+
+
 #title {
     width: 50%;
     font-size: 2em;
@@ -13,9 +18,7 @@
     font-family: Helvetica, sans-serif;
 }
 #map { 
-    height: 800px;
-    width: 65%;
-    float: left;
+    height: 900px;
     margin-right: 10px;
 }
 .controls {
