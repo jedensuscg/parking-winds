@@ -2,16 +2,7 @@
 
 var unitToFetch = "kecg";
 var JSONLoaded;
-
-let metarTextField = document.getElementById("metarTextField");
-let tafTextField = document.querySelector("#tafTextField");
-const swapMetarButton = document.querySelector("#swapMetarButton");
-swapMetarButton.addEventListener('click', function() {
-  populateMetar(swapMetarButton);
-});
 rawMetarMode = false;
-
-
 
 let unitData = {
     hideDetails: false,
@@ -77,8 +68,10 @@ let unitData = {
 function getData() {
   console.log("Getting Data")
   var dataPromise = new Promise((resolve, reject) => {
+    loadingModal.style.visibility = "visible";
     fetch(`./taf/${this.unitToFetch}`)
     .then((response) => {
+
       JSONLoaded = false;
       // If the response is not ok, throw an error
       if (!response.ok) {
@@ -110,7 +103,7 @@ function getData() {
 
       populateMetar(swapMetarButton);
       populateTaf();
-      
+      loadingModal.style.visibility = "hidden";
       resolve(unitData);
     })
     // When has failed, the `catch()` handler is called with
@@ -132,7 +125,6 @@ function populateMetar(swapMetarButton) {
     metarTextField.textContent = rawMetarText
   } else {
     swapMetarButton.innerText = "Show RAW METAR"
-    console.log(metarWinds)
     metarTextField.innerHTML = 
           `<span>Time: ${metarWinds.observationTime}</span><br>
           <span> Wind: ${metarWinds.windSpeed}@${metarWinds.windDirection}</span><br>`
@@ -152,7 +144,6 @@ function populateTaf() {
     // Create a new grid container for each forecast
     const gridContainer = document.createElement('div');
     gridContainer.className = 'grid-container';
-    console.log(taf)
     // Create rows for each property within the forecast
     createGridRow(gridContainer, 'Change Indicator', changeIndicatorToLongForm(taf.changeIndicator),'grid-blue');
     createGridRow(gridContainer, 'Forecast Period:', `${formatNumberToThreeDigits(taf.timeFrom)} to ${formatNumberToThreeDigits(taf.timeTo)}`,'grid-blue');

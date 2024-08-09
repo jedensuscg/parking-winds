@@ -26,7 +26,24 @@
     <div class="container">
         <div class="left-column">
             <div id="map">
-                <button class="mapTypeButton">Switch to Satellite Map</button>
+                <div class="loading-modal">
+                    <div class="loadingText">
+                        <p class="loading-text">Loading Data...</p>
+                    </div>
+                </div>
+                <div class="map-controls">
+                    <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
+                    <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
+                    <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
+                    <button id="strongest-gust-btn" class="wind-change-button">Strongest Gust</button>
+                    <button id="hide-label-btn" class="map-typ-btn">Hide Labels</button>
+                    <button id="change-map-btn" class="map-typ-btn">Switch to Satellite Map</button>
+                        <p class="notes">Current Functionality includes wind barbs for current winds and gusts, the most prevelant winds in the next 24 hours, and the highest gust in the next
+                            24 hours. More features from 1.0 coming soon. <a href="https://www.weather.gov/hfo/windbarbinfo" target="_blank">Click here for reading wind barbs</a>
+                        </p>
+
+                </div>
+
             </div>
         </div>
 
@@ -57,9 +74,10 @@
             </div>
         </div>
     </div>
-
+    <script src="public/js/leaflet-windbarb.js"></script>
     <script src="public/js/data.js"></script>
     <script src="public/js/map.js"></script>
     <script src="public/js/rotate.js"></script>
+
 </body>
 </html>

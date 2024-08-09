@@ -12,6 +12,21 @@ p {
     margin: 8px;
 }
 
+.loading-modal {
+    background-color: rgb(63, 113, 253);
+    width: 10%;
+    height: auto;
+    margin: 20% auto;
+    padding: 10px;
+    position: relative;
+    z-index: 1000;
+    visibility: hidden;
+    text-align: center;
+}
+
+.loading-text {
+    font-size: large;
+}
 .right-column {
     height: 98%;
     overflow-y: scroll;
@@ -50,24 +65,53 @@ p {
 }
 
 #swapMetarButton {
-    background-color: #9c3100;
     color: white;
     padding: 5px 5px;
     cursor: pointer;
-
 }
-.mapTypeButton {
+
+.map-typ-btn {
+    background-color: rgb(1, 1, 138);
+    width: 150px;
+}
+
+button {
+
+    background-color: #8a2c00;
+    color: white;
+    padding: 5px 5px;
+    cursor: pointer;
+    border-radius: 5%;
+}
+
+#hide-label-btn {
+   width: 100px;
+}
+
+.unit-button {
+    float: left;
+    padding: 3px;
+}
+
+.map-controls {
     z-index: 500;
-    position: absolute;
     position: absolute;
     top: 20px;
     right: 20px;
     padding: 10px;
 }
-.unit-button {
-    float: left;
-    padding: 3px;
+
+
+.notes {
+    width:95%;
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    font-size: 1.2em;
+    background-color: #fce66877;
 }
+
+
 #taf-text{
     height: 700px;
     width: 25%;
@@ -111,13 +155,4 @@ p {
 .bold {
     font-weight: bold;
     margin: 1px;
-}
-
-button {
-    background-color: #8a2c00;
-    color: white;
-    padding: 10px 10px;
-    cursor: pointer;
-    border-radius: 5%;
-
 }

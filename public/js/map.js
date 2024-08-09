@@ -1,6 +1,61 @@
+const swapMetarButton = document.querySelector("#swapMetarButton");
+const loadingModal = document.querySelector(".loading-modal");
+const currentWindsBtn = document.querySelector("#current-winds-btn");
+const currentGustBtn = document.querySelector("#current-gust-btn");
+const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
+const highestGustbtn = document.querySelector("#strongest-gust-btn");
+const hideLabelBtn = document.querySelector("#hide-label-btn");
 const L = window.leaflet
+let metarTextField = document.getElementById("metarTextField");
+let tafTextField = document.querySelector("#tafTextField");
+let windsToUse, windBarbs, parkingSpots, windLabels
+let windBarbOptions = {
+  strokeLength: 60,
+  strokeWidth: 3,
+  barbHeight: 20,
+  pointRadius: 5,
+  barbSpacing: 8,
+}
+// Create map with initial view. Currently Ecity.
+let map = L.map('map').setView([36.262862536771785, -76.17342389086477], 19);
+let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+});
+let satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
 
-// Create C130 Icons
+window.addEventListener('DOMContentLoaded', () => {
+  //TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
+  let kecgButton = document.getElementById('kecgButton');
+  let padqButton = document.getElementById('padqButton');
+  let toggleMapTypeButton = document.querySelector('#change-map-btn');
+  
+  kecgButton.addEventListener('click', function() {
+    unitToFetch = "kecg";
+    drawMap();
+  });
+  
+  padqButton.addEventListener('click', function() {
+    unitToFetch = "padq";
+    drawMap();
+  });
+
+  toggleMapTypeButton.addEventListener('click', function(){
+    if (map.hasLayer(OSM)) {
+        map.addLayer(satMap);
+        map.removeLayer(OSM);
+        toggleMapTypeButton.innerText = "Switch to Street Map";
+    } else {
+        map.addLayer(OSM);
+        map.removeLayer(satMap);
+        toggleMapTypeButton.innerText = "Switch to Satellite Map";
+    }
+})
+});
+
+// #region Create C130 Icons
 let airplaneIconFull = L.icon({
   iconUrl: 'public/img/130top.svg',
 
@@ -38,78 +93,11 @@ let airplaneIconTiny = L.icon({
   shadowAnchor: [4, 62],  // the same for the shadow
   popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
+// #endregion
+// Initial Load
+drawMap();
 
-// Create map with initial view. Currently Ecity.
-let map = L.map('map').setView([36.262862536771785, -76.17342389086477], 19);
-let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  });
-
-  var satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-  });
-
-// let satMap = L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
-//       attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
-//       maxZoom: 19,
-//       minZoom: 17,
-//       //Add your Azure Maps key to the map SDK. Get an Azure Maps key at https://azure.com/maps. NOTE: The primary key should be used as the key.
-//       subscriptionKey: '9cHjOG8GmLwhGGBZvLhAAkiFtpjayDmPkSUDQsh1m_U',
-  
-//       /*
-//           Tileset ID specifies which data layers to render in the tiles. Can be:
-                               
-//           'microsoft.base.road',  
-//           'microsoft.base.darkgrey',
-//           'microsoft.imagery', 
-//           'microsoft.weather.infrared.main', 
-//           'microsoft.weather.radar.main', 
-//           'microsoft.base.hybrid.road',
-//           'microsoft.base.labels.road '
-//       */
-//       tilesetId: 'microsoft.imagery',
-  
-//       //The language of labels. Supported languages: https://docs.microsoft.com/en-us/azure/azure-maps/supported-languages
-//       language: 'en-US',
-  
-//       //The regional view of the map. Supported views: https://aka.ms/AzureMapsLocalizationViews
-//       view: 'Auto'
-  
-//   });
-
-// Assign unit buttons events.
-//TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
-
-window.addEventListener('DOMContentLoaded', () => {
-  let kecgButton = document.getElementById('kecgButton');
-  let padqButton = document.getElementById('padqButton');
-  let toggleMapTypeButton = document.querySelector('.mapTypeButton');
-  
-  kecgButton.addEventListener('click', function() {
-    unitToFetch = "kecg";
-    drawMap();
-  });
-  
-  padqButton.addEventListener('click', function() {
-    unitToFetch = "padq";
-    drawMap();
-  });
-
-  toggleMapTypeButton.addEventListener('click', function(){
-    if (map.hasLayer(OSM)) {
-        map.addLayer(satMap);
-        map.removeLayer(OSM);
-        toggleMapTypeButton.innerText = "Switch to Street Map";
-    } else {
-        map.addLayer(OSM);
-        map.removeLayer(satMap);
-        toggleMapTypeButton.innerText = "Switch to Satellite Map";
-    }
-})
-});
-
-//Add Map type button
+//TODO Add a logo to the map
 L.Control.Watermark = L.Control.extend({
   onAdd: function(map) {
       var img = L.DomUtil.create('img');
@@ -124,32 +112,36 @@ L.Control.Watermark = L.Control.extend({
       // Nothing to do here
   }
 });
-
 L.control.watermark = function(opts) {
   return new L.Control.Watermark(opts);
 }
-
 L.control.watermark({ position: 'bottomleft' }).addTo(map);
 
 
-// Initial Load
-drawMap();
+// #region ---------- FUNCTIONS -------------
 
 // Fetch data from server and draw the map
 function drawMap() {
-
   getData().then(() => {
   map.setView([airStation.lat, airStation.long], 18);
-  
+    windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
+    addHandlersAndListeners()
     OSM.addTo(map);
 
+    console.log(windsToUse);
     // Add parking spot markers to map
-    let parkingSpots = addParkingSpotsToLayer();
+    windBarbs = createWindBarbLayer();
+    parkingSpots = addParkingSpotsToLayer();
+    windLabels = createWindLabelLayer();
+    //Add windBarbs to map
+    windBarbs.addTo(map);
     parkingSpots.addTo(map);
-  
+    windLabels.addTo(map);
+
+
     // Changes icon on zoom
     map.on("zoomend", function() {
-      changeIconOnZoom(parkingSpots);
+      changeIconOnZoom(parkingSpots, windBarbs);
     });
   
     map.on("contextmenu", function (event) {
@@ -159,7 +151,6 @@ function drawMap() {
       .setLatLng([lat, long])
       .setContent(lat.toString() + ", " + long.toString())
       .openOn(map);
-      console.log("Coordinates: " + event.latlng.toString());
     });
 
     // Currently only shows if the current unit is in view
@@ -170,42 +161,88 @@ function drawMap() {
 
 }).catch(() => {});
 }
-
-//#region FUNCTIONS
-
 //Add markers for current airstation to map
 function addParkingSpotsToLayer() {
   let parkingSpotArray = []
   airStation.parkingSpots.forEach(function (spot) {
 
     parkingSpotArray.push(L.marker([spot.lat, spot.long], {icon:airplaneIconHalf, rotationAngle: spot.baseHeading, rotationOrigin: 'center center'}));
-
   });
 
   return L.layerGroup(parkingSpotArray);
 }
 
-function changeIconOnZoom(parkingSpots) {
+function createWindBarbLayer() {
+
+  let windBarbArray = []
+  let icon = L.WindBarb.icon({lat:airStation.lat, deg: windsToUse.direction, speed: windsToUse.speed, ...windBarbOptions});
+  airStation.parkingSpots.forEach(function (spot) {
+    windBarbArray.push(L.marker([spot.lat, spot.long], {icon:icon}));
+  });
+
+  return L.layerGroup(windBarbArray);
+}
+
+function createWindLabelLayer() {
+  let windLabelArray = []
+  airStation.parkingSpots.forEach(function (spot) {
+    offset = addOffset(windsToUse.direction, spot.lat, spot.long);
+    windLabelArray.push(L.marker([offset[0], offset[1]], { opacity: 0.01 }));
+    
+  });
+  windLabelArray.forEach(marker => {
+
+    marker.bindTooltip(windsToUse.speed + "Kts", {permanent: true, className: "my-label", offset: [0,0] });
+  });
+  return L.layerGroup(windLabelArray);
+}
+
+function changeIconOnZoom(parkingSpots, windBarbs) {
   let currentZoom = map.getZoom();
-      if(currentZoom <= 15) {
-        parkingSpots.eachLayer(function (spot) {
-          spot.setIcon(airplaneIconTiny);
-        });
-        console.log(" Switch to full: Zoom level: " + currentZoom);
-      } else if(currentZoom <= 17 && currentZoom > 15) {
+  const baseWindOptions = {lat: airStation.lat, deg:windsToUse.direction, speed: windsToUse.speed};
+  let basewindBarbOptions = {...windBarbOptions, ...baseWindOptions};
+
+  console.log("Zoom level: " + currentZoom);
+  // Zoom <= 15
+  if(currentZoom <= 15) {
+    parkingSpots.eachLayer(function (spot) {
+      spot.setIcon(airplaneIconTiny);
+    });
+    basewindBarbOptions = {...changeWindOptions(basewindBarbOptions, 0, "set"), ...baseWindOptions};
+    windBarbs.eachLayer(function (barb) {
+      let icon = L.WindBarb.icon({...baseWindOptions, ...basewindBarbOptions});
+      barb.setIcon(icon);
+    });
+  // Zoom <= 17 && > 15
+  } else if(currentZoom <= 17 && currentZoom > 15) {
       parkingSpots.eachLayer(function (spot) {
-          spot.setIcon(airplaneIconQuarter);
-        });
-        console.log(" Switch to quarter: Zoom level: " + currentZoom);
-      } else if (currentZoom == 18 ) {
-        parkingSpots.eachLayer(function (spot) {
-          spot.setIcon(airplaneIconHalf);
-      });
-      } else {
-        parkingSpots.eachLayer(function (spot) {
-          spot.setIcon(airplaneIconFull);
-        });
-      }
+      spot.setIcon(airplaneIconQuarter);
+    });
+    basewindBarbOptions = {...changeWindOptions(basewindBarbOptions, 2, "divide"), ...baseWindOptions};
+    windBarbs.eachLayer(function (barb) {
+      let icon = L.WindBarb.icon({...baseWindOptions, ...basewindBarbOptions});
+      barb.setIcon(icon);
+    });
+  // Zoom <= 18 && > 17
+  } else if (currentZoom == 18 ) {
+    parkingSpots.eachLayer(function (spot) {
+      spot.setIcon(airplaneIconHalf);
+    });
+    windBarbs.eachLayer(function (barb) {
+      let icon = L.WindBarb.icon(basewindBarbOptions);
+      barb.setIcon(icon);
+    });
+  } else {
+    parkingSpots.eachLayer(function (spot) {
+      spot.setIcon(airplaneIconFull);
+    });
+    basewindBarbOptions = {...changeWindOptions(basewindBarbOptions, 1.25, "multiply"), ...baseWindOptions};
+    basewindBarbOptions.strokeLength = basewindBarbOptions.strokeLength * 1.5;
+    windBarbs.eachLayer(function (barb) {
+      let icon = L.WindBarb.icon({...baseWindOptions, ...basewindBarbOptions});
+      barb.setIcon(icon);
+    });
+  }
 }
 
 //Determines if current unit in view.
@@ -217,7 +254,101 @@ function checkForUnitInView() {
 
   return inView;
 }
-//#endregion
+
+function changeWindOptions(options, value, operation) {
+for (var option in options) {
+    if (options.hasOwnProperty(option)) {
+      switch (operation) {
+        case "multiply":
+           options[option] *= value;
+          break;
+        case "divide":
+          options[option] /= value;
+          break;
+        case "set":
+          options[option] = value;
+          break;
+        default:
+          options[option] = value;
+          break;
+      }
+    }
+  }
+  return options;
+}
+
+function setWindToUse (winds) {
+  const windToUse = winds.highestWinds;
+  return windToUse;
+
+}
+function createOffset(direction, distance) {
+  const offsetX = distance * Math.sin(direction * Math.PI / 180);
+  const offsetY = distance * Math.cos(direction * Math.PI / 180);
+  return { x: offsetX, y: offsetY };
+}
+
+function addOffset(direction, lat, long) {
+  const offset = 75 / 364000; // 10 feet in degrees (approximate value)
+  const offsetLat = lat + offset * Math.cos(direction * Math.PI / 180);
+  const offsetLong = long + offset * Math.sin(direction * Math.PI / 180);
+  return [offsetLat, offsetLong];
+}
+
+function addHandlersAndListeners() {
+  swapMetarButton.addEventListener('click', function() {
+    populateMetar(swapMetarButton);
+  });
+
+  currentWindsBtn.addEventListener('click', function() {
+    setWindToUse =  windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
+    map.removeLayer(windBarbs).removeLayer(windLabels);
+    windBarbs = createWindBarbLayer().addTo(map);
+    windLabels = createWindLabelLayer().addTo(map);
+    changeIconOnZoom(parkingSpots, windBarbs);
+  });
+
+  currentGustBtn.addEventListener('click', function() {
+    windsToUse = {speed: metarWinds.windGust, direction: metarWinds.windGustDir};
+    map.removeLayer(windBarbs).removeLayer(windLabels);
+    windBarbs = createWindBarbLayer().addTo(map);
+    windLabels = createWindLabelLayer().addTo(map);
+    changeIconOnZoom(parkingSpots, windBarbs);
+  });
+
+  prevailingWindBtn.addEventListener('click', function() {
+    windsToUse = winds.prevailingWinds;
+    map.removeLayer(windBarbs).removeLayer(windLabels);
+    windBarbs = createWindBarbLayer().addTo(map);
+    windLabels = createWindLabelLayer().addTo(map);
+    changeIconOnZoom(parkingSpots, windBarbs);
+  });
+
+  highestGustbtn.addEventListener('click', function() {
+    windsToUse = winds.highestWinds;
+    map.removeLayer(windBarbs).removeLayer(windLabels);
+    windBarbs = createWindBarbLayer().addTo(map);
+    windLabels = createWindLabelLayer().addTo(map);
+    changeIconOnZoom(parkingSpots, windBarbs);
+  });
+
+  hideLabelBtn.addEventListener('click', function() {
+    if (hideLabelBtn.innerText == "Hide Labels") {
+      windLabels.eachLayer(function (label) {
+        label.getTooltip().setOpacity(0.00);
+      });
+      hideLabelBtn.innerText = "Show Labels";
+    } else {
+      windLabels.eachLayer(function (label) {
+        label.getTooltip().setOpacity(1);
+      });
+      hideLabelBtn.innerText = "Hide Labels";
+    }
+  });
+
+
+}
+// #endregion
 
 
 
