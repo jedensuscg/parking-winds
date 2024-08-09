@@ -35,14 +35,13 @@ window.addEventListener('DOMContentLoaded', () => {
   kecgButton.addEventListener('click', function() {
     map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
     unitToFetch = "kecg";
-    toggleLabels();
     drawMap();
+
   });
   
   padqButton.addEventListener('click', function() {
     unitToFetch = "padq";
     map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
-    toggleLabels();
     drawMap();
   });
 
@@ -129,6 +128,7 @@ function drawMap() {
   getData().then(() => {
     map.setView([airStation.lat, airStation.long], 18);
     windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
+
     
     OSM.addTo(map);
     // Add parking spot markers to map
@@ -140,7 +140,7 @@ function drawMap() {
     windBarbs.addTo(map);
     parkingSpots.addTo(map);
     windLabels.addTo(map);
-
+    checkLabelVisibility();
 
     // Changes icon on zoom
     map.on("zoomend", function() {
@@ -302,7 +302,6 @@ function addOffset(direction, lat, long) {
 }
 
 function toggleLabels() {
-  console.log(hideLabelBtn.innerText);
   if (hideLabelBtn.innerText == "Hide Labels") {
     windLabels.eachLayer(function (label) {
       label.getTooltip().setOpacity(0.00);
@@ -313,6 +312,19 @@ function toggleLabels() {
       label.getTooltip().setOpacity(1.00);
     });
     hideLabelBtn.innerText = "Hide Labels";
+  }
+}
+
+function checkLabelVisibility() {
+  console.log("checking label visibility");
+  if (hideLabelBtn.innerText == "Hide Labels") {
+    windLabels.eachLayer(function (label) {
+      label.getTooltip().setOpacity(1.00);
+    });
+  } else {
+    windLabels.eachLayer(function (label) {
+      label.getTooltip().setOpacity(0.00);
+    });
   }
 }
 
