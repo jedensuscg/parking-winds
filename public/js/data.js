@@ -109,7 +109,8 @@ function getData() {
     // When has failed, the `catch()` handler is called with
     .catch((error) => {
       console.log(error)
-      //testData.textContent = `Could not fetch data: ${error}`;
+      loadingModal.style.visibility = "visible";
+      loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue with Aviation Weather API.";
       reject();
     });
   });

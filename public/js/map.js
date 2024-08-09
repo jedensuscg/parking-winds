@@ -33,12 +33,16 @@ window.addEventListener('DOMContentLoaded', () => {
   let toggleMapTypeButton = document.querySelector('#change-map-btn');
   
   kecgButton.addEventListener('click', function() {
+    map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
     unitToFetch = "kecg";
+    toggleLabels();
     drawMap();
   });
   
   padqButton.addEventListener('click', function() {
     unitToFetch = "padq";
+    map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
+    toggleLabels();
     drawMap();
   });
 
@@ -119,20 +123,19 @@ L.control.watermark({ position: 'bottomleft' }).addTo(map);
 
 
 // #region ---------- FUNCTIONS -------------
-
+addHandlersAndListeners()
 // Fetch data from server and draw the map
 function drawMap() {
   getData().then(() => {
-  map.setView([airStation.lat, airStation.long], 18);
+    map.setView([airStation.lat, airStation.long], 18);
     windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
-    addHandlersAndListeners()
+    
     OSM.addTo(map);
-
-    console.log(windsToUse);
     // Add parking spot markers to map
     windBarbs = createWindBarbLayer();
     parkingSpots = addParkingSpotsToLayer();
     windLabels = createWindLabelLayer();
+
     //Add windBarbs to map
     windBarbs.addTo(map);
     parkingSpots.addTo(map);
@@ -159,7 +162,10 @@ function drawMap() {
 
     });
 
-}).catch(() => {});
+}).catch(() => {
+  loadingModal.style.visibility = "visible";
+  loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue with Aviation Weather API.";
+});
 }
 //Add markers for current airstation to map
 function addParkingSpotsToLayer() {
@@ -295,6 +301,21 @@ function addOffset(direction, lat, long) {
   return [offsetLat, offsetLong];
 }
 
+function toggleLabels() {
+  console.log(hideLabelBtn.innerText);
+  if (hideLabelBtn.innerText == "Hide Labels") {
+    windLabels.eachLayer(function (label) {
+      label.getTooltip().setOpacity(0.00);
+    });
+    hideLabelBtn.innerText = "Show Labels";
+  } else {
+    windLabels.eachLayer(function (label) {
+      label.getTooltip().setOpacity(1.00);
+    });
+    hideLabelBtn.innerText = "Hide Labels";
+  }
+}
+
 function addHandlersAndListeners() {
   swapMetarButton.addEventListener('click', function() {
     populateMetar(swapMetarButton);
@@ -333,17 +354,7 @@ function addHandlersAndListeners() {
   });
 
   hideLabelBtn.addEventListener('click', function() {
-    if (hideLabelBtn.innerText == "Hide Labels") {
-      windLabels.eachLayer(function (label) {
-        label.getTooltip().setOpacity(0.00);
-      });
-      hideLabelBtn.innerText = "Show Labels";
-    } else {
-      windLabels.eachLayer(function (label) {
-        label.getTooltip().setOpacity(1);
-      });
-      hideLabelBtn.innerText = "Hide Labels";
-    }
+    toggleLabels();
   });
 
 
