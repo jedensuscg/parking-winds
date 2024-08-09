@@ -23,9 +23,12 @@
 </head>
 <body>
     <div id="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
+
     <div class="container">
+        
         <div class="left-column">
             <div id="map">
+                
                 <div class="loading-modal">
                     <div class="loadingText">
                         <p class="loading-text">Loading Data...</p>
@@ -41,7 +44,54 @@
                         <p class="notes">Current Functionality includes wind barbs for current winds and gusts, the most prevelant winds in the next 24 hours, and the highest gust in the next
                             24 hours. More features from 1.0 coming soon. <a href="https://www.weather.gov/hfo/windbarbinfo" target="_blank">Click here for reading wind barbs</a>
                         </p>
-
+                        <div id="updateModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times</span>
+                                <h4> Welcome to Version 2 of Parking Winds Visualizer. This version is currently in production and features are still being added.</h4>
+                                <h4> This page is phase 1 of the PWV, focusing on a complete front end remake using a dynamic map instead of premade images. As such, only information present
+                                    on the original page is present here, until Phase 2 starts, which is a overhaul of the backend server to add more features.
+                                </h4>
+                                <p>
+                                    All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/data/api/">Data API</a>. Temperature information is obtained
+                                    from <a href="https://www.tomorrow.io/">Tomorrow.io API v4 </a> with limited usage plan of 500 requests per day.
+                                <ul>
+                                    <li>
+                                        <h5>CURRENT WORKING FEATURES</h5>
+                                    </li>
+                                    <li>Street and Satellite Maps available</li>
+                                    <li>Full TAF and METAR data available</li>
+                                    <li>Toggle between current winds, current gusts, the most prevelant wind and the highest forcasted gusts in the next 24 hours</li>
+                                    <li>Replaced arrows with wind barbs. A quick refresher on wind barbs:
+                                        <ul>
+                                            <li>Winds are coming from the direction of the barbs, TOWARDS the center of the aircraft. Imagine the line is an arrow and the barbs are the feathers</li>
+                                            <li>Each long barb represents 10 knots</li>
+                                            <li>Each short barb represents 5 knots</li>
+                                            <li>Each triangle represents 50 knots</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h5>IN DEVELOPMENT FEATURES FROM VERSION 1.0</h5>
+                                    </li>
+                                    <li>Recreating the information panel to include time periods of expected wind catagories</li>
+                                    <li>Incorporating temperature</li>
+                                    <li>Wind and Temperature warnings</li>
+                                    <li>
+                                        <h5>UPCOMING FEATURES</h5>
+                                        Thanks to the new dynamic map, I can now add more features that were not possible in the original version. These include:
+                                    </li>
+                                    <li> Easier incorporation of new units through an on map system to point and click on parking spots and add to the database.</li>
+                                    <li> Realtime weather over-layed over the map</li>
+                                    <li> More customization</li>
+                    
+                                </ul>
+                    
+                                <p>If you have any suggestions, feedback or encounter any bugs, feel free to contact me at jedensuscg@gmail.com, or if you are familiar
+                                    with Github, create an issue <br>
+                                    View the source code or report issues on my <a href="https://github.com/jedensuscg/parking-winds" target="_blank">Github</a>
+                                </p>
+                                </p>
+                            </div>
+                        </div>
                 </div>
 
             </div>
@@ -49,6 +99,7 @@
 
         <div class="right-column">
             <p class="header">SELECT UNIT</p>
+            <button id="update-btn">CLICK FOR INFO ON THIS PAGE</button>
             <div class="controls">
                 <button class="unit-button" id="kecgButton">KECG</button><br>
                 <button class="unit-button" id="padqButton">PADQ</button><br>

@@ -37,6 +37,7 @@ p {
     height: 100%
 }
 .header {
+    display: inline-block;
     margin: 10px;
     font-family: Helvetica, sans-serif;
     font-weight: bold;
@@ -58,6 +59,7 @@ p {
     height:95%;
     margin-right: 10px;
     overflow-y: hidden;
+    z-index: 1;
 }
 .controls {
     display: flex;
@@ -73,6 +75,10 @@ p {
 .map-typ-btn {
     background-color: rgb(1, 1, 138);
     width: 150px;
+}
+
+.popup-modal {
+    display: inline-block;
 }
 
 button {
@@ -156,3 +162,44 @@ button {
     font-weight: bold;
     margin: 1px;
 }
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: -200px;
+    width: 100%; /* Full width */
+
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    z-index: 2;
+    font-size: 1.2em;
+    overflow-y: scroll;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
