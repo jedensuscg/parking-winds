@@ -128,7 +128,7 @@ function populateMetar(swapMetarButton) {
     swapMetarButton.innerText = "Show RAW METAR"
     metarTextField.innerHTML = 
           `<span>Time: ${metarWinds.observationTime}</span><br>
-          <span> Wind: ${metarWinds.windSpeed}@${metarWinds.windDirection}</span><br>`
+          <span> Wind: ${metarWinds.windDirection} @ ${metarWinds.windSpeed} knots</span><br>`
     if (metarWinds.windGustSpeed > 0) {
       metarTextField.innerHTML += `<span> Gust: ${metarWinds.windGustSpeed} knots</span><br>`
     }
@@ -137,10 +137,9 @@ function populateMetar(swapMetarButton) {
 }
 
 function populateTaf() {
-  const tafDiv = document.querySelector(".taf-grid-container");
-  const tafTextField = document.querySelector("#tafTextField");
-  tafTextField.innerHTML = `${rawTaf}`;
 
+  tafTextField.innerHTML = `${rawTaf}`;
+  tafDiv.innerHTML = '';
   decodeTaf.tafForecasts.forEach(taf => {
     // Create a new grid container for each forecast
     const gridContainer = document.createElement('div');
@@ -151,7 +150,8 @@ function populateTaf() {
     if (taf.windSpeed == 0 && taf.windDirection == 0 && taf.changeIndicator == 'TEMPO') {
       createGridRow(gridContainer, 'Winds', 'No wind changes in this TEMPO line', 'grid-yellow');
     } else {
-      createGridRow(gridContainer, 'Winds:', `${taf.windSpeed}@${taf.windDirection}`, 'grid-yellow');
+
+      createGridRow(gridContainer, 'Winds:', `${taf.windDirection == null ? "Variable": taf.windDirection} @ ${taf.windSpeed} knots`, 'grid-yellow');
     }
 
     if (taf.windGust > 0) {

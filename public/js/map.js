@@ -5,9 +5,11 @@ const currentGustBtn = document.querySelector("#current-gust-btn");
 const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
 const highestGustbtn = document.querySelector("#strongest-gust-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
+
 const L = window.leaflet
-let metarTextField = document.getElementById("metarTextField");
+let tafDiv = document.querySelector(".taf-grid-container");
 let tafTextField = document.querySelector("#tafTextField");
+let metarTextField = document.getElementById("metarTextField");
 let windsToUse, windBarbs, parkingSpots, windLabels
 let windBarbOptions = {
   strokeLength: 60,
