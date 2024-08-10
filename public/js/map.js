@@ -1,3 +1,4 @@
+const L = window.leaflet
 const swapMetarButton = document.querySelector("#swapMetarButton");
 const loadingModal = document.querySelector(".loading-modal");
 const currentWindsBtn = document.querySelector("#current-winds-btn");
@@ -6,7 +7,7 @@ const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
 const highestGustbtn = document.querySelector("#strongest-gust-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
 
-const L = window.leaflet
+
 let tafDiv = document.querySelector(".taf-grid-container");
 let tafTextField = document.querySelector("#tafTextField");
 let metarTextField = document.getElementById("metarTextField");
@@ -18,6 +19,8 @@ let windBarbOptions = {
   pointRadius: 5,
   barbSpacing: 8,
 }
+
+
 // Create map with initial view. Currently Ecity.
 let map = L.map('map').setView([36.262862536771785, -76.17342389086477], 19);
 let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -27,6 +30,7 @@ let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
+
 
 window.addEventListener('DOMContentLoaded', () => {
   //TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
@@ -120,7 +124,12 @@ L.Control.Watermark = L.Control.extend({
 L.control.watermark = function(opts) {
   return new L.Control.Watermark(opts);
 }
+
 L.control.watermark({ position: 'bottomleft' }).addTo(map);
+
+// standard leaflet map setup
+
+
 
 
 // #region ---------- FUNCTIONS -------------
