@@ -176,7 +176,7 @@ function drawMap() {
 }).catch((e) => {
   console.log(e);
   loadingModal.style.visibility = "visible";
-  loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue with Aviation Weather API.";
+  loadingModal.innerText = `Error Loading Map. Please refresh and try again. \n Error: ${e}`;
 });
 }
 //Add markers for current airstation to map

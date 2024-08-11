@@ -110,7 +110,7 @@ function getData() {
     .catch((error) => {
       console.log(error)
       loadingModal.style.visibility = "visible";
-      loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue with Aviation Weather API.";
+      loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue the sereer. \n Error: " + error;
       reject();
     });
   });
