@@ -4,7 +4,7 @@ const loadingModal = document.querySelector(".loading-modal");
 const currentWindsBtn = document.querySelector("#current-winds-btn");
 const currentGustBtn = document.querySelector("#current-gust-btn");
 const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
-const highestGustbtn = document.querySelector("#strongest-gust-btn");
+const highestWindbtn = document.querySelector("#strongest-wind-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
 
 
@@ -173,7 +173,8 @@ function drawMap() {
 
     });
 
-}).catch(() => {
+}).catch((e) => {
+  console.log(e);
   loadingModal.style.visibility = "visible";
   loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue with Aviation Weather API.";
 });
@@ -368,7 +369,7 @@ function addHandlersAndListeners() {
     changeIconOnZoom(parkingSpots, windBarbs);
   });
 
-  highestGustbtn.addEventListener('click', function() {
+  highestWindbtn.addEventListener('click', function() {
     windsToUse = winds.highestWinds;
     map.removeLayer(windBarbs).removeLayer(windLabels);
     windBarbs = createWindBarbLayer().addTo(map);
