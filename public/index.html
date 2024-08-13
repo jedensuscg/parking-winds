@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="author" content="James Edens">
     <meta name="description" content="Parking Winds allows for a visual representation of wind speed and direction to aid in parking of aircraft." >
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -28,7 +28,7 @@
 
 
 
-    <div id="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
+
 <!-- The Modal -->
     <div id="updateModal" class="modal">
     <!-- Modal content -->
@@ -38,7 +38,7 @@
         <h2>Parking Winds V2 Updates and Information</h2>
       </div>
       <div id=modal-body class="modal-body">
-        
+        <iframe src="public/Update.html" width="100%" height="100%"></iframe>
       </div>
       <br>
       Attributions: <a href="https://leafletjs.com/" target="_blank">Leaflet JS</a>, 
@@ -118,6 +118,7 @@
         </div>
             </div>
     <div id="map">
+        <div id="title" class="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
         <div class="map-controls">
             <!-- <button id="help-btn" class="map-typ-btn">Help</button> -->
             <button id="hide-label-btn" class="map-typ-btn">Hide Labels</button>

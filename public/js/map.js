@@ -30,12 +30,20 @@ let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
-var sidebar = L.control.sidebar({ 
+ // Check viewport width
+let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+
+
+let sidebar = L.control.sidebar({ 
   container: 'sidebar',
   autopan: true,
 })
 .addTo(map)
-.open('wind');
+
+if (vw > 1400) {
+  sidebar.open('wind')
+}
+
 
 
 

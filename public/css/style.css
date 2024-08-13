@@ -1,22 +1,9 @@
-.container {
-
-    width: 98%;
-    height:90vh;
-    background: rgb(234,239,246);
-    background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
+html, body, #map {
+    height: 100%;
+    width: 100vw;
+    overflow-x: hidden;
     margin: auto;
-    padding: 0px;
 }
-
-.right-column {
-    height: 98%;
-    overflow-y: scroll;
-}
-
-.left-column {
-    height: 100%
-}
-
 
 
 .loading-modal {
@@ -44,19 +31,42 @@
 #tafTextField {
     margin: 5px;
 }
-#title {
-    column-span: all;
-    width: 90%;
+.title {
     font-size: 2em;
-    margin-top: 10px;
-    margin-left: 8%;
-    margin-bottom: 10px;
+    z-index: 500;
     font-family: Helvetica, sans-serif;
+    background-color: #0f00993d;
+    width: 80%;
+    display: block;
+    position: relative;
+    top: 0px;
+    margin: auto;
+    text-align: center;
 }
-#map { 
+
+/* responsive, form small screens, use 13px font size */
+@media (max-width: 1200px) {
+    .title {
+        width: 100%;
+        font-size: 1.25em;
+    }
+    .map-controls{
+        position: absolute;
+    }
     
-    height:95%;
-    width: 100%;
+}
+
+.map-controls {
+    z-index: 500;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    padding: 10px;
+}
+
+
+#map { 
+
     margin:auto;
     overflow-y: hidden;
     z-index: 1;
@@ -94,13 +104,8 @@ button {
     padding: 3px;
 }
 
-.map-controls {
-    z-index: 500;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    padding: 10px;
-}
+
+
 
 .notes {
     width:95%;
