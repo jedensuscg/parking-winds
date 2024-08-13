@@ -311,9 +311,12 @@ function createOffset(direction, distance) {
 }
 
 function addOffset(direction, lat, long) {
+  if (direction == "variable") {
+    return [lat, long];
+  }
   const offset = 75 / 364000; // 10 feet in degrees (approximate value)
-  const offsetLat = lat + offset * Math.cos(direction * Math.PI / 180);
-  const offsetLong = long + offset * Math.sin(direction * Math.PI / 180);
+  const offsetLat = lat + offset * Math.cos(isNaN(direction) ? 0 : direction * Math.PI / 180);
+  const offsetLong = long + offset * Math.sin(isNaN(direction) ? 0 : direction * Math.PI / 180);
   return [offsetLat, offsetLong];
 }
 
