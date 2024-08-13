@@ -1,11 +1,10 @@
 .container {
-    display: grid;
-    grid-template-columns: 2.5fr 1fr;
-    width: 99vw;
+
+    width: 98%;
     height:90vh;
     background: rgb(234,239,246);
     background: linear-gradient(180deg, rgba(234,239,246,1) 17%, rgba(0,0,138,1) 96%);
-    margin: 0px;
+    margin: auto;
     padding: 0px;
 }
 
@@ -57,7 +56,8 @@
 #map { 
     
     height:95%;
-    margin-right: 10px;
+    width: 100%;
+    margin:auto;
     overflow-y: hidden;
     z-index: 1;
 }
@@ -72,6 +72,9 @@
     cursor: pointer;
 }
 
+.wind-change-button {
+    display: block;
+}
 .map-typ-btn {
     background-color: rgb(1, 1, 138);
     width: 150px;
@@ -85,12 +88,9 @@ button {
     border-radius: 5%;
 }
 
-#hide-label-btn {
-   width: 100px;
-}
 
 .unit-button {
-    float: left;
+    display: block;
     padding: 3px;
 }
 
@@ -98,7 +98,7 @@ button {
     z-index: 500;
     position: absolute;
     top: 20px;
-    right: 20px;
+    left: 50%;
     padding: 10px;
 }
 
@@ -242,3 +242,8 @@ button {
 p {
     margin: 8px;
 }
+
+.leaflet-control {
+    position:static
+}
+

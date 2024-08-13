@@ -30,6 +30,14 @@ let OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
+var sidebar = L.control.sidebar({ 
+  container: 'sidebar',
+  autopan: true,
+})
+.addTo(map)
+.open('wind');
+
+
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -50,7 +58,6 @@ window.addEventListener('DOMContentLoaded', () => {
     map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
     drawMap();
   });
-
   toggleMapTypeButton.addEventListener('click', function(){
     if (map.hasLayer(OSM)) {
         map.addLayer(satMap);
@@ -128,9 +135,6 @@ L.control.watermark = function(opts) {
 L.control.watermark({ position: 'bottomleft' }).addTo(map);
 
 // standard leaflet map setup
-
-
-
 
 // #region ---------- FUNCTIONS -------------
 addHandlersAndListeners()

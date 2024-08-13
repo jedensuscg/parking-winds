@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="James Edens">
     <meta name="description" content="Parking Winds allows for a visual representation of wind speed and direction to aid in parking of aircraft." >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="public/css/leaflet-sidebar.css">
     <link rel="stylesheet" href="public/css/style.css">
     <link rel="shortcut icon" href="public/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -28,16 +30,15 @@
 
     <div id="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
 <!-- The Modal -->
-<div id="updateModal" class="modal">
-
+    <div id="updateModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-      <div class="modal-header">
+      <div id="update-model" class="modal-header">
         <span class="close">&times;</span>
         <h2>Parking Winds V2 Updates and Information</h2>
       </div>
-      <div class="modal-body">
-        <iframe src="public/Update.html" width="100%" height="100%"></iframe>
+      <div id=modal-body class="modal-body">
+        
       </div>
       <br>
       Attributions: <a href="https://leafletjs.com/" target="_blank">Leaflet JS</a>, 
@@ -45,67 +46,102 @@
       <a href="https://aviationweather.gov/data/api/" target="_blank">AviationWeather.gov</a>,
       <a href="https://github.com/spatialsparks/Leaflet.windbarb" target="_blank">Leaflet Windbarb by Manuel Bär</a>
     </div>
+
+    
   
   </div>
-    <div class="container">
+     <div id="sidebar" class="leaflet-sidebar collapsed">
+            <!-- nav tabs -->
+            <div class="leaflet-sidebar-tabs">
+                <!-- top aligned tabs -->
+                <ul role="tablist">
+                    <li><a href="#wind" role="tab"><i class="bi bi-wind active tooltip"></i></a></li>
+                    <li><a href="#taf" role="tab"><i class="bi bi-body-text"></i></a></li>
+                    <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a></li>
+                </ul>
+    
+                <!-- bottom aligned tabs -->
+                <ul role="tablist">
+                    <li><a href="https://github.com/nickpeihl/leaflet-sidebar-v2"><i class="fa fa-github"></i></a></li>
+                </ul>
+            </div>
+    
+            <!-- panel content -->
+            <div class="leaflet-sidebar-content">
+                <div class="leaflet-sidebar-pane" id="wind">
+                    <h1 class="leaflet-sidebar-header">
+                        Wind Selection
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
 
-        <div class="left-column">
-            <div id="map">
-                
-                <div class="loading-modal">
-                    <div class="loadingText">
-                        <p class="loading-text">Loading Data...</p>
-                    </div>
+                        <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
+                        <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
+                        <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
+                        <button id="strongest-wind-btn" class="wind-change-button">Strongest Winds</button>
+
+                        <p>This tab is a placeholder and will contain the same information seen in the wind panel on version 1.0</p>
+                    
                 </div>
-                <div class="map-controls">
-                    <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
-                    <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
-                    <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
-                    <button id="strongest-wind-btn" class="wind-change-button">Strongest Winds</button>
-                    <button id="hide-label-btn" class="map-typ-btn">Hide Labels</button>
-                    <button id="change-map-btn" class="map-typ-btn">Switch to Satellite Map</button>
-                        <p class="notes">Current Functionality includes wind barbs for current winds and gusts, the most prevelant winds in the next 24 hours, and the highest gust in the next
-                            24 hours. More features from 1.0 coming soon. <a href="https://www.weather.gov/hfo/windbarbinfo" target="_blank">Click here for reading wind barbs</a>
-                        </p>
+                <div class="leaflet-sidebar-pane" id="taf">
+                    <h1 class="leaflet-sidebar-header">
+                        METAR and TAF
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
+                        <button id="update-btn">CLICK FOR INFO ON THIS PAGE</button>
+                        <div class="taf-text">
+                            <h3 id="direct-link"></h3>
+                            <div id="metarDiv">
+                                <p class="header">METAR</p>
+                                <p id="metarTextField">Error Getting Metar</p>
+                                <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
+                            </div>
+                            <div id="tafDiv">
+                                <p class="header">RAW TAF</p>
+                                <p id="tafTextField">Error Getting TAF</p>
+                                <p class="header">DECODED TAF</p>
+                                <div class="taf-grid-container">     
+                                </div>
+                            </div>          
+                        </div>
                 </div>
+              <div class="leaflet-sidebar-pane" id="unit">
+                    <h1 class="leaflet-sidebar-header">
+                        UNITS
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
 
-
+                        <p class="header">SELECT UNIT</p>
+                        <button class="unit-button" id="kecgButton">KECG</button><br>
+                        <button class="unit-button" id="padqButton">PADQ</button><br>
+                </div>
             </div>
         </div>
-
-        <div class="right-column">
-
-            <p class="header">SELECT UNIT</p>
-            <button id="update-btn">CLICK FOR INFO ON THIS PAGE</button>
-            <div class="controls">
-                <button class="unit-button" id="kecgButton">KECG</button><br>
-                <button class="unit-button" id="padqButton">PADQ</button><br>
             </div>
-
-            <div class="taf-text">
-                <h3 id="direct-link"></h3>
-                <div id="metarDiv">
-                    <p class="header">METAR</p>
-                    <p id="metarTextField">Error Getting Metar</p>
-                    <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
-                </div>
-                <div id="tafDiv">
-                    <p class="header">RAW TAF</p>
-                    <p id="tafTextField">Error Getting TAF</p>
-                    <p class="header">DECODED TAF</p>
-                    <div class="taf-grid-container">
-                        
-                    </div>
-                        
-                </div>
-                
+    <div id="map">
+        <div class="map-controls">
+            <!-- <button id="help-btn" class="map-typ-btn">Help</button> -->
+            <button id="hide-label-btn" class="map-typ-btn">Hide Labels</button>
+            <button id="change-map-btn" class="map-typ-btn">Switch to Satellite Map</button>
+        </div>
+        <div class="loading-modal">
+            <div class="loadingText">
+                <p class="loading-text">Loading Data...</p>
             </div>
         </div>
+        
+
+
     </div>
+
+
+        
+
+    <script src="public/js/leaflet-sidebar.js"></script>
     <script src="public/js/leaflet-windbarb.js"></script>
     <script src="public/js/data.js"></script>
     <script src="public/js/map.js"></script>
     <script src="public/js/rotate.js"></script>
+
 
 </body>
 </html>
