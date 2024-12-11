@@ -6,7 +6,8 @@ const currentGustBtn = document.querySelector("#current-gust-btn");
 const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
 const highestWindbtn = document.querySelector("#strongest-wind-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
-
+const windDetails = document.querySelector("#wind-details-div")
+const metarWindDataDiv = document.querySelector("#metar-wind-data-div")
 
 let tafDiv = document.querySelector(".taf-grid-container");
 let tafTextField = document.querySelector("#tafTextField");
@@ -19,6 +20,14 @@ let windBarbOptions = {
   pointRadius: 5,
   barbSpacing: 8,
 }
+
+// Wind Data Declarations
+let testData = document.querySelector("#test-data")
+
+let currentTimeSpan = document.querySelector("#current-wind-time")
+let currentWindDirSpan = document.querySelector("#current-wind-dir")
+let currentWindSpeedSpan = document.querySelector("#current-wind-speed")
+let currentWindGustSpan = document.querySelector("#current-wind-gust")
 
 
 // Create map with initial view. Currently Ecity.
@@ -366,6 +375,7 @@ function addHandlersAndListeners() {
     windBarbs = createWindBarbLayer().addTo(map);
     windLabels = createWindLabelLayer().addTo(map);
     changeIconOnZoom(parkingSpots, windBarbs);
+    metarWindDataDiv.classList.add("wind-data-col-active")
   });
 
   currentGustBtn.addEventListener('click', function() {

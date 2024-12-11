@@ -102,6 +102,7 @@ function getData() {
       };
 
       populateMetar(swapMetarButton);
+      populateWindData();
       populateTaf();
       loadingModal.style.visibility = "hidden";
       resolve(unitData);
@@ -134,6 +135,15 @@ function populateMetar(swapMetarButton) {
     }
     metarTextField.innerHTML += `NOTE: Clouds and visibility are not currently not decoded. Server side updates are in progress.`
   }
+}
+
+function populateWindData() {
+  //METAR
+  currentTimeSpan.innerHTML = convertToLocalTime(metarWinds.observationTime);
+  currentWindDirSpan.innerHTML = metarWinds.windDirection;
+  currentWindSpeedSpan.innerHTML = metarWinds.windSpeed;
+  metarWinds.windGust > 0 ? currentWindGustSpan.innerHTML = metarWinds.windGust : currentWindGustSpan.innerHTML = "No Gusts";
+
 }
 
 function populateTaf() {
@@ -202,6 +212,37 @@ function formatNumberToThreeDigits (value) {
     return value
   }
 }
+
+function convertToLocalTime (time) {
+  const localTimeFull = new Date(time);
+  const today = new Date()
+
+  let localTime
+  if (localTimeFull.getDate() === today.getDate()) {
+    localTime = localTimeFull.toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } else {
+    localTime = localTimeFull.toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      day: '2-digit',
+      month: 'short'
+    });
+  }
+
+  
+  const localDay = localTimeFull.getDate()
+  const localMonth = (localTimeFull.getMonth()) + 1
+  const localDate = `${localMonth}/${localDay}`
+  localTime = localTime.replace(':', "")
+  localTime = localTime.replace(',', "")
+  return localTime
+}
+  
 
 // Get the modal
 var modal = document.getElementById("updateModal");
