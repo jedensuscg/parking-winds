@@ -55,9 +55,9 @@
             <div class="leaflet-sidebar-tabs">
                 <!-- top aligned tabs -->
                 <ul role="tablist">
+                    <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a></li>
                     <li><a href="#wind" role="tab"><i class="bi bi-wind active tooltip"></i></a></li>
                     <li><a href="#taf" role="tab"><i class="bi bi-body-text"></i></a></li>
-                    <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a></li>
                 </ul>
     
                 <!-- bottom aligned tabs -->
@@ -68,6 +68,16 @@
     
             <!-- panel content -->
             <div class="leaflet-sidebar-content">
+                <div class="leaflet-sidebar-pane" id="unit">
+                    <h1 class="leaflet-sidebar-header">
+                        UNITS
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
+
+                        <p class="header">SELECT UNIT</p>
+                        <button class="unit-button" id="kecgButton">KECG</button><br>
+                        <button class="unit-button" id="padqButton">PADQ</button><br>
+                </div>
                 <div class="leaflet-sidebar-pane" id="wind">
                     <h1 class="leaflet-sidebar-header">
                         Wind Selection
@@ -132,16 +142,6 @@
                                 </div>
                             </div>          
                         </div>
-                </div>
-              <div class="leaflet-sidebar-pane" id="unit">
-                    <h1 class="leaflet-sidebar-header">
-                        UNITS
-                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
-                    </h1>
-
-                        <p class="header">SELECT UNIT</p>
-                        <button class="unit-button" id="kecgButton">KECG</button><br>
-                        <button class="unit-button" id="padqButton">PADQ</button><br>
                 </div>
             </div>
         </div>

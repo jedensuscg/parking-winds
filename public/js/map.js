@@ -58,8 +58,11 @@ let sidebar = L.control.sidebar({
 .addTo(map)
 
 if (vw > 1400) {
-  sidebar.open('wind')
-}
+  if (getLocalCookie("unit") == null) {sidebar.open('unit')} else {
+    sidebar.open("wind")
+  }
+  
+} 
 
 window.addEventListener('DOMContentLoaded', () => {
   //TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
@@ -161,6 +164,7 @@ L.control.watermark({ position: 'bottomleft' }).addTo(map);
 addHandlersAndListeners()
 // Fetch data from server and draw the map
 function drawMap() {
+  setLocalCookie("unit", unitToFetch)
   getData().then(() => {
     map.setView([airStation.lat, airStation.long], 18);
     windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};

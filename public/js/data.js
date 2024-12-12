@@ -1,8 +1,38 @@
 
 
-var unitToFetch = "kecg";
-var JSONLoaded;
+//Retrieve unit ICAO list
+
+
+let unitToFetch = getLocalCookie("unit")
+let unitList;
+let JSONLoaded;
 rawMetarMode = false;
+console.log(unitToFetch)
+if (unitToFetch == null) {unitToFetch = 'kecg'}
+
+function getUnitList() {
+  var unitPromise = new Promise((resolve, reject) => {
+    fetch(`./unitsICAO`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      unitList = data
+      resolve(unitList);
+    })
+    // When has failed, the `catch()` handler is called with
+    .catch((error) => {
+      console.log(error)
+      loadingModal.style.visibility = "visible";
+      loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue the sereer. \n Error: " + error;
+      reject();
+    });
+  });
+  return unitPromise;
+}
 
 let unitData = {
     hideDetails: false,
@@ -69,7 +99,7 @@ function getData() {
   console.log("Getting Data")
   var dataPromise = new Promise((resolve, reject) => {
     loadingModal.style.visibility = "visible";
-    fetch(`./taf/${this.unitToFetch}`)
+    fetch(`./taf/${unitToFetch}`)
     .then((response) => {
 
       JSONLoaded = false;
@@ -253,6 +283,9 @@ function convertToLocalTime (time) {
 }
   
 
+unitList = getUnitList();
+console.log(unitList)
+
 // Get the modal
 var modal = document.getElementById("updateModal");
 
@@ -280,3 +313,16 @@ window.onclick = function(event) {
   }
 }
   
+function setLocalCookie(key, value) {
+  localStorage.setItem(key, value);
+}
+
+// Function to get a value from localStorage
+function getLocalCookie(key) {
+  return localStorage.getItem(key);
+}
+
+// Function to remove a value from localStorage
+function removeLocalCookie(key) {
+  localStorage.removeItem(key);
+}
