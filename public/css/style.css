@@ -252,14 +252,20 @@ p {
     position:static
 }
 
-.wind-data-col-active {
+.wind-data-div {
+    box-sizing: border-box;
     width: 100%;
+    border: solid 2px black;
+    font-size: 1.2em;
+    
+}
+
+.wind-data-col-active {
+    font-weight: bold;
     margin: auto;
-    margin-bottom: 3px;
-    margin-top: 3px;
     padding-left: 10%;
     background-color: rgba(208, 250, 248, 0.832);
-    border: solid 2px black
+    overflow: hidden;
 }
 
 #view-wind-text-p {
@@ -271,4 +277,16 @@ p {
 #wind-buttons-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+
+.view-wind-description-p {
+    font-style: italic;
+    font-size: .75em;
+}
+
+.subheading-span {
+    font-size: .75em;
+    margin-top: -20px;
+    margin-left: auto;
+    color: #8a2c00;
 }
