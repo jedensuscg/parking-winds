@@ -90,7 +90,7 @@ createTafArrays = (forecastData) => {
     timeFrom = forecast.fcst_time_from;
     timeTo = forecast.fcst_time_to;
     changeIndicator = forecast.change_indicator? forecast.change_indicator : "FM";
-    windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
+    windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0' || 'VRB' ? 'Variable': forecast.wind_dir_degrees) : 0;
     windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
     windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
     windGustDir = forecast.wind_gust_kt ? forecast.wind_dir_degrees : 0;
