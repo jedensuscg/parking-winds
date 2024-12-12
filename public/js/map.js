@@ -8,6 +8,8 @@ const highestWindbtn = document.querySelector("#strongest-wind-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
 const windDetails = document.querySelector("#wind-details-div")
 const metarWindDataDiv = document.querySelector("#metar-wind-data-div")
+const prevailingWindDataDiv = document.querySelector("#prevailing-wind-data-div")
+const strongestWindDataDiv = document.querySelector("#strongest-wind-data-div")
 
 let tafDiv = document.querySelector(".taf-grid-container");
 let tafTextField = document.querySelector("#tafTextField");
@@ -28,7 +30,11 @@ let currentTimeSpan = document.querySelector("#current-wind-time")
 let currentWindDirSpan = document.querySelector("#current-wind-dir")
 let currentWindSpeedSpan = document.querySelector("#current-wind-speed")
 let currentWindGustSpan = document.querySelector("#current-wind-gust")
-
+let prevailingWindsDirSpan = document.querySelector("#prevailing-wind-dir")
+let prevailingWindsSpeedSpan = document.querySelector("#prevailing-wind-speed")
+let strongestWindsTimeSpan = document.querySelector("#strongest-wind-time")
+let strongestWindsDirSpan = document.querySelector("#strongest-wind-dir")
+let strongestWindsSpeedSpan = document.querySelector("#strongest-wind-speed")
 
 // Create map with initial view. Currently Ecity.
 let map = L.map('map').setView([36.262862536771785, -76.17342389086477], 19);
@@ -369,43 +375,32 @@ function addHandlersAndListeners() {
     populateMetar(swapMetarButton);
   });
 
-  currentWindsBtn.addEventListener('click', function() {
-    setWindToUse =  windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-    metarWindDataDiv.classList.add("wind-data-col-active")
-  });
-
-  currentGustBtn.addEventListener('click', function() {
-    windsToUse = {speed: metarWinds.windGust, direction: metarWinds.windGustDir};
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
-
-  prevailingWindBtn.addEventListener('click', function() {
-    windsToUse = winds.prevailingWinds;
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
-
-  highestWindbtn.addEventListener('click', function() {
-    windsToUse = winds.highestWinds;
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
+  currentWindsBtn.addEventListener('click', () => handleWindSelectionClick({speed: metarWinds.windSpeed, direction: metarWinds.windDirection}, metarWindDataDiv, "METAR WINDS"))
+  currentGustBtn.addEventListener('click', () => handleWindSelectionClick({speed: metarWinds.windGust, direction: metarWinds.windGustDir}, metarWindDataDiv, "METAR GUSTS"))
+  prevailingWindBtn.addEventListener('click', () => handleWindSelectionClick(winds.prevailingWinds, prevailingWindDataDiv,"PREVAILING WINDS"))
+  highestWindbtn.addEventListener('click', () => handleWindSelectionClick(winds.highestWinds, strongestWindDataDiv,  "STRONGEST WINDS"))
+  
 
   hideLabelBtn.addEventListener('click', function() {
     toggleLabels();
   });
 
+  function handleWindSelectionClick(wind, windDiv, windText) {
+    windsToUse = wind
+    map.removeLayer(windBarbs).removeLayer(windLabels);
+    windBarbs = createWindBarbLayer().addTo(map);
+    windLabels = createWindLabelLayer().addTo(map);
+    changeIconOnZoom(parkingSpots, windBarbs);
+    const elements = document.querySelectorAll(".wind-data-col-active");
+    console.log(elements)
+
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].classList.remove("wind-data-col-active");
+    }
+
+    windDiv.classList.add("wind-data-col-active")
+    document.querySelector("#view-wind-text").innerHTML = windText
+  }
 
 }
 // #endregion

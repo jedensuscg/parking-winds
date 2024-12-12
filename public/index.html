@@ -73,18 +73,33 @@
                         Wind Selection
                         <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
                     </h1>
+                        <div id="wind-buttons-wrapper">                      
+                            <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
+                            <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
+                            <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
+                            <button id="strongest-wind-btn" class="wind-change-button">Strongest Winds</button>
+                        </div>
 
-                        <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
-                        <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
-                        <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
-                        <button id="strongest-wind-btn" class="wind-change-button">Strongest Winds</button>
+
                         <div id="wind-details-div">
-                            <div id="metar-wind-data-div" class="wind-data-div">
+                            <p id="view-wind-text-p">Viewing <span id="view-wind-text" class="view-wind-text-span">METAR WINDS</span></p>
+                            <div id="metar-wind-data-div" class="wind-data-div wind-data-col-active">
                                 <h3 class="wind-data-heading">CURRENT WINDS (METAR)</h3>
                                 <p class="wind-data-p">Metar Time: <span id="current-wind-time"></span></p>
                                 <p class="wind-data-p">Direction: <span id="current-wind-dir"></span></p>
                                 <p class="wind-data-p">Speed: <span id="current-wind-speed"></span></p>
                                 <p class="wind-data-p">Gust: <span id="current-wind-gust"></span></p>
+                            </div>
+                            <div id="prevailing-wind-data-div" class="wind-data-div">
+                                <h3 class="wind-data-heading">PREVAILING WINDS (TAF)</h3>
+                                <p class="wind-data-p">Direction: 1 <span id="prevailing-wind-dir"></span></p>
+                                <p class="wind-data-p">Speed: <span id="prevailing-wind-speed"></span></p>
+                            </div>
+                            <div id="strongest-wind-data-div" class="wind-data-div">
+                                <h3 class="wind-data-heading">STRONGEST WINDS/GUSTS (TAF)</h3>
+                                <p class="wind-data-p">Time of Strongest Winds: <span id="strongest-wind-time"></span></p>
+                                <p class="wind-data-p">Direction: <span id="strongest-wind-dir"></span></p>
+                                <p class="wind-data-p">Speed: <span id="strongest-wind-speed"></span></p>
                             </div>
                         </div>
                         <p id="test-data"></p>

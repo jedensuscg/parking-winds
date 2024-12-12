@@ -144,6 +144,15 @@ function populateWindData() {
   currentWindSpeedSpan.innerHTML = metarWinds.windSpeed;
   metarWinds.windGust > 0 ? currentWindGustSpan.innerHTML = metarWinds.windGust : currentWindGustSpan.innerHTML = "No Gusts";
 
+  //PREVAILING
+  console.log(winds.prevailingWinds.direction)
+  prevailingWindsDirSpan.innerHTML = winds.prevailingWinds.direction;
+  prevailingWindsSpeedSpan.innerHTML = winds.prevailingWinds.speed;
+  
+  //STRONGEST
+  strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestGust.timeFrom) + " to " + convertToLocalTime(this.winds.highestGust.timeTo)
+  strongestWindsDirSpan.innerHTML = winds.highestWinds.direction
+  strongestWindsSpeedSpan.innerHTML = winds.highestWinds.speed;
 }
 
 function populateTaf() {
