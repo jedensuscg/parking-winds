@@ -8,6 +8,8 @@ let unitList;
 let JSONLoaded;
 rawMetarMode = false;
 console.log(unitToFetch)
+getUnitList();
+
 if (unitToFetch == null) {unitToFetch = 'kecg'}
 
 function getUnitList() {
@@ -21,6 +23,7 @@ function getUnitList() {
     })
     .then((data) => {
       unitList = data
+      console.log(unitList)
       resolve(unitList);
     })
     // When has failed, the `catch()` handler is called with
@@ -283,8 +286,7 @@ function convertToLocalTime (time) {
 }
   
 
-unitList = getUnitList();
-console.log(unitList)
+
 
 // Get the modal
 var modal = document.getElementById("updateModal");

@@ -252,6 +252,12 @@ p {
     position:static
 }
 
+.sidebar-unit-select {
+    width: 90%;
+    display: inline-block;
+    margin-left:25%;
+}
+
 .wind-data-div {
     box-sizing: border-box;
     width: 100%;
@@ -290,3 +296,37 @@ p {
     margin-left: auto;
     color: #8a2c00;
 }
+
+.bi {
+    color: #bcbcbc;
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: visible;
+    width: 120px;
+    background-color: black;
+    color: #ff0000;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    left: 120%;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+
+  }

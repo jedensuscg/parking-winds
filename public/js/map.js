@@ -58,7 +58,10 @@ let sidebar = L.control.sidebar({
 .addTo(map)
 
 if (vw > 1400) {
-  if (getLocalCookie("unit") == null) {sidebar.open('unit')} else {
+  if (getLocalCookie() == null) {
+      console.log("opening wind tab")
+      sidebar.open('unit')} 
+  else {
     sidebar.open("wind")
   }
   
