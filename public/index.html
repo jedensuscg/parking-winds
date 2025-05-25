@@ -25,11 +25,7 @@
 </head>
 <body>
 
-
-
-
-
-<!-- The Modal -->
+<!-- The Updates Modal -->
     <div id="updateModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
@@ -55,7 +51,7 @@
             <div class="leaflet-sidebar-tabs">
                 <!-- top aligned tabs -->
                 <ul role="tablist">
-                    <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a>
+                    <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a></li>
                     <li><a href="#wind" role="tab"><i class="bi bi-wind active tooltip"></i></a></li>
                     <li><a href="#taf" role="tab"><i class="bi bi-body-text"></i></a></li>
                 </ul>
@@ -71,7 +67,7 @@
             <div class="leaflet-sidebar-content">
                 <div class="leaflet-sidebar-pane" id="unit">
                     <h1 class="leaflet-sidebar-header">
-                        UNITS
+                        SELECT UNIT
                         <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
                     </h1>
 
@@ -83,7 +79,7 @@
                 </div>
                 <div class="leaflet-sidebar-pane" id="wind">
                     <h1 class="leaflet-sidebar-header">
-                        Wind Selection
+                        SELECT WIND TYPE
                         <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
                     </h1>
                         <div>                      
@@ -107,7 +103,7 @@
                             </div>
                             <div id="prevailing-wind-data-div" class="wind-data-div">
                                 <h3 class="wind-data-heading">PREVAILING WINDS (TAF)</h3>
-                                <p class="subheading-span">CLICK AGAIN TO VIEW</p>
+                                <p class="subheading-span">CLICK TO VIEW</p>
                                 <p class="wind-data-p">Direction: <span id="prevailing-wind-dir"></span></p>
                                 <p class="wind-data-p">Speed: <span id="prevailing-wind-speed"></span></p>
                                 <p class="view-wind-description-p">Determined from total time wind is in effect. derived from TAF lines.</p>
@@ -115,7 +111,7 @@
                             </div>
                             <div id="strongest-wind-data-div" class="wind-data-div">
                                 <h3 class="wind-data-heading">STRONGEST WINDS/GUSTS (TAF)</h3>
-                                <p class="subheading-span">CLICK AGAIN TO VIEW</p>
+                                <p class="subheading-span">CLICK TO VIEW</p>
                                 <p class="wind-data-p">Time of Strongest Winds: <span id="strongest-wind-time"></span></p>
                                 <p class="wind-data-p">Direction: <span id="strongest-wind-dir"></span></p>
                                 <p class="wind-data-p">Speed: <span id="strongest-wind-speed"></span></p>
@@ -126,14 +122,13 @@
                 </div>
                 <div class="leaflet-sidebar-pane" id="taf">
                     <h1 class="leaflet-sidebar-header">
-                        METAR and TAF
+                        VIEW METAR and TAF DATA
                         <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
                     </h1>
                         <button id="update-btn">CLICK FOR INFO ON THIS PAGE</button>
                         <div class="taf-text">
                             <h3 id="direct-link"></h3>
                             <div id="metarDiv">
-                                <p class="header">METAR</p>
                                 <p id="metarTextField">Error Getting Metar</p>
                                 <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
                             </div>
@@ -153,6 +148,20 @@
             </div>
     <div id="map">
         <div id="title" class="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
+                <div id="alert-box">
+            <div class="alert-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i></div>
+                <div class="alert-label">ALERTS</div>
+            <div class="alert-icon">
+                <i class="bi bi-thermometer-snow"></i></div>
+                <div class="alert-label">Freeze Possible</div>
+            <div class="alert-icon">
+                <i class="bi bi-wind"></i></div>
+                <div class="alert-label">Forcast Winds > 22kts</div>
+            <div class="alert-icon">
+                <i class="bi bi-wind high-wind"></i></div>
+                <div class="alert-label">Forcast Winds > 35kts</div>
+        </div>
         <div class="map-controls">
             <!-- <button id="help-btn" class="map-typ-btn">Help</button> -->
             <button id="hide-label-btn" class="map-typ-btn">Hide Labels</button>
