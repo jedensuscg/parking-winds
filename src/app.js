@@ -57,7 +57,7 @@ app.get("/taf/:unit", async (req, res) => {
           metarData = metar
           response["METAR"] = metarData;
 
-          logger.log({level: 'request', message: `Request from IP: ${ip}`, dataReceived: `${JSON.stringify(response)}`})
+          
           res.send(response)
         })
       })
@@ -73,7 +73,7 @@ app.get("/taf/:unit", async (req, res) => {
         response["airStation"] = unit;
         return response
       }).then((response) => {
-        console.log("getting metar");
+
         getMetar({ test: false, dataSource: _unit }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;

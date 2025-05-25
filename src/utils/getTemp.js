@@ -4,7 +4,7 @@ require("dotenv").config();
 dateAndTime = require("./dateAndTime");
 const queryString = require("query-string");
 const getTimelineURL = "https://api.tomorrow.io/v4/timelines";
-const apikey = process.env.CLIMACELL_KEY;
+const apikey = process.env.TOMORROW_IO_KEY;
 const logger = require('./logger')
 
 let location
@@ -23,6 +23,7 @@ async function getTemp(latLong) {
         .then((result) => {
           const data = result.data.data;
           lowestTemp = getMinTemp(data.timelines[0].intervals);
+          //console.log(getTimelineURL + "?" + getTimelineParameters)
           resolve(lowestTemp);
         })
         .catch((error) => {

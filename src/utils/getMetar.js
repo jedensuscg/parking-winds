@@ -13,8 +13,9 @@ const getMetar = async (options) => {
       axios
         .get(url)
         .then((response) => {
-          const metarData = buildMetarObject(response, options.location);
+          console.log("getting metar");
 
+          const metarData = buildMetarObject(response, options.location);
           resolve(metarData);
         })
         .catch((error) => {
@@ -48,6 +49,7 @@ const buildMetarObject = async (response, location) => {
 
 
     const baseData = result.response.data
+    console.log("Metar Data", baseData)
     //object relating to TAF times
     timeData = {
       issueTime: baseData.issue_time,
