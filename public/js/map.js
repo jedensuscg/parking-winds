@@ -140,6 +140,7 @@ let airplaneIconTiny = L.icon({
 // Initial Load
 drawMap();
 
+
 //TODO Add a logo to the map
 L.Control.Watermark = L.Control.extend({
   onAdd: function(map) {
@@ -294,6 +295,8 @@ function changeIconOnZoom(parkingSpots, windBarbs) {
     });
   }
 }
+
+
 
 //Determines if current unit in view.
 //TODO Change to see if any unit is in view.

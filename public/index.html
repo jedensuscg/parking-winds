@@ -148,19 +148,26 @@
             </div>
     <div id="map">
         <div id="title" class="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
-                <div id="alert-box">
+        <div id="alert-box">
             <div class="alert-icon">
-                <i class="bi bi-exclamation-triangle-fill"></i></div>
-                <div class="alert-label">ALERTS</div>
-            <div class="alert-icon">
-                <i class="bi bi-thermometer-snow"></i></div>
-                <div class="alert-label">Freeze Possible</div>
-            <div class="alert-icon">
-                <i class="bi bi-wind"></i></div>
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div class="alert-label hidden" id="alerts-present">ALERTS in next 24 hours</div>
+                <div class="alert-label" id="no-alerts">No Alerts in next 24 hours</div>
+        </div>
+            <div class="alert-icon hidden" id="temp-warning-alert">
+                <i class="bi bi-thermometer-snow"></i>
+                <div class="alert-label">Freeze Possible<br>
+                    <span id="lowest-temp"></span>@
+                    <span id="lowest-temp-time"></span></div>
+            </div>
+            <div class="alert-icon hidden" id="wind-caution-alert">
+                <i class="bi bi-wind"></i>
                 <div class="alert-label">Forcast Winds > 22kts</div>
-            <div class="alert-icon">
-                <i class="bi bi-wind high-wind"></i></div>
+            </div>
+            <div class="alert-icon hidden" id="wind-warning-alert">
+                <i class="bi bi-wind high-wind"></i>
                 <div class="alert-label">Forcast Winds > 35kts</div>
+            </div>
         </div>
         <div class="map-controls">
             <!-- <button id="help-btn" class="map-typ-btn">Help</button> -->

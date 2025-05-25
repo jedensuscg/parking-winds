@@ -6,6 +6,8 @@
 let unitToFetch = getLocalCookie("unit")
 let unitList;
 let JSONLoaded;
+let highWindWarning = false;
+let highWindCaution = false;
 rawMetarMode = false;
 console.log(unitToFetch)
 getUnitList();
@@ -138,6 +140,8 @@ function getData() {
       populateWindData();
       populateTaf();
       loadingModal.style.visibility = "hidden";
+      calculateWindAlert();
+      checkForAlerts();
       resolve(unitData);
     })
     // When has failed, the `catch()` handler is called with
@@ -148,6 +152,7 @@ function getData() {
       reject();
     });
   });
+
   return dataPromise;
 }
 
@@ -284,7 +289,55 @@ function convertToLocalTime (time) {
   localTime = localTime.replace(',', "")
   return localTime
 }
-  
+
+function calculateWindAlert(){
+  if ((winds.highestGust.speed || winds.highestWinds.speed ) > 22 && (winds.highestGust.speed || winds.highestWinds.speed ) < 35) {
+    highWindCaution = true;
+        console.log("high wind caution")
+  }
+  if ((winds.highestGust.speed || winds.highestWinds.speed ) > 34) {
+        highWindWarning = true;
+        console.log("high wind warning")
+      }
+}
+
+
+
+function checkForAlerts() {
+  console.log("checking for alerts")
+  console.log(highWindCaution)
+  console.log(highWindWarning)
+  console.log(lowestTemp)
+  if(highWindCaution) {
+    triggerAlert("wind-caution-alert")
+  }
+  if(highWindWarning) {
+    triggerAlert("wind-warning-alert")
+  }
+  if(lowestTemp.temp < 34) {
+    tempTimeSpan = document.getElementById("lowest-temp-time")
+    tempSpan = document.getElementById("lowest-temp")
+    tempSpan.innerHTML = lowestTemp.temp + "&deg"
+    tempTimeSpan.innerHTML = lowestTemp.time + "Z"
+    triggerAlert("temp-warning-alert")
+    
+  }
+}
+
+function triggerAlert(id) {
+  const alert = document.getElementById(id);
+  const statusAlert = document.getElementById("alerts-present");
+  const statusNoAlert = document.getElementById("no-alerts");
+  if (alert && alert.classList.contains('hidden')) {
+    alert.classList.remove('hidden');
+    if(statusAlert.classList.contains('hidden')) {
+       statusAlert.classList.remove('hidden');
+    }
+    if(!statusNoAlert.classList.contains('hidden')) {
+       statusNoAlert.classList.add('hidden');
+    }
+  }
+}
 
 
 
