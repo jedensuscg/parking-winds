@@ -13,6 +13,8 @@ const getMetar = async (options) => {
       axios
         .get(url)
         .then((response) => {
+          console.log("getting metar");
+
           const metarData = buildMetarObject(response, options.location);
           resolve(metarData);
         })
@@ -32,7 +34,7 @@ const buildMetarObject = async (response, location) => {
   let rawText;
 
   // Check if using online source or local xml test file.
-  const xmlToParse = (() => {
+  const xmlToParse = (() => { 
     if (!response.data) {
       return response;
     } else {
@@ -53,9 +55,12 @@ const buildMetarObject = async (response, location) => {
       validTimeFrom: baseData.valid_time_from,
       validTimeTo: baseData.valid_time_to,
     };
+
     rawMetarText = baseData.METAR.raw_text
-    windSpeed = baseData.METAR.wind_gust_kt
+    windSpeed = baseData.METAR.wind_speed_kt
     windDirection = baseData.METAR.wind_dir_degrees
+    stationID = baseData.METAR.station_id
+
     
     rawMetarData = createMetarArrays(baseData.METAR);
 
@@ -80,6 +85,8 @@ createMetarArrays = (forecast) => {
       windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
       windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
       windGustDir = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
+      stationID = forecast.station_id;
+      metarTemp = forecast.temp_c;
   
       metarForecast.push({
         observationTime,
@@ -87,6 +94,8 @@ createMetarArrays = (forecast) => {
         windSpeed: parseInt(windSpeed),
         windGust: parseInt(windGust),
         windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
+        stationID,
+        metarTemp: parseInt(metarTemp)
       });
     } catch (error) {
       logger.error(error.stack)

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Page</title>
+</head>
+<body>
+    
+    
+    <div id="update-content"></div>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const updateDiv = document.getElementById("update-content");
+
+        try {
+            // Add cache buster by appending current timestamp as query parameter
+            const url = "https://raw.githubusercontent.com/jedensuscg/parking-winds/refs/heads/main/update.txt?v=" + new Date().getTime();
+            
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Could not fetch update file");
+
+            const html = await response.text();
+            updateDiv.innerHTML = html;
+        } catch (err) {
+            updateDiv.innerHTML = "<p style='color: red;'>Failed to load update message.</p>";
+            console.error("Error loading update file:", err);
+        }
+    });
+</script>
+
+</body>
+</html>

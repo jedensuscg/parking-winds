@@ -39,7 +39,7 @@ app.get("/taf/:unit", async (req, res) => {
       return res.status(404).send("No Unit Found");
     }
   } catch (error) {
-    logger.error(err.stack)
+    logger.error(error.stack)
   }
 
   if (process.env.NODE_ENV == "development") {
@@ -56,8 +56,7 @@ app.get("/taf/:unit", async (req, res) => {
         getMetar({ test: true, dataSource: xmlTestMetarData }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;
-
-          logger.log({level: 'request', message: `Request from IP: ${ip}`, dataReceived: `${JSON.stringify(response)}`})
+          
           res.send(response)
         })
       })
@@ -73,10 +72,11 @@ app.get("/taf/:unit", async (req, res) => {
         response["airStation"] = unit;
         return response
       }).then((response) => {
-        console.log("getting metar");
-        getMetar({ test: false, dataSource: _unit }).then((metar) => {
+
+        getMetar({ test: false, dataSource: ICAOCode }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;
+
           
 
         }).then(() => {

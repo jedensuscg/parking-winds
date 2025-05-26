@@ -1,7 +1,5 @@
 mongoose = require('mongoose')
 
-
-
 const unitSchema = new mongoose.Schema({
   unitName: {
     type: String,
@@ -56,6 +54,8 @@ const unitSchema = new mongoose.Schema({
         spot: { type: Number, required: true },
         x: { type: Number, required: true},
         y: { type: Number, required: true },
+        lat: { type: Number, required: true},
+        long: { type: Number, required: true },
         baseHeading: { type: Number, required: true, min: [0, "Value can't be negative"], max: [360, "Value can not be more than 360"] },
       },
     ],
