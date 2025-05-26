@@ -130,6 +130,8 @@ function getData() {
       winds = unitData.winds;
       rawTaf = unitData.rawText;
       metarWinds = unitData.METAR.rawMetarData.metarForecast[0];
+
+      (unitData.METAR.rawMetarData)
       rawMetarText = unitData.METAR.rawMetarText
       lowestTemp = {
         time: data.lowestTemp[0],
@@ -191,6 +193,11 @@ function populateWindData() {
   strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestGust.timeFrom) + " to " + convertToLocalTime(this.winds.highestGust.timeTo)
   strongestWindsDirSpan.innerHTML = winds.highestWinds.direction
   strongestWindsSpeedSpan.innerHTML = winds.highestWinds.speed;
+
+  //TEMP DATA
+  currentTempSpan.innerHTML =  convertToF(metarWinds.metarTemp) + "&deg"
+  lowestTempSpan.innerHTML = lowestTemp.temp
+  lowestTempTimeSpan.innerHTML = lowestTemp.time
 }
 
 function populateTaf() {
@@ -305,9 +312,8 @@ function calculateWindAlert(){
 
 function checkForAlerts() {
   console.log("checking for alerts")
-  console.log(highWindCaution)
-  console.log(highWindWarning)
-  console.log(lowestTemp)
+  sidebarLowTempSpan = document.getElementById("lowest-temp-sidebar")
+  sidebarLowTempSpan.innerHTML = lowestTemp.temp + "&deg"
   if(highWindCaution) {
     triggerAlert("wind-caution-alert")
   }
@@ -315,6 +321,7 @@ function checkForAlerts() {
     triggerAlert("wind-warning-alert")
   }
   if(lowestTemp.temp < 34) {
+
     tempTimeSpan = document.getElementById("lowest-temp-time")
     tempSpan = document.getElementById("lowest-temp")
     tempSpan.innerHTML = lowestTemp.temp + "&deg"
@@ -366,6 +373,10 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
+}
+
+function convertToF(tempC){
+  return (tempC * 9/5) + 32;
 }
   
 function setLocalCookie(key, value) {

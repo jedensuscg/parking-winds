@@ -53,6 +53,7 @@
                 <ul role="tablist">
                     <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a></li>
                     <li><a href="#wind" role="tab"><i class="bi bi-wind active tooltip"></i></a></li>
+                    <li><a href="#temp" role="tab"><span id="lowest-temp-sidebar">?</span></a></li>
                     <li><a href="#taf" role="tab"><i class="bi bi-body-text"></i></a></li>
                 </ul>
     /
@@ -119,6 +120,14 @@
                             </div>
                         </div>
                     
+                </div>
+                <div class="leaflet-sidebar-pane" id="temp">
+                    <h1 class="leaflet-sidebar-header">
+                        TEMPERATURES
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
+                    Current Temperature: <span id="current-temp-span"></span><br>
+                    Lowest Temperature in 24 hours: <span id="lowest-temp-span"></span> at around <span id="lowest-temp-time"></span> 
                 </div>
                 <div class="leaflet-sidebar-pane" id="taf">
                     <h1 class="leaflet-sidebar-header">

@@ -56,7 +56,6 @@ app.get("/taf/:unit", async (req, res) => {
         getMetar({ test: true, dataSource: xmlTestMetarData }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;
-
           
           res.send(response)
         })
@@ -74,9 +73,10 @@ app.get("/taf/:unit", async (req, res) => {
         return response
       }).then((response) => {
 
-        getMetar({ test: false, dataSource: _unit }).then((metar) => {
+        getMetar({ test: false, dataSource: ICAOCode }).then((metar) => {
           metarData = metar
           response["METAR"] = metarData;
+
           
 
         }).then(() => {

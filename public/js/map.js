@@ -13,7 +13,7 @@ let metarGustToggleText = document.querySelector("#metar-toggle-span")
 let tafDiv = document.querySelector(".taf-grid-container");
 let tafTextField = document.querySelector("#tafTextField");
 let metarTextField = document.getElementById("metarTextField");
-let windsToUse, windBarbs, parkingSpots, windLabels
+let windsToUse, windBarbs, parkingSpots, windLabels, currentTemp
 let windBarbOptions = {
   strokeLength: 60,
   strokeWidth: 3,
@@ -37,6 +37,10 @@ let prevailingWindsSpeedSpan = document.querySelector("#prevailing-wind-speed")
 let strongestWindsTimeSpan = document.querySelector("#strongest-wind-time")
 let strongestWindsDirSpan = document.querySelector("#strongest-wind-dir")
 let strongestWindsSpeedSpan = document.querySelector("#strongest-wind-speed")
+let currentTempSpan = document.querySelector("#current-temp-span")
+let lowestTempSpan = document.querySelector("#lowest-temp-span")
+let lowestTempTimeSpan = document.querySelector("#lowest-temp-time")
+
 
 // Create map with initial view. Currently Ecity.
 let map = L.map('map').setView([36.262862536771785, -76.17342389086477], 19);
@@ -171,8 +175,11 @@ function drawMap() {
   setLocalCookie("unit", unitToFetch)
   getData().then(() => {
     map.setView([airStation.lat, airStation.long], 18);
-    windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
+    windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection, temp: metarWinds.metarTemp};
 
+    console.log(windsToUse.temp)
+
+    
     
     OSM.addTo(map);
     // Add parking spot markers to map
@@ -425,7 +432,7 @@ function handleWindSelectionClick(wind, windDiv, windText) {
   windLabels = createWindLabelLayer().addTo(map);
   changeIconOnZoom(parkingSpots, windBarbs);
   const elements = document.querySelectorAll(".wind-data-col-active");
-  console.log(elements)
+
 
   for (let i = 0; i < elements.length; i++) {
     elements[i].classList.remove("wind-data-col-active");

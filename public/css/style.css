@@ -379,3 +379,7 @@ p {
     .hidden {
         display: none;
     }
+
+    #lowest-temp-sidebar {
+        color: #bcbcbc;
+    }
