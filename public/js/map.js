@@ -145,14 +145,12 @@ let airplaneIconTiny = L.icon({
 drawMap();
 
 
-//TODO Add a logo to the map
+
 L.Control.Watermark = L.Control.extend({
   onAdd: function(map) {
       var img = L.DomUtil.create('img');
-
-      img.src = '../../docs/images/logo.png';
-      img.style.width = '200px';
-
+      img.src = 'public/img/parking-winds-logov1.png';
+      img.style.width = '75px';
       return img;
   },
 
