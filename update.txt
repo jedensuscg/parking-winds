@@ -9,6 +9,8 @@
 
         <h5>Change Log</h5>
         <li>
+            Added Alerts to right side of screen. Current alerts are for Freeze Warning (<34 degrees F), high wind CAUTION (>22kts) and high wind                 WARNING(>34kts)
+            Added Lowest Temperature to the sidebar, plus when opening the sidebar shows current METAR temp and the time the lowest temp starts.
             Moved most of the information to a sidebar to reduce clutter on the main page
             Wind Icon: Buttons to select wind data.
             Text Icon: METAR and TAF data.
