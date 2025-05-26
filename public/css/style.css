@@ -1,5 +1,6 @@
 html, body, #map {
     height: 100%;
+
     width: 100vw;
     overflow-x: hidden;
     margin: auto;
@@ -19,6 +20,18 @@ html, body, #map {
 
 .loading-text {
     font-size: large;
+}
+.small-banner{
+    width: 400px;
+    margin-left: 20%;
+    background-color: #fc3838;
+}
+#beta-notice {
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+#beta-link {
+    text-align: center;
 }
 
 .header {
