@@ -20,13 +20,14 @@
             Added some basic mobile responsiveness. The sidebar will start collapsed on smaller screens
         </li>
         <li>
-            BUG FIX: Fixed alerts not being removed when switching units
+            <b>BUG FIX:</b> Fixed alerts not being removed when switching units
         </li>
         <li>
-            KNOWN ISSUES: The strongest winds field not showing gusts, even if gusts and are unable to be selected. However High Wind Alerts ARE 
+            <b>KNOWN ISSUES:</b> The strongest winds field not showing gusts, even if gusts and are unable to be selected. However High Wind Alerts ARE 
             being shown for gusts speeds. If a wind of >22 kts alert is shown, but strongest winds show <22kts, it is probably the wind gusts causing 
             the alert. A big is being implemented when a UI update for selecting winds is finished.
-            <b>WORKAROUND:</b> The METAR and TAF data is always the most accurate information, see the decoded METAR/TAF lines for details.
+            <br>
+            --<b>WORKAROUND:</b> The METAR and TAF data is always the most accurate information, see the decoded METAR/TAF lines for details.
         </li>
 
     <li>
