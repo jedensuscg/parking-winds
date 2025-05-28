@@ -311,6 +311,7 @@ function calculateWindAlert(){
 
 
 function checkForAlerts() {
+
   console.log("checking for alerts")
   sidebarLowTempSpan = document.getElementById("lowest-temp-sidebar")
   sidebarLowTempSpan.innerHTML = lowestTemp.temp + "&deg"
@@ -343,6 +344,20 @@ function triggerAlert(id) {
     if(!statusNoAlert.classList.contains('hidden')) {
        statusNoAlert.classList.add('hidden');
     }
+  }
+}
+
+function clearAlerts(id) {
+  const alert = document.getElementById(id);
+  const statusAlert = document.getElementById("alerts-present");
+  const statusNoAlert = document.getElementById("no-alerts");
+  if (!alert.classList.contains('hidden')) {
+  }
+  if (!statusAlert.classList.contains('hidden')) {
+    statusAlert.classList.add('hidden')
+  }
+  if (statusNoAlert.classList.contains('hidden')) {
+    statusNoAlert.classList.remove('hidden')
   }
 }
 
