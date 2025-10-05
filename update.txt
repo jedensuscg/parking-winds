@@ -3,6 +3,8 @@
     on the original page is present here, until Phase 2 starts, which is a overhaul of the backend server to add more features.
     </h4>
     <p>
+    <h1 style="color: red">SITE CURRENTLY DOWN</h1>
+    <h2>Due to a change in aviationweather.gov's API, data is not being retrieved from the site. Until I have time to change the code to account for the new API the website is not functional</h2>
     All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/data/api/">Data API</a>. Temperature information is obtained
     from <a href="https://www.tomorrow.io/">Tomorrow.io API v4 </a> with limited usage plan of 500 requests per day.
     <ul>
