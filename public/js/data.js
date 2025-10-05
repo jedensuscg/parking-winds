@@ -32,7 +32,7 @@ function getUnitList() {
     .catch((error) => {
       console.log(error)
       loadingModal.style.visibility = "visible";
-      loadingModal.innerText = "Error fetching data. Please refresh and try again. If problem persists, there may be an issue the sereer. \n Error: " + error;
+      loadingModal.innerText = "!!!!!OCT 2025 UDPATE: Due to changes in aviationweather.gov's API, backend code changes need to be made before data can be retrieved. Fix is in progress: \n Error fetching data. Please refresh and try again. If problem persists, there may be an issue the server. \n Error: " + error;
       reject();
     });
   });
@@ -190,9 +190,17 @@ function populateWindData() {
   prevailingWindsSpeedSpan.innerHTML = winds.prevailingWinds.speed;
   
   //STRONGEST
-  strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestGust.timeFrom) + " to " + convertToLocalTime(this.winds.highestGust.timeTo)
-  strongestWindsDirSpan.innerHTML = winds.highestWinds.direction
-  strongestWindsSpeedSpan.innerHTML = winds.highestWinds.speed;
+  
+  if (winds.highestGust.speed > winds.highestWinds.speed) {
+    strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestGust.timeFrom) + " to " + convertToLocalTime(this.winds.highestGust.timeTo)
+    strongestWindsDirSpan.innerHTML = winds.highestGust.direction
+    strongestWindsSpeedSpan.innerHTML = winds.highestGust.speed;
+  } else {
+    strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestWinds.timeFrom) + " to " + convertToLocalTime(this.winds.highestWinds.timeTo)
+    strongestWindsDirSpan.innerHTML = winds.highestWinds.direction
+    strongestWindsSpeedSpan.innerHTML = winds.highestWinds.speed;
+  }
+
 
   //TEMP DATA
   currentTempSpan.innerHTML =  convertToF(metarWinds.metarTemp) + "&deg"
