@@ -13,9 +13,8 @@ const getMetar = async (options) => {
       axios
         .get(url)
         .then((response) => {
-          
-          const metarData = buildMetarObject(response, options.location);
 
+          const metarData = buildMetarObject(response, options.location);
 
           resolve(metarData);
           logger.info("metar data: ", metarData);
@@ -69,6 +68,7 @@ const buildMetarObject = async (response, location) => {
 
 // Create an array for each forecast period.
 createMetarArrays = (forecast) => {
+
   let metarForecast = [];
   
     try {
@@ -77,22 +77,19 @@ createMetarArrays = (forecast) => {
       windSpeed = forecast.wspd ? forecast.wspd : 0;
       windGust = forecast.wgst ? forecast.wgst : 0;
       windGustDir = forecast.wdir ? (forecast.wdir == '0'? 'Variable': forecast.wdir) : 0;
-  
+
       metarForecast.push({
         observationTime,
         windDirection: windDirection == 'Variable'? 'Variable': parseInt(windDirection),
         windSpeed: parseInt(windSpeed),
         windGust: parseInt(windGust),
         windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
-        stationID,
-        metarTemp: parseInt(metarTemp)
+        metarTemp: parseInt(forecast.temp)
       });
+      console.log("metar forcast ",metarForecast)
     } catch (error) {
       logger.error(error.stack)
     }
-
-
-
   return {
     metarForecast,
   };

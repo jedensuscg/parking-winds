@@ -25,7 +25,7 @@ async function getTemp(latLong) {
           const data = result.data.data;
           console.log("tempt data ",data.timelines[0].intervals)
           lowestTemp = getMinTemp(data.timelines[0].intervals);
-          //console.log(getTimelineURL + "?" + getTimelineParameters)
+
           resolve(lowestTemp);
         })
         .catch((error) => {

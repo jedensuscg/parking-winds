@@ -104,7 +104,7 @@ app.get("/taf/:unit", async (req, res) => {
             message: `Request from IP: ${ip}`,
             dataReceived: `${JSON.stringify(response)}`
           });
-          console.log(response)
+
           res.send(response);
         });
       })
