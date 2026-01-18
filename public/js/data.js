@@ -16,7 +16,7 @@ if (unitToFetch == null) {unitToFetch = 'kecg'}
 
 function getUnitList() {
   var unitPromise = new Promise((resolve, reject) => {
-    fetch(`./unitsICAO`)
+    fetch('./unitsICAO')
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`);
@@ -32,7 +32,7 @@ function getUnitList() {
     .catch((error) => {
       console.log(error)
       loadingModal.style.visibility = "visible";
-      loadingModal.innerText = "!!!!!OCT 2025 UDPATE: Due to changes in aviationweather.gov's API, backend code changes need to be made before data can be retrieved. Fix is in progress: \n Error fetching data. Please refresh and try again. If problem persists, there may be an issue the server. \n Error: " + error;
+      loadingModal.innerText = "LOADING. \n If this persists there might be an error fetching data. Please refresh and try again. If problem persists, there may be an issue the server. \n Error: " + error;
       reject();
     });
   });
@@ -134,8 +134,8 @@ function getData() {
       (unitData.METAR.rawMetarData)
       rawMetarText = unitData.METAR.rawMetarText
       lowestTemp = {
-        time: data.lowestTemp[0],
-        temp: Math.floor(unitData.lowestTemp[1]),
+        time: unitData.tempData[0],
+        temp: Math.floor(unitData.tempData[1]),
       };
 
       populateMetar(swapMetarButton);
