@@ -61,8 +61,8 @@ const buildTafObject = async (response, location) => {
   let rawTafText;
 
   // ! Temp solution to not burn through API limits
-  //lowestTemp = await getTemp(location)
-  lowestTemp = "15"
+  tempData = await getTemp(location)
+  //lowestTemp = "15"
 
   // Check if using online source or local test file.
   const dataSource = (() => {
@@ -89,7 +89,7 @@ const buildTafObject = async (response, location) => {
     rawTafText,
     winds,
     rawTafForcasts,
-    lowestTemp,
+    tempData,
   };
 };
 

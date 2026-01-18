@@ -26,10 +26,7 @@
 <body>
 
 
-
-
-
-<!-- The Modal -->
+<!-- The Updates Modal -->
     <div id="updateModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
@@ -55,43 +52,106 @@
             <div class="leaflet-sidebar-tabs">
                 <!-- top aligned tabs -->
                 <ul role="tablist">
-                    <li><a href="#wind" role="tab"><i class="bi bi-wind active tooltip"></i></a></li>
-                    <li><a href="#taf" role="tab"><i class="bi bi-body-text"></i></a></li>
                     <li><a href="#unit" role="tab"><i class="bi bi-airplane-fill"></i></a></li>
+                    <li><a href="#wind" role="tab"><i class="bi bi-wind active tooltip"></i></a></li>
+                    <li><a href="#temp" role="tab"><span id="lowest-temp-sidebar">?</span></a></li>
+                    <li><a href="#taf" role="tab"><i class="bi bi-body-text"></i></a></li>
                 </ul>
-    
+    /
                 <!-- bottom aligned tabs -->
                 <ul role="tablist">
-                    <li><a href="https://github.com/nickpeihl/leaflet-sidebar-v2"><i class="fa fa-github"></i></a></li>
+                    <li><a href="https://github.com/jedensuscg/parking-winds"><i class="bi bi-github"></i></a></li>
+                    <li><a href="https://github.com/nickpeihl/leaflet-sidebar-v2"><i class="bi bi-map"></i></a></li>
                 </ul>
+
             </div>
     
             <!-- panel content -->
             <div class="leaflet-sidebar-content">
-                <div class="leaflet-sidebar-pane" id="wind">
+                <div class="leaflet-sidebar-pane" id="unit">
                     <h1 class="leaflet-sidebar-header">
-                        Wind Selection
+                        SELECT UNIT
                         <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
                     </h1>
 
-                        <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
-                        <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
-                        <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
-                        <button id="strongest-wind-btn" class="wind-change-button">Strongest Winds</button>
+                    <div class="sidebar-unit-select">
+                        <p class="header">SELECT UNIT</p>
+                        <button class="unit-button" id="kecgButton">KECG</button><br>
+                        <button class="unit-button" id="padqButton">PADQ</button><br>
+                        <br>
+                        <p style="font-size: 14px; margin-left: -50px; width: 80%;">Miss the legacy version? <a href="https://parking-winds.jamesedens.me/legacy/">Click here to use it</a></p>
+                        <p style="font-size: 14px; margin-left: -50px; width: 80%;">Welcome to Parking Winds 2.0. Here is a brief HOW TO <br>Use the Icons on the left to choose
+                        what you want to view.<br>
+                        <ul style="font-size: 14px; margin-left: -50px; width: 80%;">
+                            <li>Wind Icon: Allows selection of what winds will be display on the wind barbs. Clicking 'Current Winds' cycles between METAR winds and METAR gusts</li>
+                            <li>The temperature icon shows the lowest forcasted temperature for the next 24 hours. Click it to see more details</li>
+                            <li>The last block allows you to view the rar METAR text as well as the decoded TAF data that is used to generate wind barbs</li>
+                        </ul></p>
+                        <p style="font-size: 14px; margin-left: -50px; width: 80%;">
+                            For a refresher on reading Wind Barbs click <a href="https://www.weather.gov/hfo/windbarbinfo">HERE</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="leaflet-sidebar-pane" id="wind">
+                    <h1 class="leaflet-sidebar-header">
+                        SELECT WIND TYPE
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
+                        <div>                      
+                            <!-- <button id="current-winds-btn" class="wind-change-button">Current Winds (METAR)</button>
+                            <button id="current-gust-btn" class="wind-change-button">Current Gusts (METAR)</button>
+                            <button id="prevailing-wind-btn" class="wind-change-button">Prevailing Winds</button>
+                            <button id="strongest-wind-btn" class="wind-change-button">Strongest Winds</button> -->
+                            Click a wind type to view it on the map. Clicking the METAR winds block toggles between METAR winds and METAR gusts.
+                        </div>
 
-                        <p>This tab is a placeholder and will contain the same information seen in the wind panel on version 1.0</p>
+
+                        <div id="wind-details-div">
+                            <p id="view-wind-text-p">VIEWING <span id="view-wind-text" class="view-wind-text-span">METAR WINDS</span></p>
+                            <div id="metar-wind-data-div" class="wind-data-div wind-data-col-active">
+                                <h3 class="wind-data-heading">CURRENT WINDS (METAR)</h3>
+                                <p id="metar-toggle-span" class="subheading-span">CLICK AGAIN TO VIEW GUSTS</p>
+                                <p class="wind-data-p">Metar Time: <span id="current-wind-time"></span></p>
+                                <p class="wind-data-p">Direction: <span id="current-wind-dir"></span></p>
+                                <p class="wind-data-p">Speed: <span id="current-wind-speed"></span></p>
+                                <p class="wind-data-p">Gust: <span id="current-wind-gust"></span></p>
+                            </div>
+                            <div id="prevailing-wind-data-div" class="wind-data-div">
+                                <h3 class="wind-data-heading">PREVAILING WINDS (TAF)</h3>
+                                <p class="subheading-span">CLICK TO VIEW</p>
+                                <p class="wind-data-p">Direction: <span id="prevailing-wind-dir"></span></p>
+                                <p class="wind-data-p">Speed: <span id="prevailing-wind-speed"></span></p>
+                                <p class="view-wind-description-p">Determined from total time wind is in effect. derived from TAF lines.</p>
+
+                            </div>
+                            <div id="strongest-wind-data-div" class="wind-data-div">
+                                <h3 class="wind-data-heading">STRONGEST WINDS/GUSTS (TAF)</h3>
+                                <p class="subheading-span">CLICK TO VIEW</p>
+                                <p class="wind-data-p">Time of Strongest Winds: <span id="strongest-wind-time"></span></p>
+                                <p class="wind-data-p">Direction: <span id="strongest-wind-dir"></span></p>
+                                <p class="wind-data-p">Speed: <span id="strongest-wind-speed"></span></p>
+                                <p class="view-wind-description-p">Determined by TAF line showing highest possible gusts.</p>
+                            </div>
+                        </div>
                     
+                </div>
+                <div class="leaflet-sidebar-pane" id="temp">
+                    <h1 class="leaflet-sidebar-header">
+                        TEMPERATURES
+                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
+                    </h1>
+                    Current Temperature: <span id="current-temp-span"></span><br>
+                    Lowest Temperature in 24 hours: <span id="lowest-temp-span"></span> at around <span id="lowest-temp-time"></span> 
                 </div>
                 <div class="leaflet-sidebar-pane" id="taf">
                     <h1 class="leaflet-sidebar-header">
-                        METAR and TAF
+                        VIEW METAR and TAF DATA
                         <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
                     </h1>
                         <button id="update-btn">CLICK FOR INFO ON THIS PAGE</button>
                         <div class="taf-text">
                             <h3 id="direct-link"></h3>
                             <div id="metarDiv">
-                                <p class="header">METAR</p>
                                 <p id="metarTextField">Error Getting Metar</p>
                                 <button id="swapMetarButton" class="toggleButton">View Decoded Metar</button>
                             </div>
@@ -104,21 +164,34 @@
                             </div>          
                         </div>
                 </div>
-              <div class="leaflet-sidebar-pane" id="unit">
-                    <h1 class="leaflet-sidebar-header">
-                        UNITS
-                        <span class="leaflet-sidebar-close"><i class="bi bi-caret-left-fill"></i></span>
-                    </h1>
 
-                        <p class="header">SELECT UNIT</p>
-                        <button class="unit-button" id="kecgButton">KECG</button><br>
-                        <button class="unit-button" id="padqButton">PADQ</button><br>
-                </div>
+                
             </div>
         </div>
             </div>
     <div id="map">
-        <div id="title" class="title">PARKING WINDS VISUALIZER VERSION 2 (Currently in production and missing features)</div>
+        <div id="title" class="title">PARKING WINDS VISUALIZER 2.0</div>
+        <div id="alert-box">
+            <div class="alert-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div class="alert-label hidden" id="alerts-present">ALERTS in next 24 hours</div>
+                <div class="alert-label" id="no-alerts">No Alerts in next 24 hours</div>
+        </div>
+            <div class="alert-icon hidden" id="temp-warning-alert">
+                <i class="bi bi-thermometer-snow"></i>
+                <div class="alert-label">Freeze Possible<br>
+                    <span id="lowest-temp"></span>@
+                    <span id="lowest-temp-time"></span></div>
+            </div>
+            <div class="alert-icon hidden" id="wind-caution-alert">
+                <i class="bi bi-wind"></i>
+                <div class="alert-label">Forcast Winds > 22kts</div>
+            </div>
+            <div class="alert-icon hidden" id="wind-warning-alert">
+                <i class="bi bi-wind high-wind"></i>
+                <div class="alert-label">Forcast Winds > 35kts</div>
+            </div>
+        </div>
         <div class="map-controls">
             <!-- <button id="help-btn" class="map-typ-btn">Help</button> -->
             <button id="hide-label-btn" class="map-typ-btn">Hide Labels</button>
@@ -127,12 +200,15 @@
         <div class="loading-modal">
             <div class="loadingText">
                 <p class="loading-text">Loading Data...</p>
+                <p class="loading-text">Please Wait</p>
+                <p class="loading-text" style="color:rgb(173, 171, 0)">!!!!!OCT 2025 Due to changes in aviationweather.gov's API, backend code changes need to be made before data can be retrieved. Fix is in progress:</p>
             </div>
         </div>
         
 
 
     </div>
+
 
 
         

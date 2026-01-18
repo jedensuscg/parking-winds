@@ -1,17 +1,19 @@
 const L = window.leaflet
 const swapMetarButton = document.querySelector("#swapMetarButton");
 const loadingModal = document.querySelector(".loading-modal");
-const currentWindsBtn = document.querySelector("#current-winds-btn");
-const currentGustBtn = document.querySelector("#current-gust-btn");
-const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
-const highestWindbtn = document.querySelector("#strongest-wind-btn");
+// const currentWindsBtn = document.querySelector("#current-winds-btn");
+// const currentGustBtn = document.querySelector("#current-gust-btn");
+// const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
+// const highestWindbtn = document.querySelector("#strongest-wind-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
 
+let metarGustToggle = true;
 
+let metarGustToggleText = document.querySelector("#metar-toggle-span")
 let tafDiv = document.querySelector(".taf-grid-container");
 let tafTextField = document.querySelector("#tafTextField");
 let metarTextField = document.getElementById("metarTextField");
-let windsToUse, windBarbs, parkingSpots, windLabels
+let windsToUse, windBarbs, parkingSpots, windLabels, currentTemp
 let windBarbOptions = {
   strokeLength: 60,
   strokeWidth: 3,
@@ -19,6 +21,25 @@ let windBarbOptions = {
   pointRadius: 5,
   barbSpacing: 8,
 }
+
+//Wind Data divs and spans
+const windDetails = document.querySelector("#wind-details-div")
+const metarWindDataDiv = document.querySelector("#metar-wind-data-div")
+const prevailingWindDataDiv = document.querySelector("#prevailing-wind-data-div")
+const strongestWindDataDiv = document.querySelector("#strongest-wind-data-div")
+
+let currentTimeSpan = document.querySelector("#current-wind-time")
+let currentWindDirSpan = document.querySelector("#current-wind-dir")
+let currentWindSpeedSpan = document.querySelector("#current-wind-speed")
+let currentWindGustSpan = document.querySelector("#current-wind-gust")
+let prevailingWindsDirSpan = document.querySelector("#prevailing-wind-dir")
+let prevailingWindsSpeedSpan = document.querySelector("#prevailing-wind-speed")
+let strongestWindsTimeSpan = document.querySelector("#strongest-wind-time")
+let strongestWindsDirSpan = document.querySelector("#strongest-wind-dir")
+let strongestWindsSpeedSpan = document.querySelector("#strongest-wind-speed")
+let currentTempSpan = document.querySelector("#current-temp-span")
+let lowestTempSpan = document.querySelector("#lowest-temp-span")
+let lowestTempTimeSpan = document.querySelector("#lowest-temp-time")
 
 
 // Create map with initial view. Currently Ecity.
@@ -41,12 +62,14 @@ let sidebar = L.control.sidebar({
 .addTo(map)
 
 if (vw > 1400) {
-  sidebar.open('wind')
-}
-
-
-
-
+  if (getLocalCookie() == null) {
+      console.log("opening wind tab")
+      sidebar.open('unit')} 
+  else {
+    sidebar.open("wind")
+  }
+  
+} 
 
 window.addEventListener('DOMContentLoaded', () => {
   //TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
@@ -121,14 +144,13 @@ let airplaneIconTiny = L.icon({
 // Initial Load
 drawMap();
 
-//TODO Add a logo to the map
+
+
 L.Control.Watermark = L.Control.extend({
   onAdd: function(map) {
       var img = L.DomUtil.create('img');
-
-      img.src = '../../docs/images/logo.png';
-      img.style.width = '200px';
-
+      img.src = 'public/img/parking-winds-logov1.png';
+      img.style.width = '75px';
       return img;
   },
 
@@ -148,10 +170,14 @@ L.control.watermark({ position: 'bottomleft' }).addTo(map);
 addHandlersAndListeners()
 // Fetch data from server and draw the map
 function drawMap() {
+  setLocalCookie("unit", unitToFetch)
   getData().then(() => {
     map.setView([airStation.lat, airStation.long], 18);
-    windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
+    windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection, temp: metarWinds.metarTemp};
 
+    console.log(windsToUse.temp)
+
+    
     
     OSM.addTo(map);
     // Add parking spot markers to map
@@ -188,7 +214,7 @@ function drawMap() {
 }).catch((e) => {
   console.log(e);
   loadingModal.style.visibility = "visible";
-  loadingModal.innerText = `Error Loading Map. Please refresh and try again. \n Error: ${e}`;
+  loadingModal.innerText = `!!!!!OCT 2025 UDPATE: Due to changes in aviationweather.gov's API, backend code changes need to be made before data can be retrieved. Fix is in progress: \n Error Loading Map. Please refresh and try again. \n Error: ${e}`;
 });
 }
 //Add markers for current airstation to map
@@ -275,6 +301,8 @@ function changeIconOnZoom(parkingSpots, windBarbs) {
   }
 }
 
+
+
 //Determines if current unit in view.
 //TODO Change to see if any unit is in view.
 function checkForUnitInView() {
@@ -308,7 +336,8 @@ for (var option in options) {
 }
 
 function setWindToUse (winds) {
-  const windToUse = winds.highestWinds;
+  let windToUse
+  winds.windGust > winds.highestWinds ? windToUse = winds.windGust : winds.highestWinds;;
   return windToUse;
 
 }
@@ -360,43 +389,56 @@ function addHandlersAndListeners() {
     populateMetar(swapMetarButton);
   });
 
-  currentWindsBtn.addEventListener('click', function() {
-    setWindToUse =  windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection};
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
+  // currentWindsBtn.addEventListener('click', () => handleWindSelectionClick({speed: metarWinds.windSpeed, direction: metarWinds.windDirection}, metarWindDataDiv, "METAR WINDS"))
+  // currentGustBtn.addEventListener('click', () => handleWindSelectionClick({speed: metarWinds.windGust, direction: metarWinds.windGustDir}, metarWindDataDiv, "METAR GUSTS"))
+  // prevailingWindBtn.addEventListener('click', () => handleWindSelectionClick(winds.prevailingWinds, prevailingWindDataDiv,"PREVAILING WINDS"))
+  // highestWindbtn.addEventListener('click', () => handleWindSelectionClick(winds.highestWinds, strongestWindDataDiv,  "STRONGEST WINDS"))
 
-  currentGustBtn.addEventListener('click', function() {
-    windsToUse = {speed: metarWinds.windGust, direction: metarWinds.windGustDir};
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
 
-  prevailingWindBtn.addEventListener('click', function() {
-    windsToUse = winds.prevailingWinds;
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
-
-  highestWindbtn.addEventListener('click', function() {
-    windsToUse = winds.highestWinds;
-    map.removeLayer(windBarbs).removeLayer(windLabels);
-    windBarbs = createWindBarbLayer().addTo(map);
-    windLabels = createWindLabelLayer().addTo(map);
-    changeIconOnZoom(parkingSpots, windBarbs);
-  });
+  metarWindDataDiv.addEventListener('click', () => handleWindSelectionClick(metarWinds, metarWindDataDiv, "METAR WINDS"))
+  prevailingWindDataDiv.addEventListener('click', () => handleWindSelectionClick(winds.prevailingWinds, prevailingWindDataDiv,"PREVAILING WINDS"))
+  strongestWindDataDiv.addEventListener('click', () => handleWindSelectionClick(winds.highestWinds, strongestWindDataDiv,  "STRONGEST WINDS"))
+  
 
   hideLabelBtn.addEventListener('click', function() {
     toggleLabels();
   });
 
+  
 
+}
+
+function handleWindSelectionClick(wind, windDiv, windText) {
+  if(windDiv == metarWindDataDiv) {
+    if (!metarGustToggle) {
+      windsToUse = {speed: wind.windSpeed, direction: wind.windDirection}
+      metarGustToggle = true
+      windText = "METAR WINDS"
+      metarGustToggleText.innerHTML = "CLICK AGAIN TO VIEW GUSTS"
+    } else {
+      windsToUse = {speed: wind.windGust, direction: wind.windGustDir}
+      metarGustToggle = false
+      windText = "METAR GUSTS"
+      metarGustToggleText.innerHTML= "CLICK AGAIN TO VIEW WINDS"
+
+    }
+  } else {
+    windsToUse = wind
+  }
+
+  map.removeLayer(windBarbs).removeLayer(windLabels);
+  windBarbs = createWindBarbLayer().addTo(map);
+  windLabels = createWindLabelLayer().addTo(map);
+  changeIconOnZoom(parkingSpots, windBarbs);
+  const elements = document.querySelectorAll(".wind-data-col-active");
+
+
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].classList.remove("wind-data-col-active");
+  }
+
+  windDiv.classList.add("wind-data-col-active")
+  document.querySelector("#view-wind-text").innerHTML = windText
 }
 // #endregion
 

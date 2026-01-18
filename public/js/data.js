@@ -1,8 +1,43 @@
 
 
-var unitToFetch = "kecg";
-var JSONLoaded;
+//Retrieve unit ICAO list
+
+
+let unitToFetch = getLocalCookie("unit")
+let unitList;
+let JSONLoaded;
+let highWindWarning = false;
+let highWindCaution = false;
 rawMetarMode = false;
+console.log(unitToFetch)
+getUnitList();
+
+if (unitToFetch == null) {unitToFetch = 'kecg'}
+
+function getUnitList() {
+  var unitPromise = new Promise((resolve, reject) => {
+    fetch(`./unitsICAO`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      unitList = data
+      console.log(unitList)
+      resolve(unitList);
+    })
+    // When has failed, the `catch()` handler is called with
+    .catch((error) => {
+      console.log(error)
+      loadingModal.style.visibility = "visible";
+      loadingModal.innerText = "!!!!!OCT 2025 UDPATE: Due to changes in aviationweather.gov's API, backend code changes need to be made before data can be retrieved. Fix is in progress: \n Error fetching data. Please refresh and try again. If problem persists, there may be an issue the server. \n Error: " + error;
+      reject();
+    });
+  });
+  return unitPromise;
+}
 
 let unitData = {
     hideDetails: false,
@@ -69,7 +104,7 @@ function getData() {
   console.log("Getting Data")
   var dataPromise = new Promise((resolve, reject) => {
     loadingModal.style.visibility = "visible";
-    fetch(`./taf/${this.unitToFetch}`)
+    fetch(`./taf/${unitToFetch}`)
     .then((response) => {
 
       JSONLoaded = false;
@@ -90,20 +125,25 @@ function getData() {
         lat: unitData.airStation.lat,
         long: unitData.airStation.long,
       }
-      //console.log(unitData)
+
       decodeTaf = unitData.rawTafForcasts;
       winds = unitData.winds;
       rawTaf = unitData.rawTafText;
       metarWinds = unitData.METAR.rawMetarData.metarForecast[0];
+
+      (unitData.METAR.rawMetarData)
       rawMetarText = unitData.METAR.rawMetarText
       lowestTemp = {
         time: data.lowestTemp[0],
         temp: Math.floor(unitData.lowestTemp[1]),
       };
-      console.log("decode taf ", unitData.winds)
+
       populateMetar(swapMetarButton);
+      populateWindData();
       populateTaf();
       loadingModal.style.visibility = "hidden";
+      calculateWindAlert();
+      checkForAlerts();
       resolve(unitData);
     })
     // When has failed, the `catch()` handler is called with
@@ -114,6 +154,7 @@ function getData() {
       reject();
     });
   });
+
   return dataPromise;
 }
 
@@ -136,13 +177,42 @@ function populateMetar(swapMetarButton) {
   }
 }
 
+function populateWindData() {
+  //METAR
+  currentTimeSpan.innerHTML = convertToLocalTime(metarWinds.observationTime);
+  currentWindDirSpan.innerHTML = metarWinds.windDirection;
+  currentWindSpeedSpan.innerHTML = metarWinds.windSpeed;
+  metarWinds.windGust > 0 ? currentWindGustSpan.innerHTML = metarWinds.windGust : currentWindGustSpan.innerHTML = "No Gusts";
+
+  //PREVAILING
+  console.log(winds.prevailingWinds.direction)
+  prevailingWindsDirSpan.innerHTML = winds.prevailingWinds.direction;
+  prevailingWindsSpeedSpan.innerHTML = winds.prevailingWinds.speed;
+  
+  //STRONGEST
+  
+  if (winds.highestGust.speed > winds.highestWinds.speed) {
+    strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestGust.timeFrom) + " to " + convertToLocalTime(this.winds.highestGust.timeTo)
+    strongestWindsDirSpan.innerHTML = winds.highestGust.direction
+    strongestWindsSpeedSpan.innerHTML = winds.highestGust.speed;
+  } else {
+    strongestWindsTimeSpan.innerHTML = convertToLocalTime(this.winds.highestWinds.timeFrom) + " to " + convertToLocalTime(this.winds.highestWinds.timeTo)
+    strongestWindsDirSpan.innerHTML = winds.highestWinds.direction
+    strongestWindsSpeedSpan.innerHTML = winds.highestWinds.speed;
+  }
+
+
+  //TEMP DATA
+  currentTempSpan.innerHTML =  convertToF(metarWinds.metarTemp) + "&deg"
+  lowestTempSpan.innerHTML = lowestTemp.temp
+  lowestTempTimeSpan.innerHTML = lowestTemp.time
+}
+
 function populateTaf() {
 
   tafTextField.innerHTML = `${rawTaf}`;
   tafDiv.innerHTML = '';
-
   decodeTaf.tafForecasts.forEach(taf => {
-    
     // Create a new grid container for each forecast
     const gridContainer = document.createElement('div');
     gridContainer.className = 'grid-container';
@@ -205,6 +275,102 @@ function formatNumberToThreeDigits (value) {
   }
 }
 
+function convertToLocalTime (time) {
+  const localTimeFull = new Date(time);
+  const today = new Date()
+
+  let localTime
+  if (localTimeFull.getDate() === today.getDate()) {
+    localTime = localTimeFull.toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } else {
+    localTime = localTimeFull.toLocaleTimeString("en-US", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit",
+      day: '2-digit',
+      month: 'short'
+    });
+  }
+
+  
+  const localDay = localTimeFull.getDate()
+  const localMonth = (localTimeFull.getMonth()) + 1
+  const localDate = `${localMonth}/${localDay}`
+  localTime = localTime.replace(':', "")
+  localTime = localTime.replace(',', "")
+  return localTime
+}
+
+function calculateWindAlert(){
+  if ((winds.highestGust.speed || winds.highestWinds.speed ) > 22 && (winds.highestGust.speed || winds.highestWinds.speed ) < 35) {
+    highWindCaution = true;
+        console.log("high wind caution")
+  }
+  if ((winds.highestGust.speed || winds.highestWinds.speed ) > 34) {
+        highWindWarning = true;
+        console.log("high wind warning")
+      }
+}
+
+
+
+function checkForAlerts() {
+
+  console.log("checking for alerts")
+  sidebarLowTempSpan = document.getElementById("lowest-temp-sidebar")
+  sidebarLowTempSpan.innerHTML = lowestTemp.temp + "&deg"
+  if(highWindCaution) {
+    triggerAlert("wind-caution-alert")
+  }
+  if(highWindWarning) {
+    triggerAlert("wind-warning-alert")
+  }
+  if(lowestTemp.temp < 34) {
+
+    tempTimeSpan = document.getElementById("lowest-temp-time")
+    tempSpan = document.getElementById("lowest-temp")
+    tempSpan.innerHTML = lowestTemp.temp + "&deg"
+    tempTimeSpan.innerHTML = lowestTemp.time + "Z"
+    triggerAlert("temp-warning-alert")
+    
+  }
+}
+
+function triggerAlert(id) {
+  const alert = document.getElementById(id);
+  const statusAlert = document.getElementById("alerts-present");
+  const statusNoAlert = document.getElementById("no-alerts");
+  if (alert && alert.classList.contains('hidden')) {
+    alert.classList.remove('hidden');
+    if(statusAlert.classList.contains('hidden')) {
+       statusAlert.classList.remove('hidden');
+    }
+    if(!statusNoAlert.classList.contains('hidden')) {
+       statusNoAlert.classList.add('hidden');
+    }
+  }
+}
+
+function clearAlerts(id) {
+  const alert = document.getElementById(id);
+  const statusAlert = document.getElementById("alerts-present");
+  const statusNoAlert = document.getElementById("no-alerts");
+  if (!alert.classList.contains('hidden')) {
+  }
+  if (!statusAlert.classList.contains('hidden')) {
+    statusAlert.classList.add('hidden')
+  }
+  if (statusNoAlert.classList.contains('hidden')) {
+    statusNoAlert.classList.remove('hidden')
+  }
+}
+
+
+
 // Get the modal
 var modal = document.getElementById("updateModal");
 
@@ -231,4 +397,21 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+function convertToF(tempC){
+  return (tempC * 9/5) + 32;
+}
   
+function setLocalCookie(key, value) {
+  localStorage.setItem(key, value);
+}
+
+// Function to get a value from localStorage
+function getLocalCookie(key) {
+  return localStorage.getItem(key);
+}
+
+// Function to remove a value from localStorage
+function removeLocalCookie(key) {
+  localStorage.removeItem(key);
+}

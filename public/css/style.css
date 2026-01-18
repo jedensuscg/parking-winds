@@ -1,10 +1,10 @@
 html, body, #map {
     height: 100%;
+
     width: 100vw;
     overflow-x: hidden;
     margin: auto;
 }
-
 
 .loading-modal {
     background-color: rgb(63, 113, 253);
@@ -14,12 +14,24 @@ html, body, #map {
     padding: 10px;
     position: relative;
     z-index: 1000;
-    visibility: hidden;
+    visibility: visible;
     text-align: center;
 }
 
 .loading-text {
     font-size: large;
+}
+.small-banner{
+    width: 400px;
+    margin-left: 20%;
+    background-color: #fc3838;
+}
+#beta-notice {
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+#beta-link {
+    text-align: center;
 }
 
 .header {
@@ -103,9 +115,6 @@ button {
     display: block;
     padding: 3px;
 }
-
-
-
 
 .notes {
     width:95%;
@@ -252,3 +261,138 @@ p {
     position:static
 }
 
+.sidebar-unit-select {
+    width: 90%;
+    display: inline-block;
+    margin-left:25%;
+}
+
+.wind-data-div {
+    box-sizing: border-box;
+    width: 100%;
+    border: solid 2px black;
+    font-size: 1.2em;
+    
+}
+
+.wind-data-col-active {
+    font-weight: bold;
+    margin: auto;
+    padding-left: 10%;
+    background-color: rgba(208, 250, 248, 0.832);
+    overflow: hidden;
+}
+
+#view-wind-text-p {
+    margin-left: 20%;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+#wind-buttons-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.view-wind-description-p {
+    font-style: italic;
+    font-size: .75em;
+}
+
+.subheading-span {
+    font-size: .75em;
+    margin-top: -20px;
+    margin-left: auto;
+    color: #8a2c00;
+}
+
+.bi {
+    color: #bcbcbc;
+}
+
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: visible;
+    width: 120px;
+    background-color: black;
+    color: #ff0000;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    left: 120%;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+
+  }
+
+  #alert-box {
+      position: absolute;         /* Use 'fixed' if you want it to stay on scroll */
+      top: 16.666vh;              /* Start 1/6 down the viewport */
+      right: 0;
+      width: 70px;
+      background-color: rgba(0, 0, 0, 0.62); /* Dark overlay */
+      color: white;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-radius: 8px 0 0 8px;
+      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .alert-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 32px;
+
+    }
+    
+    .alert-icon .bi-exclamation-triangle-fill {
+        color: #f7f302;
+    }
+
+    .alert-icon .bi-thermometer-snow {
+        color: #0299f7;
+    }
+
+    .alert-icon .bi-wind {
+        color: #f7b202;
+    }
+    .alert-icon .high-wind{
+        color: #f74702;
+    }
+
+    .alert-label {
+      margin-top: 2px;
+      font-size: 12px;
+      color: white;
+      text-align: center;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #lowest-temp-sidebar {
+        color: #bcbcbc;
+    }
