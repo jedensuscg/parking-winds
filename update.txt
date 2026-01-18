@@ -3,14 +3,15 @@
     on the original page is present here, until Phase 2 starts, which is a overhaul of the backend server to add more features.
     </h4>
     <p>
-    <h1 style="color: red">SITE CURRENTLY DOWN</h1>
-    <h2>Due to a change in aviationweather.gov's API, data is not being retrieved from the site. Until I have time to change the code to account for the new API the website is not functional</h2>
+    <h1 style="color: red">SITE BACK UP</h1>
+    <h2>The new backend rework is complete. I switched from pulling from aviationweather.gov in XML format to JSON, which which allowed for some streamlining of the code in the end.</h2>
     All wind data is obtained from AviationWeather.gov's <a href="https://aviationweather.gov/data/api/">Data API</a>. Temperature information is obtained
     from <a href="https://www.tomorrow.io/">Tomorrow.io API v4 </a> with limited usage plan of 500 requests per day.
     <ul>
 
         <h5>Change Log</h5>
         <li>
+            Reworked backend to pull data directly in JSON format, rather then XML and then converting to JSON for use with the front end.
             Added Alerts to right side of screen. Current alerts are for Freeze Warning (<34 degrees F), high wind CAUTION (>22kts) and high wind                 WARNING(>34kts)
             Added Lowest Temperature to the sidebar, plus when opening the sidebar shows current METAR temp and the time the lowest temp starts.
             Moved most of the information to a sidebar to reduce clutter on the main page
@@ -25,11 +26,16 @@
             <b>BUG FIX:</b> Fixed alerts not being removed when switching units
         </li>
         <li>
-            <b>KNOWN ISSUES:</b> The strongest winds field not showing gusts, even if gusts and are unable to be selected. However High Wind Alerts ARE 
+            <b>KNOWN ISSUE:</b> The strongest winds field not showing gusts, even if gusts and are unable to be selected. However High Wind Alerts ARE 
             being shown for gusts speeds. If a wind of >22 kts alert is shown, but strongest winds show <22kts, it is probably the wind gusts causing 
             the alert. A big is being implemented when a UI update for selecting winds is finished.
             <br>
             --<b>WORKAROUND:</b> The METAR and TAF data is always the most accurate information, see the decoded METAR/TAF lines for details.
+        </li>
+        <li>
+            <b>KNOWN ISSUE:</b> The current temp is not displaying. This is due to the way the temperature API works and requires a second query to their servers.
+            <br>
+            --<b>WORKAROUND:</b> None at this time. I already have the current METAR temp available for use. It is not "current" so could be an hour old. I just need to program it into the display.
         </li>
 
     <li>
