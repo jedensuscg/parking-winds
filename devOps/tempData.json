@@ -39,13 +39,13 @@
                     {
                         "startTime": "2021-04-08T02:17:00Z",
                         "values": {
-                            "temperature": 31
+                            "temperature": 50
                         }
                     },
                     {
                         "startTime": "2021-04-08T03:17:00Z",
                         "values": {
-                            "temperature": 58.8
+                            "temperature": 31
                         }
                     },
                     {

@@ -16,6 +16,7 @@ const getMetar = async (options) => {
           
           const metarData = buildMetarObject(response, options.location);
 
+          const metarData = buildMetarObject(response, options.location);
           resolve(metarData);
           logger.info("metar data: ", metarData);
         })
@@ -83,6 +84,8 @@ createMetarArrays = (forecast) => {
         windSpeed: parseInt(windSpeed),
         windGust: parseInt(windGust),
         windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
+        stationID,
+        metarTemp: parseInt(metarTemp)
       });
     } catch (error) {
       logger.error(error.stack)

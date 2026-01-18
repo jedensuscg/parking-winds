@@ -17,3 +17,8 @@ My goal for this app was to learn a broad range of technologies needed to design
 - And a LOT of troubleshooting along the way.
 
 http://parking-winds.jamesedens.me
+
+## VERSION 2 IN DEVELOPMENT
+A full front end rework is in development in the leaflet branch. This overhaul moves the front end from static images to a leaflet.js based map.
+You can view the testing page at
+[http://parking-winds.jamesedens.me/testing](http://parking-winds.jamesedens.me/testing)
