@@ -16,7 +16,7 @@ const getMetar = async (options) => {
           
           const metarData = buildMetarObject(response, options.location);
 
-          const metarData = buildMetarObject(response, options.location);
+
           resolve(metarData);
           logger.info("metar data: ", metarData);
         })
