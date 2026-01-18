@@ -71,13 +71,14 @@ calcHighestWinds = (rawTafData) => {
 
 calcHighestGust = (rawTafData) => {
   let windGustMap = new Map();
-
+  
   //Create map with only the FIRST instance of each wind speed element.
   rawTafData.tafForecasts.forEach((forecast) => {
     if (!windGustMap.has(Object.values(forecast)[4])) {
       windGustMap.set(Object.values(forecast)[4], [Object.values(forecast)[2], Object.values(forecast)[0], Object.values(forecast)[1]]);
     }
   });
+
 
   //Get the highest wind speed, and create a map with direction at time.
   const highestWindSet = [...windGustMap.entries()].reduce((total, next) => (next[0] > total[0] ? next : total));

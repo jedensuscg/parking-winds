@@ -90,17 +90,17 @@ function getData() {
         lat: unitData.airStation.lat,
         long: unitData.airStation.long,
       }
-
-      decodeTaf = unitData.rawTafData;
+      //console.log(unitData)
+      decodeTaf = unitData.rawTafForcasts;
       winds = unitData.winds;
-      rawTaf = unitData.rawText;
+      rawTaf = unitData.rawTafText;
       metarWinds = unitData.METAR.rawMetarData.metarForecast[0];
       rawMetarText = unitData.METAR.rawMetarText
       lowestTemp = {
         time: data.lowestTemp[0],
         temp: Math.floor(unitData.lowestTemp[1]),
       };
-
+      console.log("decode taf ", unitData.winds)
       populateMetar(swapMetarButton);
       populateTaf();
       loadingModal.style.visibility = "hidden";
@@ -140,7 +140,9 @@ function populateTaf() {
 
   tafTextField.innerHTML = `${rawTaf}`;
   tafDiv.innerHTML = '';
+
   decodeTaf.tafForecasts.forEach(taf => {
+    
     // Create a new grid container for each forecast
     const gridContainer = document.createElement('div');
     gridContainer.className = 'grid-container';
