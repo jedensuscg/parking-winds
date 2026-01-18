@@ -1,0 +1,197 @@
+[
+    {
+      "icaoId": "KECG",
+      "dbPopTime": "2025-11-08T17:38:37.884Z",
+      "bulletinTime": "2025-11-08T17:38:00.000Z",
+      "issueTime": "2025-11-08T17:38:00.000Z",
+      "validTimeFrom": 1762624800,
+      "validTimeTo": 1762711200,
+      "rawTAF": "TAF KECG 081738Z 0818/0918 VRB06KT P6SM SKC FM082200 15004KT P6SM SCT100 SCT250 FM090600 14005KT 5SM -SHRA BR SCT025 OVC045 FM091100 16005KT 5SM -SHRA BR BKN020 FM091300 17007KT P6SM BKN020 FM091500 21010KT P6SM SCT025 BKN040",
+      "mostRecent": 1,
+      "remarks": "",
+      "lat": 36.25715,
+      "lon": -76.17161,
+      "elev": 2,
+      "prior": 4,
+      "name": "Elizabeth City Rgnl",
+      "fcsts": [
+        {
+          "timeFrom": 1762624800,
+          "timeTo": 1762639200,
+          "timeBec": null,
+          "fcstChange": null,
+          "probability": null,
+          "wdir": "VRB",
+          "wspd": 30,
+          "wgst": null,
+          "wshearHgt": null,
+          "wshearDir": null,
+          "wshearSpd": null,
+          "visib": "6+",
+          "altim": null,
+          "vertVis": null,
+          "wxString": null,
+          "notDecoded": null,
+          "clouds": [
+            {
+              "cover": "SKC",
+              "base": null,
+              "type": null
+            }
+          ],
+          "icgTurb": [],
+          "temp": []
+        },
+        {
+          "timeFrom": 1762639200,
+          "timeTo": 1762668000,
+          "timeBec": null,
+          "fcstChange": "FM",
+          "probability": null,
+          "wdir": 150,
+          "wspd": 4,
+          "wgst": null,
+          "wshearHgt": null,
+          "wshearDir": null,
+          "wshearSpd": null,
+          "visib": "6+",
+          "altim": null,
+          "vertVis": null,
+          "wxString": null,
+          "notDecoded": null,
+          "clouds": [
+            {
+              "cover": "SCT",
+              "base": 10000,
+              "type": null
+            },
+            {
+              "cover": "SCT",
+              "base": 25000,
+              "type": null
+            }
+          ],
+          "icgTurb": [],
+          "temp": []
+        },
+        {
+          "timeFrom": 1762668000,
+          "timeTo": 1762686000,
+          "timeBec": null,
+          "fcstChange": "FM",
+          "probability": null,
+          "wdir": 140,
+          "wspd": 5,
+          "wgst": null,
+          "wshearHgt": null,
+          "wshearDir": null,
+          "wshearSpd": null,
+          "visib": 5,
+          "altim": null,
+          "vertVis": null,
+          "wxString": "-SHRA BR",
+          "notDecoded": null,
+          "clouds": [
+            {
+              "cover": "SCT",
+              "base": 2500,
+              "type": null
+            },
+            {
+              "cover": "OVC",
+              "base": 4500,
+              "type": null
+            }
+          ],
+          "icgTurb": [],
+          "temp": []
+        },
+        {
+          "timeFrom": 1762686000,
+          "timeTo": 1762693200,
+          "timeBec": null,
+          "fcstChange": "FM",
+          "probability": null,
+          "wdir": 160,
+          "wspd": 5,
+          "wgst": null,
+          "wshearHgt": null,
+          "wshearDir": null,
+          "wshearSpd": null,
+          "visib": 5,
+          "altim": null,
+          "vertVis": null,
+          "wxString": "-SHRA BR",
+          "notDecoded": null,
+          "clouds": [
+            {
+              "cover": "BKN",
+              "base": 2000,
+              "type": null
+            }
+          ],
+          "icgTurb": [],
+          "temp": []
+        },
+        {
+          "timeFrom": 1762693200,
+          "timeTo": 1762700400,
+          "timeBec": null,
+          "fcstChange": "FM",
+          "probability": null,
+          "wdir": 170,
+          "wspd": 7,
+          "wgst": null,
+          "wshearHgt": null,
+          "wshearDir": null,
+          "wshearSpd": null,
+          "visib": "6+",
+          "altim": null,
+          "vertVis": null,
+          "wxString": null,
+          "notDecoded": null,
+          "clouds": [
+            {
+              "cover": "BKN",
+              "base": 2000,
+              "type": null
+            }
+          ],
+          "icgTurb": [],
+          "temp": []
+        },
+        {
+          "timeFrom": 1762700400,
+          "timeTo": 1762711200,
+          "timeBec": null,
+          "fcstChange": "FM",
+          "probability": null,
+          "wdir": 210,
+          "wspd": 10,
+          "wgst": null,
+          "wshearHgt": null,
+          "wshearDir": null,
+          "wshearSpd": null,
+          "visib": "6+",
+          "altim": null,
+          "vertVis": null,
+          "wxString": null,
+          "notDecoded": null,
+          "clouds": [
+            {
+              "cover": "SCT",
+              "base": 2500,
+              "type": null
+            },
+            {
+              "cover": "BKN",
+              "base": 4000,
+              "type": null
+            }
+          ],
+          "icgTurb": [],
+          "temp": []
+        }
+      ]
+    }
+  ]

@@ -1,0 +1,26 @@
+[
+    {
+      "icaoId": "KECG",
+      "receiptTime": "2025-11-08T20:58:17.404Z",
+      "obsTime": 1762635240,
+      "reportTime": "2025-11-08T21:00:00.000Z",
+      "temp": 21.1,
+      "dewp": 13.3,
+      "wdir": 210,
+      "wspd": 8,
+      "visib": "10+",
+      "altim": 1010.2,
+      "slp": 1010.1,
+      "qcField": 4,
+      "presTend": -0.1,
+      "metarType": "METAR",
+      "rawOb": "METAR KECG 082054Z 21008KT 10SM CLR 21/13 A2983 RMK AO2 SLP101 T02110133 55001",
+      "lat": 36.2572,
+      "lon": -76.1716,
+      "elev": 2,
+      "name": "Elizabeth City Rgnl, NC, US",
+      "cover": "CLR",
+      "clouds": [],
+      "fltCat": "VFR"
+    }
+  ]

@@ -1,8 +1,9 @@
-const { createLogger, format,transports} = require("winston");
-const {combine,timestamp,cli,json,label,printf,errors} = format;
-//require("dotenv").config();
+const { createLogger, format, transports } = require("winston");
+const { combine, timestamp, cli, json, printf } = format;
+// require("dotenv").config();
 
-const logLevels = { 
+// 1. Define Custom Levels
+const logLevels = {
   error: 0,
   warn: 1,
   request: 2,
@@ -13,79 +14,85 @@ const logLevels = {
   silly: 7
 };
 
+// 2. Define Formats
 const logFormat = printf(({ timestamp, level, message, label }) => {
-  return `${timestamp} [${label}] ${level}: ${message}`;
+  return `${timestamp} [${label || 'App'}] ${level}: ${message}`;
 });
 
-
-
 const cliFormat = combine(
-  format.errors({
-    stack: true
-  }),
+  format.errors({ stack: true }),
   cli({
     colors: {
+      error: "red",
+      warn: "yellow",
+      request: "magenta",
       info: "blue",
     },
   })
 );
 
+// 3. Create the Main Logger (Production Defaults)
 const logger = createLogger({
   levels: logLevels,
-  format: combine(timestamp(), logFormat),
-  defaultMeta: {
-    name: "Parking Winds",
-  },
+  defaultMeta: { name: "Parking Winds" },
+  format: combine(timestamp(), format.json()), // Default format for files
   transports: [
-    new transports.File({
-      filename: "/var/log/parking-winds/stable/error.log",
-      level: "error",
-      format: format.json()
-    }),
-    new transports.File({
-      filename: "/var/log/parking-winds/stable/log/requests.log",
-      level: "request",
-      format: format.json()
-    }),
-    new transports.File({
-      filename: "/var/log/parking-winds/stable/log/combined.log",
-      format: format.json()
-    }),
-    new transports.File({
-      filename: "combined.log",
-      format: format.json()
-    }),
-    new transports.Console({
-      format: format.json()
-    }),
-  ],
-  // exceptionHandlers: [
-  //   new transports.File({
-  //     filename: "exceptions.log",
-  //   })
-  // ],
-});
-
-if (process.env.NODE_ENV !== "production") {
-  logger.clear().add(
-    new transports.File({
-      filename: "requests.log",
-      level: "request",
-      format: combine(timestamp(), logFormat, format.json()),
-    }),
+    // Production: Error Log (Level 0 only)
     new transports.File({
       filename: "error.log",
       level: "error",
-      format: format.json()
     }),
+    // Production: Requests (Level 2, 1, 0)
+    new transports.File({
+      filename: "requests.log",
+      level: "request",
+    }),
+    // Production: Info (Level 3, 2, 1, 0)
+    new transports.File({
+      filename: "info.log",
+      level: "info",
+    }),
+    // Production: Combined (Everything)
     new transports.File({
       filename: "combined.log",
-      format: format.json()
     }),
-    new transports.Console({
-      format: cliFormat,
-    }),
-  );
+  ],
+});
+
+// 4. Local Development Override
+if (process.env.NODE_ENV !== "production") {
+  // Clear default production transports
+  logger.clear();
+
+  // Add Local Transports ONE BY ONE (Chained)
+  logger
+    .add(
+      new transports.File({
+        filename: "error.log",
+        level: "error", // Only catches errors
+        format: format.json(),
+      })
+    )
+    .add(
+      new transports.File({
+        filename: "info.log",
+        level: "info", // Catches Info, Request, Warn, Error
+        format: format.json(),
+      })
+    )
+    .add(
+      new transports.File({
+        filename: "requests.log",
+        level: "request", // Catches Request, Warn, Error
+        format: format.json(),
+      })
+    )
+    .add(
+      new transports.Console({
+        level: "info", // Show up to Info in console
+        format: cliFormat,
+      })
+    );
 }
 
 module.exports = logger;
