@@ -56,7 +56,7 @@
 <fcst_time_to>2021-08-22T18:00:00Z</fcst_time_to>
 <change_indicator>FM</change_indicator>
 <wind_dir_degrees>240</wind_dir_degrees>
-<wind_speed_kt>6</wind_speed_kt>
+<wind_speed_kt>20</wind_speed_kt>
 <visibility_statute_mi>6.21</visibility_statute_mi>
 <sky_condition sky_cover="SCT" cloud_base_ft_agl="4000"/>
 </forecast>
