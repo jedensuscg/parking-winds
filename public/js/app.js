@@ -121,8 +121,8 @@ const app = Vue.createApp({
           this.metarWinds = data.METAR.rawMetarData.metarForecast[0];
           this.rawMetarText = data.METAR.rawMetarText
           lowestTemp = {
-            time: unitData.tempData[0],
-            temp: Math.floor(unitData.tempData[1]),
+            time: data.tempData[0],
+            temp: Math.floor(data.tempData[1]),
           };
           this.airStation = {
             unitName: data.airStation.unitName,
