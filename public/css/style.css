@@ -26,18 +26,24 @@ header {
     width: 100%;
 }
 .small-banner{
-    width: 400px;
-    margin-left: 20%;
+    width: 80%;
     background-color: #379e29;
+    margin: auto;
 }
+
 #beta-notice {
     color: rgb(0, 0, 0);
     text-align: center;
+    margin: 5px;
 }
 #beta-link {
     text-align: center;
+    margin: 5px;
 }
 
+#beta-disc {
+    margin: 2px;
+}
 .title {
     width: 50%;
     font-size: 2em;
