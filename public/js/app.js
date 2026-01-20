@@ -114,15 +114,15 @@ const app = Vue.createApp({
           this.viewingWindSpeed = data.METAR.rawMetarData.metarForecast[0].windSpeed
           //console.table(data.airStation);
           console.log(data)
-          this.decodeTaf = data.rawTafData;
-          console.log(this.decodeTaf.tafForecasts.length);
+          this.decodeTaf = data.rawTafForcasts;
+
           this.winds = data.winds;
-          this.rawTaf = data.rawText;
+          this.rawTaf = data.rawTafText;
           this.metarWinds = data.METAR.rawMetarData.metarForecast[0];
           this.rawMetarText = data.METAR.rawMetarText
-          this.lowestTemp = {
-            time: data.lowestTemp[0],
-            temp: Math.floor(data.lowestTemp[1]),
+          lowestTemp = {
+            time: unitData.tempData[0],
+            temp: Math.floor(unitData.tempData[1]),
           };
           this.airStation = {
             unitName: data.airStation.unitName,

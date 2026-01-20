@@ -81,6 +81,7 @@ app.get("/taf/:unit", async (req, res) => {
       });
   } else {
     // If not in development mode, fetch live data
+
     const ICAOCode = unit.ICAOCode;
     const location = [unit.lat, unit.long];
 
