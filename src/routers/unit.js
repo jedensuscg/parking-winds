@@ -27,6 +27,16 @@ router.get("/units", async (req, res) => {
   }
 });
 
+router.get("/unitsICAO", async (req, res) => {
+  try {
+    const units = await Unit.find({}, 'ICAOCode');
+    const values = units.map(units => units.ICAOCode);
+    res.send(values);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
 router.get("/units/:unit", async (req, res) => {
   const _unit = req.params.unit.toLowerCase();
 

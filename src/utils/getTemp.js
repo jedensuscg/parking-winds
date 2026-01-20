@@ -4,6 +4,7 @@ require("dotenv").config();
 dateAndTime = require("./dateAndTime");
 const queryString = require("query-string");
 const getTimelineURL = "https://api.tomorrow.io/v4/timelines";
+const getRealtimeURL = "https://api.tomorrow.io/v4/weather/realtime";
 const apikey = process.env.CLIMACELL_KEY;
 const logger = require('./logger')
 
@@ -22,7 +23,9 @@ async function getTemp(latLong) {
         .get(getTimelineURL + "?" + getTimelineParameters)
         .then((result) => {
           const data = result.data.data;
+          console.log("tempt data ",data.timelines[0].intervals)
           lowestTemp = getMinTemp(data.timelines[0].intervals);
+
           resolve(lowestTemp);
         })
         .catch((error) => {
@@ -36,6 +39,7 @@ async function getTemp(latLong) {
       const jsonData = JSON.parse(climacellTestData);
       const tempData = jsonData.data.timelines[0].intervals;
       lowestTemp = getMinTemp(tempData);
+      
       resolve(lowestTemp);
     }
   });

@@ -7,14 +7,17 @@ const { DateTime } = require("luxon");
 const url = ''
 
 const getMetar = async (options) => {
-  const url = `https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=${options.dataSource}&hoursBeforeNow=12&format=xml&mostRecent=true`
+  const url = `https://aviationweather.gov/api/data/metar?ids=${options.dataSource}&format=json`
   return new Promise((resolve, reject) => {
     if (!options.test) { //Check if using TEST DATA
       axios
         .get(url)
         .then((response) => {
+
           const metarData = buildMetarObject(response, options.location);
+
           resolve(metarData);
+          logger.info("metar data: ", metarData);
         })
         .catch((error) => {
           logger.error(error.stack)
@@ -28,72 +31,65 @@ const getMetar = async (options) => {
 };
 
 const buildMetarObject = async (response, location) => {
-  let timeData;
-  let rawText;
+  try {
+    logger.info("Building metar object");
 
-  // Check if using online source or local xml test file.
-  const xmlToParse = (() => {
-    if (!response.data) {
-      return response;
-    } else {
-      return response.data;
-    }
-  })();
-
-  parser.parseString(xmlToParse, (err, result) => {
-    if (err) {
-      return "parse error", err;
-    }
-
-
-    const baseData = result.response.data
-    //object relating to TAF times
-    timeData = {
-      issueTime: baseData.issue_time,
-      validTimeFrom: baseData.valid_time_from,
-      validTimeTo: baseData.valid_time_to,
-    };
-    rawMetarText = baseData.METAR.raw_text
-    windSpeed = baseData.METAR.wind_gust_kt
-    windDirection = baseData.METAR.wind_dir_degrees
     
-    rawMetarData = createMetarArrays(baseData.METAR);
+
+    // NOTE: You originally had 'result.response.data' here, 
+    // but your function argument is named 'response'.
+    const baseData = response.data[0]; // Changed 'result' to 'response'
+    const timeData = {
+      issueTime: baseData.reportTime,
+    };
 
 
-  });
-  return {
-    //timeData,
-    rawMetarText,
-    //winds,
-    rawMetarData,
-    //lowestTemp
-  };
+
+    // Added 'const' here so these variables exist
+    const rawMetarText = baseData.rawOb;
+    const windSpeed = baseData.wspd;
+    const windDirection = baseData.wdir;
+    const rawMetarData = createMetarArrays(baseData);
+
+
+    return {
+      timeData,
+      rawMetarText,
+      //winds,
+      rawMetarData,
+      //lowestTemp
+    };
+
+  } catch (error) { 
+    logger.error("Error building metar object: ", error);
+    return null; // Useful to return null if it fails so the caller knows
+  }
 };
 
 // Create an array for each forecast period.
 createMetarArrays = (forecast) => {
+
   let metarForecast = [];
   
     try {
-      observationTime = forecast.observation_time;
-      windDirection = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
-      windSpeed = forecast.wind_speed_kt ? forecast.wind_speed_kt : 0;
-      windGust = forecast.wind_gust_kt ? forecast.wind_gust_kt : 0;
-      windGustDir = forecast.wind_dir_degrees ? (forecast.wind_dir_degrees == '0'? 'Variable': forecast.wind_dir_degrees) : 0;
-  
+      observationTime = forecast.reportTime;
+      windDirection = forecast.wdir ? (forecast.wdir == '0'? 'Variable': forecast.wdir) : 0;
+      windSpeed = forecast.wspd ? forecast.wspd : 0;
+      windGust = forecast.wgst ? forecast.wgst : 0;
+      windGustDir = forecast.wdir ? (forecast.wdir == '0'? 'Variable': forecast.wdir) : 0;
+
       metarForecast.push({
         observationTime,
         windDirection: windDirection == 'Variable'? 'Variable': parseInt(windDirection),
         windSpeed: parseInt(windSpeed),
         windGust: parseInt(windGust),
         windGustDir: windGustDir == 'Variable'? 'Variable': parseInt(windGustDir),
+        metarTemp: parseInt(forecast.temp)
       });
+      console.log("metar forcast ",metarForecast)
     } catch (error) {
       logger.error(error.stack)
     }
-
-
-
   return {
     metarForecast,
   };
