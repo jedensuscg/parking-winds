@@ -11,6 +11,11 @@
 
         <h5>Change Log</h5>
         <li>
+            Added Barbers Point to available options. Currently all units are added manually via building the database query, and typing lat and longs in and getting headings via Google earth. However the foundations for
+            adding units via the web is already in place, including user accounts for permissions to create, manage and delete units and users. Just need to fine tune
+            a few things and create the interface, including a point and click method for creating parking spots directly from the map screen.
+        </li>
+        <li>
             Reworked backend to pull data directly in JSON format, rather then XML and then converting to JSON for use with the front end.
             Added Alerts to right side of screen. Current alerts are for Freeze Warning (<34 degrees F), high wind CAUTION (>22kts) and high wind                 WARNING(>34kts)
             Added Lowest Temperature to the sidebar, plus when opening the sidebar shows current METAR temp and the time the lowest temp starts.
@@ -31,11 +36,6 @@
             the alert. A big is being implemented when a UI update for selecting winds is finished.
             <br>
             --<b>WORKAROUND:</b> The METAR and TAF data is always the most accurate information, see the decoded METAR/TAF lines for details.
-        </li>
-        <li>
-            <b>KNOWN ISSUE:</b> The current temp is not displaying. This is due to the way the temperature API works and requires a second query to their servers.
-            <br>
-            --<b>WORKAROUND:</b> None at this time. I already have the current METAR temp available for use. It is not "current" so could be an hour old. I just need to program it into the display.
         </li>
 
     <li>
