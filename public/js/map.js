@@ -75,6 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
   //TODO Replace with programatical assignment based on number of units in DB. I.E Dropdown menu.
   let kecgButton = document.getElementById('kecgButton');
   let padqButton = document.getElementById('padqButton');
+  let phjrButton = document.getElementById('phjrButton');
   let toggleMapTypeButton = document.querySelector('#change-map-btn');
   
   kecgButton.addEventListener('click', function() {
@@ -86,6 +87,12 @@ window.addEventListener('DOMContentLoaded', () => {
   
   padqButton.addEventListener('click', function() {
     unitToFetch = "padq";
+    map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
+    drawMap();
+  });
+
+    phjrButton.addEventListener('click', function() {
+    unitToFetch = "phjr";
     map.removeLayer(windBarbs).removeLayer(parkingSpots).removeLayer(windLabels);
     drawMap();
   });
