@@ -221,7 +221,7 @@ function drawMap() {
 }).catch((e) => {
   console.log(e);
   loadingModal.style.visibility = "visible";
-  loadingModal.innerText = `!!!!!OCT 2025 UDPATE: Due to changes in aviationweather.gov's API, backend code changes need to be made before data can be retrieved. Fix is in progress: \n Error Loading Map. Please refresh and try again. \n Error: ${e}`;
+  loadingModal.innerText = `LOADING MAP. \n If this take a long time, you might have a slow connection or the server is down. Please refresh and try again. \n Error: ${e}`;
 });
 }
 //Add markers for current airstation to map
