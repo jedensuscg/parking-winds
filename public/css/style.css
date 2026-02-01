@@ -1,9 +1,10 @@
 html, body, #map {
     height: 100%;
-
     width: 100vw;
     overflow-x: hidden;
     margin: auto;
+    z-index: 1;
+
 }
 
 .loading-modal {
@@ -68,24 +69,50 @@ html, body, #map {
     
 }
 
-.map-controls {
-    z-index: 500;
+.map-ui-container {
     position: absolute;
-    top: 40px;
-    left: 50%;
-    padding: 10px;
-}
-
-
-#map { 
-
-    margin:auto;
-    overflow-y: hidden;
-    z-index: 1;
-}
-.controls {
+    top: 80px;          /* adjust to taste */
+    right: 15px;
     display: flex;
-    padding: 3px;
+    gap: 12px;
+    z-index: 1000;      /* above Leaflet */
+}
+
+/* Existing buttons */
+.map-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* New panel */
+.map-utility-panel {
+    background: rgba(20, 20, 20, 0.85);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    min-width: 200px;
+}
+
+/* Grid inside the panel */
+.utility-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+
+/* Individual items */
+.utility-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+}
+
+/* Make certain items span full width when needed */
+.utility-card.full {
+    grid-column: 1 / -1;
 }
 
 #swapMetarButton {
@@ -97,10 +124,7 @@ html, body, #map {
 .wind-change-button {
     display: block;
 }
-.map-typ-btn {
-    background-color: rgb(1, 1, 138);
-    width: 150px;
-}
+
 
 button {
     background-color: #8a2c00;
@@ -300,10 +324,11 @@ p {
 }
 
 .subheading-span {
-    font-size: .75em;
+    font-size: .85em;
     margin-top: -20px;
     margin-left: auto;
     color: #8a2c00;
+    font-weight: bold;
 }
 
 .bi {
@@ -341,22 +366,7 @@ p {
 
   }
 
-  #alert-box {
-      position: absolute;         /* Use 'fixed' if you want it to stay on scroll */
-      top: 16.666vh;              /* Start 1/6 down the viewport */
-      right: 0;
-      width: 70px;
-      background-color: rgba(0, 0, 0, 0.62); /* Dark overlay */
-      color: white;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      padding: 10px 0;
-      border-radius: 8px 0 0 8px;
-      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
-    }
+
 
     .alert-icon {
       display: flex;
@@ -396,3 +406,153 @@ p {
     #lowest-temp-sidebar {
         color: #bcbcbc;
     }
+/* ===============================
+   UTILITY PANEL ALERT OVERRIDES
+   =============================== */
+
+.alert-box-panel {
+    position: static;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+
+    background: transparent;
+    box-shadow: none;
+    padding: 4px 0;
+    border-radius: 0;
+}
+
+.alerts-card {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Keep icon look, adjust sizing for panel */
+.alert-box-panel .alert-icon {
+    margin: 0;
+    font-size: 26px;
+}
+
+/* Labels fit compact panel */
+.alert-box-panel .alert-label {
+    font-size: 11px;
+    max-width: 90px;
+    text-align: center;
+}
+/* ===============================
+   UTILITY / MAP BUTTON STYLING
+   =============================== */
+
+/* Base button styling for map + utility panel */
+.map-controls button,
+.map-utility-panel button {
+    /* CHANGED: darker, more opaque background for map readability */
+    background: rgba(20, 20, 20, 0.88);
+    color: #f2f2f2;
+
+    /* CHANGED: stronger border contrast */
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 6px;
+
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.05s ease;
+}
+
+/* Map-specific buttons (keep size, improve contrast) */
+.map-typ-btn {
+    width: 150px;
+
+    /* CHANGED: ensure same opaque base as other controls */
+    background: rgba(20, 20, 20, 0.88);
+}
+
+/* Hover */
+.map-controls button:hover,
+.map-utility-panel button:hover {
+    /* CHANGED: visible but subtle hover */
+    background: rgba(40, 40, 40, 0.95);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Active / pressed */
+.map-controls button:active,
+.map-utility-panel button:active {
+    transform: translateY(1px);
+
+    /* CHANGED: clear pressed feedback */
+    background: rgba(60, 60, 60, 0.95);
+}
+
+/* Emphasis / selected state (used for toggles) */
+button.btn-active {
+    /* CHANGED: aviation-style highlight */
+    background: rgba(208, 250, 248, 0.95);
+    border-color: rgba(0, 0, 0, 0.45);
+    color: #000000;
+    font-weight: 600;
+}
+
+/* Map controls inside utility panel */
+.utility-map-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+
+.map-utility-panel {
+    width: 260px;      /* pick what looks right */
+    min-width: 260px;
+    max-width: 260px;
+}
+/* === METAR wind mode buttons === */
+.wind-button-group {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.wind-select-btn {
+    flex: 1;
+    padding: 6px 8px;
+    background-color: rgba(20, 20, 20, 0.9);   /* solid, dark */
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    font-size: 0.85em;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Hover feedback */
+.wind-select-btn:hover {
+    background-color: rgba(40, 40, 40, 0.95);
+}
+
+/* Active (selected) state */
+.wind-select-btn.active {
+    background-color: rgba(208, 250, 248, 0.95);
+    color: #000000;
+    font-weight: bold;
+    border-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Label toggle visual state */
+#hide-label-btn.labels-off i {
+    opacity: 0.4;
+}
+
+/* Optional: dim label text */
+#hide-label-btn.labels-off .btn-label {
+    opacity: 0.6;
+}
