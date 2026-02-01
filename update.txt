@@ -11,9 +11,9 @@
 
         <h5>Change Log</h5>
         <li>
-            Added Barbers Point to available options. Currently all units are added manually via building the database query, and typing lat and longs in and getting headings via Google earth. However the foundations for
-            adding units via the web is already in place, including user accounts for permissions to create, manage and delete units and users. Just need to fine tune
-            a few things and create the interface, including a point and click method for creating parking spots directly from the map screen.
+            UI UPDATE 1: <br>
+            UI Update 1 is here with the first UI improvements to the map view. Most noticable is the addition of a utility panel that combines the original map control buttons with the alerts
+            and with wind speed and direction. You can also select which wind to view from the panel.  For full wind details such as times and taf data, that is available in the sidebar.
         </li>
         <li>
             Reworked backend to pull data directly in JSON format, rather then XML and then converting to JSON for use with the front end.
