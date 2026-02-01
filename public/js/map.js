@@ -154,7 +154,7 @@ drawMap();
 L.Control.Watermark = L.Control.extend({
   onAdd: function(map) {
       var img = L.DomUtil.create('img');
-      img.src = 'public/img/parking-winds-logov1.png';
+      img.src = '';
       img.style.width = '75px';
       return img;
   },

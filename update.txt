@@ -11,6 +11,11 @@
 
         <h5>Change Log</h5>
         <li>
+            UI UPDATE 1: <br>
+            UI Update 1 is here with the first UI improvements to the map view. Most noticable is the addition of a utility panel that combines the original map control buttons with the alerts
+            and with wind speed and direction. You can also select which wind to view from the panel.  For full wind details such as times and taf data, that is available in the sidebar.
+        </li>
+        <li>
             Reworked backend to pull data directly in JSON format, rather then XML and then converting to JSON for use with the front end.
             Added Alerts to right side of screen. Current alerts are for Freeze Warning (<34 degrees F), high wind CAUTION (>22kts) and high wind                 WARNING(>34kts)
             Added Lowest Temperature to the sidebar, plus when opening the sidebar shows current METAR temp and the time the lowest temp starts.

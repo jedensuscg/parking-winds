@@ -108,6 +108,8 @@ html, body, #map {
     border-radius: 6px;
     padding: 6px 8px;
     font-size: 0.85rem;
+    text-align: center;
+    
 }
 
 /* Make certain items span full width when needed */
@@ -397,6 +399,7 @@ p {
       font-size: 12px;
       color: white;
       text-align: center;
+      width: 100%;
     }
 
     .hidden {
@@ -438,7 +441,7 @@ p {
 /* Labels fit compact panel */
 .alert-box-panel .alert-label {
     font-size: 11px;
-    max-width: 90px;
+    max-width: 100%;
     text-align: center;
 }
 /* ===============================
@@ -555,4 +558,117 @@ button.btn-active {
 /* Optional: dim label text */
 #hide-label-btn.labels-off .btn-label {
     opacity: 0.6;
+}
+
+/* ===============================
+   MOBILE UTILITY PANEL FIX
+   =============================== */
+@media (max-width: 768px) {
+
+    /* Lift above Leaflet sidebar + controls */
+    .map-utility-panel {
+        position: fixed;
+        bottom: 0;
+        left: 10%;
+        right: 0;
+
+        width: 85%;
+        max-width: none;
+
+        /* KEY FIXES */
+        max-height: 32vh;               /* cap height */
+        overflow-y: auto;               /* internal scroll */
+        overscroll-behavior: contain;   /* prevent map scroll hijack */
+
+        padding: 6px 8px;
+        border-radius: 12px 12px 0 0;
+
+        z-index: 2000;                  /* ABOVE leaflet sidebar */
+    }
+
+    /* Make grid denser */
+    .utility-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2px;
+    }
+
+    /* Cards tighter */
+    .utility-card {
+        padding: 4px;
+        font-size: 0.7rem;
+        grid-column: span 2;
+    }
+
+    /* Full-width items stay full */
+    .utility-card.full {
+        grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+
+    /* Force alerts container horizontal */
+    #alert-box.alert-box-panel {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    /* Make each alert icon compact */
+    #alert-box.alert-box-panel .alert-icon {
+        flex-direction: column;   /* icon over label */
+        margin: 0;
+        font-size: 22px;
+    }
+
+    /* Tighten alert labels */
+    #alert-box.alert-box-panel .alert-label {
+        font-size: 10px;
+        line-height: 1.1;
+        text-align: center;
+    }
+}
+
+
+    /* Compact icon buttons */
+    .icon-btn {
+        padding: 2px;
+    }
+
+    .icon-btn i {
+        font-size: 0.95rem;
+    }
+
+    .icon-btn .btn-label {
+        font-size: 0.6rem;
+    }
+     /* Make map controls horizontal on mobile */
+    .utility-map-controls {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        align-items: center;
+    }
+
+
+    /* Make buttons more compact */
+    .utility-map-controls .map-typ-btn {
+        padding: 4px 6px;
+        min-width: 0;
+    }
+
+    /* Icon buttons stay centered */
+    .utility-map-controls .icon-btn {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .utility-map-controls .icon-btn i {
+        font-size: 1rem;
+    }
+
+    .utility-map-controls .icon-btn .btn-label {
+        font-size: 0.6rem;
+    }
 }
