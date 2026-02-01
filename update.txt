@@ -37,11 +37,6 @@
             <br>
             --<b>WORKAROUND:</b> The METAR and TAF data is always the most accurate information, see the decoded METAR/TAF lines for details.
         </li>
-        <li>
-            <b>KNOWN ISSUE:</b> The current temp is not displaying. This is due to the way the temperature API works and requires a second query to their servers.
-            <br>
-            --<b>WORKAROUND:</b> None at this time. I already have the current METAR temp available for use. It is not "current" so could be an hour old. I just need to program it into the display.
-        </li>
 
     <li>
         <h5 class="bi bi-caret-right-fill">CURRENT WORKING FEATURES</h5></i>
