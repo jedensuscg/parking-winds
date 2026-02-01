@@ -6,7 +6,7 @@ const loadingModal = document.querySelector(".loading-modal");
 // const prevailingWindBtn = document.querySelector("#prevailing-wind-btn");
 // const highestWindbtn = document.querySelector("#strongest-wind-btn");
 const hideLabelBtn = document.querySelector("#hide-label-btn");
-
+let labelsVisible = true;
 let metarGustToggle = true;
 
 let metarGustToggleText = document.querySelector("#metar-toggle-span")
@@ -100,11 +100,9 @@ window.addEventListener('DOMContentLoaded', () => {
     if (map.hasLayer(OSM)) {
         map.addLayer(satMap);
         map.removeLayer(OSM);
-        toggleMapTypeButton.innerText = "Switch to Street Map";
     } else {
         map.addLayer(OSM);
         map.removeLayer(satMap);
-        toggleMapTypeButton.innerText = "Switch to Satellite Map";
     }
 })
 });
@@ -181,6 +179,7 @@ function drawMap() {
   getData().then(() => {
     map.setView([airStation.lat, airStation.long], 18);
     windsToUse = {speed: metarWinds.windSpeed, direction: metarWinds.windDirection, temp: metarWinds.metarTemp};
+    updateUtilityWindPanel(windsToUse);
 
     console.log(windsToUse.temp)
 
@@ -365,22 +364,27 @@ function addOffset(direction, lat, long) {
 }
 
 function toggleLabels() {
-  if (hideLabelBtn.innerText == "Hide Labels") {
-    windLabels.eachLayer(function (label) {
-      label.getTooltip().setOpacity(0.00);
-    });
-    hideLabelBtn.innerText = "Show Labels";
-  } else {
-    windLabels.eachLayer(function (label) {
-      label.getTooltip().setOpacity(1.00);
-    });
-    hideLabelBtn.innerText = "Hide Labels";
+  if (!windLabels) return;
+
+  labelsVisible = !labelsVisible;
+
+  windLabels.eachLayer(label => {
+    label.getTooltip().setOpacity(labelsVisible ? 1.0 : 0.0);
+  });
+
+  const icon = hideLabelBtn.querySelector("i");
+
+  if (icon) {
+    icon.classList.toggle("bi-eye", labelsVisible);
+    icon.classList.toggle("bi-eye-slash", !labelsVisible);
   }
 }
 
+
+
 function checkLabelVisibility() {
   console.log("checking label visibility");
-  if (hideLabelBtn.innerText == "Hide Labels") {
+  if (hideLabelBtn.innerText == "Labels ON") {
     windLabels.eachLayer(function (label) {
       label.getTooltip().setOpacity(1.00);
     });
@@ -402,7 +406,32 @@ function addHandlersAndListeners() {
   // highestWindbtn.addEventListener('click', () => handleWindSelectionClick(winds.highestWinds, strongestWindDataDiv,  "STRONGEST WINDS"))
 
 
-  metarWindDataDiv.addEventListener('click', () => handleWindSelectionClick(metarWinds, metarWindDataDiv, "METAR WINDS"))
+  const metarWindsBtn = document.querySelector("#metar-winds-btn");
+const metarGustsBtn = document.querySelector("#metar-gusts-btn");
+
+if (metarWindsBtn && metarGustsBtn) {
+
+  metarWindsBtn.addEventListener("click", () => {
+    windsToUse = {
+      speed: metarWinds.windSpeed,
+      direction: metarWinds.windDirection
+    };
+
+    redrawMapWind("METAR WINDS");
+    setMetarButtonState("winds");
+  });
+
+  metarGustsBtn.addEventListener("click", () => {
+    windsToUse = {
+      speed: metarWinds.windGust,
+      direction: metarWinds.windGustDir
+    };
+
+    redrawMapWind("METAR GUSTS");
+    setMetarButtonState("gusts");
+  });
+}
+
   prevailingWindDataDiv.addEventListener('click', () => handleWindSelectionClick(winds.prevailingWinds, prevailingWindDataDiv,"PREVAILING WINDS"))
   strongestWindDataDiv.addEventListener('click', () => handleWindSelectionClick(winds.highestWinds, strongestWindDataDiv,  "STRONGEST WINDS"))
   
@@ -411,11 +440,37 @@ function addHandlersAndListeners() {
     toggleLabels();
   });
 
-  
+  // Utility panel dropdown → reuse sidebar click logic
+const utilityWindSelect = document.querySelector("#utility-wind-select");
+
+if (utilityWindSelect) {
+  utilityWindSelect.addEventListener("change", () => {
+
+  switch (utilityWindSelect.value) {
+
+    case "metar":
+      document.querySelector("#metar-winds-btn").click();
+      break;
+
+    case "gusts":
+      document.querySelector("#metar-gusts-btn").click();
+      break;
+
+    case "prevailing":
+      prevailingWindDataDiv.click();
+      break;
+
+    case "strongest":
+      strongestWindDataDiv.click();
+      break;
+  }
+});
 
 }
 
-function handleWindSelectionClick(wind, windDiv, windText) {
+}
+
+function handleWindSelectionClick(wind, windDiv, windText, force=null) {
   if(windDiv == metarWindDataDiv) {
     if (!metarGustToggle) {
       windsToUse = {speed: wind.windSpeed, direction: wind.windDirection}
@@ -437,6 +492,7 @@ function handleWindSelectionClick(wind, windDiv, windText) {
   windBarbs = createWindBarbLayer().addTo(map);
   windLabels = createWindLabelLayer().addTo(map);
   changeIconOnZoom(parkingSpots, windBarbs);
+  updateUtilityWindPanel(windsToUse);
   const elements = document.querySelectorAll(".wind-data-col-active");
 
 
@@ -447,6 +503,42 @@ function handleWindSelectionClick(wind, windDiv, windText) {
   windDiv.classList.add("wind-data-col-active")
   document.querySelector("#view-wind-text").innerHTML = windText
 }
+
+function redrawMapWind(labelText) {
+  map.removeLayer(windBarbs).removeLayer(windLabels);
+  windBarbs = createWindBarbLayer().addTo(map);
+  windLabels = createWindLabelLayer().addTo(map);
+  changeIconOnZoom(parkingSpots, windBarbs);
+  updateUtilityWindPanel(windsToUse);
+  document.querySelector("#view-wind-text").innerText = labelText;
+  document.querySelector("#utility-wind-text").innerText = labelText;
+}
+
+function setMetarButtonState(active) {
+  document.querySelector("#metar-winds-btn").classList.toggle("active", active === "winds");
+  document.querySelector("#metar-gusts-btn").classList.toggle("active", active === "gusts");
+}
+
+function updateUtilityWindPanel(wind) {
+  if (!wind) return;
+
+  const speedEl = document.querySelector("#utility-wind-speed");
+  const dirEl = document.querySelector("#utility-wind-dir");
+
+  if (!speedEl || !dirEl) return;
+
+  speedEl.innerText = `${wind.speed} kt`;
+
+  if (typeof wind.direction === "number") {
+    dirEl.innerText = `${wind.direction}°`;
+  } else {
+    // Handles VRB or text values
+    dirEl.innerText = wind.direction;
+  }
+}
+
+
+
 // #endregion
 
 
